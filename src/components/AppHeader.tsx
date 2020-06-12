@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Theme } from '@material-ui/core/styles';
 import { 
     AppBar,
@@ -12,7 +12,8 @@ import {
  } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import * as Firebase from 'firebase';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
 
 const useStyles = makeStyles((theme: Theme) =>
   ({
@@ -37,6 +38,9 @@ export const AppHeader = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
+  const currentUser = useContext(UserContext);
+  const history = useHistory();
+
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -48,6 +52,10 @@ export const AppHeader = () => {
 
   const handleLogout = async () => {
     await Firebase.auth().signOut();
+  }
+
+  const redirectAdmin = () => {
+    history.push('/admin/manage');
   }
 
   return (
@@ -84,6 +92,7 @@ export const AppHeader = () => {
                 >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
+                {currentUser?.admin && <MenuItem onClick={redirectAdmin}>Admin</MenuItem> }
                 <Divider />
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>

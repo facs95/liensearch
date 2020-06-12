@@ -21,8 +21,7 @@ export const CreateAccount: React.FC = () => {
         e.preventDefault();
         setErrorMessage('');
         try {
-            const response = await firebase.auth().createUserWithEmailAndPassword(email, password);
-            console.log(response);
+            await firebase.auth().createUserWithEmailAndPassword(email, password);
         } catch (err) {
             setErrorMessage(err.message);
         }
