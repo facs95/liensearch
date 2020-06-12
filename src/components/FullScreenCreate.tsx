@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, Grid, AppBar, Toolbar, IconButton, Typography, makeStyles, Container } from '@material-ui/core';
+import { Dialog, Grid, AppBar, Toolbar, IconButton, Typography, makeStyles } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { useHistory } from 'react-router-dom';
 import { CreateStepper } from './CreateStepper';

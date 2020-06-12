@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Button, Paper, makeStyles } from '@material-ui/core';
+import { Grid, Button, makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 
 interface Props {

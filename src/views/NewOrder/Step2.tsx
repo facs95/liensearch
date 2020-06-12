@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Typography, TextField, makeStyles, Divider } from '@material-ui/core';
+import { Grid, Typography, Divider } from '@material-ui/core';
 import { CreateWrapper } from '../../components/CreateWrapper';
 import { useForm } from "react-hook-form";
 import { Associations } from './NewOrder';
@@ -22,11 +22,10 @@ interface Props {
 
 export const Step2 = ({setData, setAssociations, associations, orderTypes, data}: Props) => {
     
-    const { register, handleSubmit, watch, errors } = useForm<OrderData>({defaultValues: {
+    const { register, handleSubmit} = useForm<OrderData>({defaultValues: {
         ...data
     }});
 
-    const classes = useStyles();
     const history = useHistory();
 
     const onSubmit = (data: OrderData) => {
@@ -170,10 +169,3 @@ export const Step2 = ({setData, setAssociations, associations, orderTypes, data}
 
     return <CreateWrapper {...{content}} onNext={handleSubmit(onSubmit)} />
 }
-
-const useStyles = makeStyles(() => ({
-    container: {
-        width:  '30vw',
-        minWdith: '200px'
-    }
-}))
