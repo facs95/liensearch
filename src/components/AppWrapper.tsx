@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import {
-    Container, 
-    CssBaseline,
-    makeStyles
+    Toolbar,
+    Grid,
+    makeStyles,
+    LinearProgress,
 } from '@material-ui/core';
 
 import {AppHeader} from './AppHeader';
+import { LoadingContext } from '../context/LoadingContext';
 
 interface Props {
     children: JSX.Element
@@ -13,24 +15,28 @@ interface Props {
 
 export const AppWrapper: React.FC<Props> = ({children}) => {
 
+    const [loading, setLoading] = useState(false);
+
     const classes = useStyles();
+
     return (
         <>
-            <CssBaseline />
             <AppHeader />
-            <Container maxWidth="sm">
-                <div className={classes.root}>
+            <Toolbar />
+            {loading && <LinearProgress />}
+            <LoadingContext.Provider value={{loading, setLoading}}>
+                <Grid container direction="column" alignItems="center" spacing={3} className={classes.content}>
                     {children}
-                </div>
-            </Container>
+                </Grid>
+            </LoadingContext.Provider>
         </>
     )
 }
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        display: 'flex',
-        justifyContent: "center",
-        marginTop: theme.spacing(5)
+    content: {
+        padding: theme.spacing(3, 4, 6, 4),
+        wordBreak: 'break-word',
+        minWidth: 0
     }
 }))

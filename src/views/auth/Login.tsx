@@ -6,6 +6,7 @@ import {
     makeStyles,
     Typography
 } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import * as firebase from 'firebase/app';
 
 export const Login: React.FC = () => {
@@ -19,8 +20,7 @@ export const Login: React.FC = () => {
         e.preventDefault();
         setErrorMessage('');
         try {
-            const response = await firebase.auth().signInWithEmailAndPassword(email, password);
-            console.log(response);
+            await firebase.auth().signInWithEmailAndPassword(email, password);
         } catch (err) {
             setErrorMessage(err.message);
         }
@@ -28,7 +28,7 @@ export const Login: React.FC = () => {
 
     return(
         <form className={classes.formContainer} onSubmit={(e) => onSubmit(e)}>
-            <Grid container direction="column" alignItems="stretch" spacing={4} >
+            <Grid container direction="column" alignItems="stretch" spacing={4}>
                 <Grid item>
                     <TextField type="email" error={!!errorMessage} fullWidth value={email} onChange={(e) => setEmail(e.target.value)} label="email" variant="outlined"/>
                 </Grid>
@@ -36,7 +36,17 @@ export const Login: React.FC = () => {
                     <TextField fullWidth error={!!errorMessage} type="password" label="password" value={password} onChange={(e) => setPassword(e.target.value)} variant="outlined"/>
                 </Grid>
                 <Grid item>
-                    <Button type="submit" fullWidth variant="contained" color="primary">Submit</Button>
+                    <Button type="submit" disabled={!email || !password} fullWidth variant="contained" color="primary">Submit</Button>
+                </Grid>
+                <Grid item container alignItems="center" spacing={1}>
+                    <Grid item>
+                        <Typography>Dont have an account?</Typography>
+                    </Grid>
+                    <Grid item>
+                        <Link to="/create-account">
+                            Create account
+                        </Link>
+                    </Grid>
                 </Grid>
                 {errorMessage && (
                     <Grid item>

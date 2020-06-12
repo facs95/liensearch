@@ -4,7 +4,7 @@ import { createBrowserHistory } from "history";
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import {Routes} from './Routes';
-import { UserContext } from './context/UserContext';
+import { UserContext, User } from './context/UserContext';
 import * as firebase from 'firebase/app';
 import './initFirebase';
 
@@ -14,17 +14,16 @@ const theme = createMuiTheme({})
 
 
 const App: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState<any | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        setCurrentUser(user);
+        const token = await user.getIdTokenResult();
+        setCurrentUser({admin: token.claims.admin});
         setLoading(false);
-        console.log(user);
       } else {
-        console.log(user);
         setCurrentUser(null);
         setLoading(false);
       }

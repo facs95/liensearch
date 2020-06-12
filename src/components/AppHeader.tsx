@@ -1,17 +1,18 @@
 import React from 'react';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core/styles';
 import { 
     AppBar,
     Toolbar,
     Typography,
     IconButton,
     MenuItem,
+    makeStyles,
     Menu,
     Divider
  } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import * as Firebase from 'firebase';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
   ({
@@ -24,6 +25,10 @@ const useStyles = makeStyles((theme: Theme) =>
     title: {
       flexGrow: 1,
     },
+    link: {
+      textDecoration: 'none',
+      color: 'white'
+    }
   }),
 );
 
@@ -42,19 +47,16 @@ export const AppHeader = () => {
   };
 
   const handleLogout = async () => {
-    const response = await Firebase.auth().signOut();
-    console.log(response);
+    await Firebase.auth().signOut();
   }
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="absolute">
         <Toolbar>
-            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                <MenuIcon />
-            </IconButton>
             <Typography variant="h6" className={classes.title}>
-                Dashboard
+              <Link to="/" className={classes.link}>
+                    Dashboard
+              </Link>
             </Typography>
             <IconButton
                 aria-label="account of current user"
@@ -87,6 +89,5 @@ export const AppHeader = () => {
             </Menu>
         </Toolbar>
       </AppBar>
-    </div>
   );
-}
+};

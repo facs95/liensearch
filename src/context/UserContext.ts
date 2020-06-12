@@ -1,7 +1,8 @@
 import {createContext} from 'react';
 
-interface user {
-    activeUser: any
+export interface User {
+    admin: boolean
 }
 
-export const UserContext =  createContext<any | null>(null);
+
+export const UserContext =  createContext<User | null>(null);
