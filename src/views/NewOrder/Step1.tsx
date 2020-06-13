@@ -58,7 +58,7 @@ export const Step1 = ({orderTypes, setOrderTypes}: Props) => {
 
 
     const content = (
-        <>
+        <Grid item container>
             <Grid item>
                 <Typography variant="h6">Select Type of Order</Typography>
                 <Divider />
@@ -86,7 +86,7 @@ export const Step1 = ({orderTypes, setOrderTypes}: Props) => {
                     </Grid>
                 ))}
             </Grid>
-        </>
+        </Grid>
     )
 
     return <CreateWrapper {...{content}} isFirst {...{onNext}} />
