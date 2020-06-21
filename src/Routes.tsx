@@ -12,7 +12,7 @@ const appWrap = (component: JSX.Element): JSX.Element => <AppWrapper>{component}
 export const Routes : React.FC = () => {
     const currentUser = useContext(UserContext);
     
-    if(currentUser) {
+    if(currentUser?.uid) {
         return (
             <>
                 <Route exact path='/' render={() => appWrap(<Dashboard />)} />

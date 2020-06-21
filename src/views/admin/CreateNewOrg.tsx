@@ -8,8 +8,12 @@ import {
 } from "@material-ui/core";
 
 interface Props {
-    orgName: string;
-    setOrgName: React.Dispatch<React.SetStateAction<string>>;
+    orgName: string
+    setOrgName: React.Dispatch<React.SetStateAction<string>>
+    phoneNumber: string
+    setPhoneNumber: React.Dispatch<React.SetStateAction<string>>
+    address: string
+    setAddress: React.Dispatch<React.SetStateAction<string>>
     onCreateOrgClick: () => void;
 }
 
@@ -17,6 +21,10 @@ export const CreateNewOrg = ({
     orgName,
     setOrgName,
     onCreateOrgClick,
+    phoneNumber,
+    setAddress,
+    address,
+    setPhoneNumber
 }: Props) => {
     return (
         <>
@@ -42,7 +50,28 @@ export const CreateNewOrg = ({
                     />
                 </Grid>
                 <Grid item>
+                    <TextField
+                        fullWidth
+                        size="small"
+                        label="Phone Number"
+                        variant="outlined"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                    />
+                </Grid>
+                <Grid item>
+                    <TextField
+                        fullWidth
+                        size="small"
+                        label="Address"
+                        variant="outlined"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                    />
+                </Grid>
+                <Grid item>
                     <Button
+                        disabled={!address || !phoneNumber || !orgName}
                         fullWidth
                         variant="contained"
                         onClick={onCreateOrgClick}

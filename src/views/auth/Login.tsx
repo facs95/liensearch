@@ -82,6 +82,7 @@ export const Login: React.FC = () => {
 
 const useStyles = makeStyles(() => ({
     formContainer: {
-        width: "50vh",
+        width: "30vw",
+        minWidth: '300px'
     },
 }));

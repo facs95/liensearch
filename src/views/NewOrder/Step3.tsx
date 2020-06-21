@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useContext } from 'react';
 import { Grid, Typography, Divider } from '@material-ui/core';
 import { CreateWrapper } from '../../components/CreateWrapper';
 import * as firebase from 'firebase/app';
 import { OrderType, OrderData } from '../../Interfaces';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckIcon from '@material-ui/icons/Check';
+import { UserContext } from '../../context/UserContext';
 
 interface Props {
     data: OrderData
@@ -34,19 +35,20 @@ export const Step3 = ({data, orderType}: Props) => {
 
     const [loading, setLoading] = useState(false);
 
+    const userData = useContext(UserContext);
+
     const db = firebase.firestore();
-    const user = firebase.auth().currentUser;
 
     const onSubmit = async () => {
         setLoading(true);
         try {
-            const response = await db.collection('orders').add({
+            await db.collection('orders').add({
                 ...data,
                 orderType,
-                userId: user?.uid,
+                userId: userData?.uid || '',
+                orgId: userData?.orgId || '',
                 created_on: firebase.firestore.FieldValue.serverTimestamp()
             })
-            console.log(response);
         } catch (err) {
             console.log(err)
         } finally {

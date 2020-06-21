@@ -70,6 +70,7 @@ export const AddUserToOrg = ({
                 </Grid>
                 <Grid item>
                     <Button
+                        disabled={!userToOrg || !selectedOrg}
                         fullWidth
                         variant="contained"
                         onClick={onAddUserToOrgClick}

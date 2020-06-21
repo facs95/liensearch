@@ -1,9 +1,7 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import { UserContext } from "../../context/UserContext";
 import { Redirect } from "react-router-dom";
-import {
-    Grid,
-} from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import * as firebase from "firebase";
 import { MessageSnackbar } from "../../components/SnackMessage";
 import { SetAdmin } from "./SetAdmin";
@@ -25,6 +23,8 @@ export const ManageAdming = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [orgs, setOrgs] = useState<Array<Org>>([]);
     const [selectedOrg, setSelectedOrg] = useState("");
+    const [orgPhoneNumber, setOrgPhoneNumber] = useState("");
+    const [orgAddress, setOrgAddress] = useState("");
     const [userToOrg, setUserToOrg] = useState("");
     const [messageType, setMessageType] = useState<"success" | "error">(
         "success"
@@ -78,6 +78,8 @@ export const ManageAdming = () => {
             await db.collection("organizations").add({
                 name: orgName,
                 users: [],
+                phoneNumber: orgPhoneNumber,
+                address: orgAddress,
                 created_on: firebase.firestore.FieldValue.serverTimestamp(),
             });
             setNotificationMessage("Org Create Succesfully", "success");
@@ -117,6 +119,10 @@ export const ManageAdming = () => {
                 </Grid>
                 <Grid item container spacing={3}>
                     <CreateNewOrg
+                        phoneNumber={orgPhoneNumber}
+                        setPhoneNumber={setOrgPhoneNumber}
+                        address={orgAddress}
+                        setAddress={setOrgAddress}
                         {...{ onCreateOrgClick }}
                         {...{ orgName }}
                         {...{ setOrgName }}

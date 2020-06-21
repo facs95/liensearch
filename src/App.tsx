@@ -16,18 +16,37 @@ const App: React.FC = () => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
+    const db = firebase.firestore();
+
     useEffect(() => {
         firebase.auth().onAuthStateChanged(async (user) => {
             if (user) {
-                const token = await user.getIdTokenResult();
-                setCurrentUser({ admin: token.claims.admin });
-                setLoading(false);
+                try {
+                    const token = await user.getIdTokenResult();
+                    const userDoc = await db.collection('users').doc(user.uid).get();
+                    let userData;
+                    if (userDoc.exists) {
+                        userData = await userDoc.data();
+                    }
+                    setCurrentUser({
+                        admin: token.claims.admin ?? false,
+                        orgId: userData?.orgId ?? '',
+                        name: userData?.name ?? '',
+                        phoneNumber: userData?.phoneNumber ?? '',
+                        email: user.email || '',
+                        uid: user.uid || ''
+                    });
+                } catch (err) {
+                    console.log(err);
+                } finally {
+                    setLoading(false)
+                }
             } else {
                 setCurrentUser(null);
                 setLoading(false);
             }
         });
-    }, []);
+    }, [db]);
 
     if (loading) return <></>;
 

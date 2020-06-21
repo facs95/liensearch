@@ -38,6 +38,7 @@ export const SetAdmin = ({ email, setEmail, onSetNewAdminClick }: Props) => {
                 </Grid>
                 <Grid item>
                     <Button
+                        disabled={!email}
                         fullWidth
                         variant="contained"
                         onClick={onSetNewAdminClick}
