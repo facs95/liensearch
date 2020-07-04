@@ -74,18 +74,12 @@ export const Step2 = ({setData, setAssociations, associations, orderTypes, data}
     const legalData: InputList= [{
         label: 'Folio',
         name: 'folio',
-        md: 4,
+        md: 6,
         xs: 12
     }, {
         label: 'Legal Description',
         name: 'legalDescription',
-        md: 4,
-        xs: 12
-    }, {
-        label: 'Requested By',
-        name: 'requestedBy',
-        required: false,
-        md: 4,
+        md: 6,
         xs: 12
     }, {
         label: 'Closing Date',

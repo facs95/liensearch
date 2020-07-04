@@ -15,6 +15,7 @@ import {
 import { useHistory } from "react-router-dom";
 import { Order } from "../Interfaces";
 import { LoadingContext } from "../context/LoadingContext";
+import { UserContext } from "../context/UserContext";
 
 const headers = ["Order", "Address", "Created"];
 
@@ -22,17 +23,17 @@ export const Dashboard: React.FC = () => {
     const history = useHistory();
     const [orders, serOrders] = useState<Order[]>([]);
 
+    const user = useContext(UserContext);
     const { setLoading } = useContext(LoadingContext);
 
     const db = firebase.firestore();
-    const user = firebase.auth().currentUser;
 
     const classes = useStyles();
 
     useEffect(() => {
         setLoading(true);
-        db.collection("orders")
-            .where("userId", "==", user?.uid)
+        if (user?.admin) {
+            db.collection("orders")
             .get()
             .then((querySnapshot) => {
                 const arr: Array<Order> = [];
@@ -45,6 +46,22 @@ export const Dashboard: React.FC = () => {
             .finally(() => {
                 setLoading(false);
             });
+        } else {
+            db.collection("orders")
+                .where("orgId", "==", user && user.orgId)
+                .get()
+                .then((querySnapshot) => {
+                    const arr: Array<Order> = [];
+                    querySnapshot.forEach((doc) => {
+                        arr.push({ ...doc.data(), id: doc.id } as Order);
+                    });
+                    serOrders(arr);
+                })
+                .catch((err) => console.log(err))
+                .finally(() => {
+                    setLoading(false);
+                });
+        }
     }, [db, user, setLoading]);
 
     const onClick = (id: string) => {

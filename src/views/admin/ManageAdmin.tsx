@@ -7,12 +7,7 @@ import { MessageSnackbar } from "../../components/SnackMessage";
 import { SetAdmin } from "./SetAdmin";
 import { CreateNewOrg } from "./CreateNewOrg";
 import { AddUserToOrg } from "./AddUserToOrg";
-
-export interface Org {
-    name: string;
-    users: string[];
-    id: string;
-}
+import { Org } from "../../Interfaces";
 
 export const ManageAdming = () => {
     const db = firebase.firestore();

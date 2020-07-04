@@ -6,9 +6,10 @@ import { Step1 } from "./Step1";
 import { useParams, Redirect, useHistory } from "react-router-dom";
 import { OrderType, OrderData } from "../../Interfaces";
 
+
+
 const blankData: OrderData = {
-    id: "",
-    address: {
+    address: { 
         address1: "",
         address2: "",
         unit: "",
@@ -18,7 +19,6 @@ const blankData: OrderData = {
     },
     folio: 0,
     legalDescription: "",
-    requestedBy: "",
     closingDate: "",
     neededDate: "",
     seller: "",

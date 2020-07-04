@@ -7,7 +7,7 @@ import {
     Divider,
     MenuItem,
 } from "@material-ui/core";
-import { Org } from "./ManageAdmin";
+import { Org } from "../../Interfaces";
 
 interface Props {
     userToOrg: string;
