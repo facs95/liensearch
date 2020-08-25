@@ -1,16 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Grid, Typography, Divider } from "@material-ui/core";
+import { Grid, Typography, Divider, Button } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
-import {
-    Order,
-    OrderType,
-    OrderData,
-    Org,
-    CreateOrder,
-} from "../Interfaces";
+import { Order, OrderType, OrderData, Org, CreateOrder } from "../Interfaces";
 import { UserContext } from "../context/UserContext";
-import * as firebase from "firebase";
+import firebase from "firebase";
+import { useHistory } from "react-router-dom";
 
 interface Props {
     order: Order | CreateOrder;
@@ -48,6 +43,7 @@ const orderDetails: Array<keyof OrderData> = [
 export const DisplayOrder = ({ order, type }: Props) => {
     const userData = useContext(UserContext);
     const db = firebase.firestore();
+    const history = useHistory();
 
     const [org, setOrg] = useState<Org | null>(null);
     const [requestedBy, setRequestedBy] = useState<string | null>(null);
@@ -79,7 +75,7 @@ export const DisplayOrder = ({ order, type }: Props) => {
                     if (!doc.exists) setRequestedBy(null);
                     setRequestedBy(doc.data()?.email ?? ("" as string));
                 })
-                .catch((err) => console.log('here', err))
+                .catch((err) => console.log("here", err))
                 .finally(() => setLoading(false));
         } else {
             setRequestedBy(userData?.email ?? "");
@@ -120,12 +116,12 @@ export const DisplayOrder = ({ order, type }: Props) => {
                     justify="space-between"
                     key={detail}
                 >
-                    <Grid item>
+                    <Grid item xs={4}>
                         <Typography variant="body1">
                             {orderInfoText.get(detail)}
                         </Typography>
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={8}>
                         <Typography variant="body2">
                             {order[detail] ?? ""}
                         </Typography>
@@ -137,42 +133,32 @@ export const DisplayOrder = ({ order, type }: Props) => {
 
     const OwnerInfo = (
         <>
-            <Grid
-                item
-                container
-                alignItems="center"
-                justify="space-between"
-            >
+            <Grid item container alignItems="center" justify="space-between">
                 <Grid item>
-                    <Typography variant="body1">
-                        Requested By
-                    </Typography>
+                    <Typography variant="body1">Requested By</Typography>
                 </Grid>
                 <Grid item>
                     <Typography variant="body2">
-                        {requestedBy ?? 'No User Found'}
+                        {requestedBy ?? "No User Found"}
                     </Typography>
                 </Grid>
             </Grid>
-            <Grid
-                item
-                container
-                alignItems="center"
-                justify="space-between"
-            >
+            <Grid item container alignItems="center" justify="space-between">
                 <Grid item>
-                    <Typography variant="body1">
-                        Company
-                    </Typography>
+                    <Typography variant="body1">Company</Typography>
                 </Grid>
                 <Grid item>
                     <Typography variant="body2">
-                        {org ? org.name : 'No Company Found'}
+                        {org ? org.name : "No Company Found"}
                     </Typography>
                 </Grid>
             </Grid>
         </>
-    )
+    );
+
+    function isOrder(order: Order | CreateOrder): order is Order {
+        return true;
+    }
 
     if (loading) return <></>;
 
@@ -251,6 +237,22 @@ export const DisplayOrder = ({ order, type }: Props) => {
                     </Grid>
                     {displayInfo()}
                 </Grid>
+                {isOrder(order) &&
+                    type === "info" &&
+                    order.status !== "cancelled" &&
+                    order.status !== "finalized" && (
+                        <Grid item>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() =>
+                                    history.push(`/update/${order.id}/1`)
+                                }
+                            >
+                                Update Order
+                            </Button>
+                        </Grid>
+                    )}
             </Grid>
         </>
     );

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Grid, Typography, TextField, MenuItem } from "@material-ui/core";
-import * as firebase from "firebase/app";
+import firebase from "firebase/app";
 import { UserData } from "../../Interfaces";
 import { UserContext } from "../../context/UserContext";
 

@@ -39,12 +39,6 @@ export const Step1 = ({ orderTypes, setOrderTypes }: Props) => {
             description: "Lorep ilsum Lorep ilsumLorep ilsumLorep ilsum",
         },
         {
-            name: "permitResolution",
-            label: "Permit Resolution",
-            selected: orderTypes.permitResolution,
-            description: "Lorep ilsum Lorep ilsumLorep ilsumLorep ilsum",
-        },
-        {
             name: "estoppelLetter",
             label: "Estoppel Letter",
             selected: orderTypes.estoppelLetter,
@@ -54,6 +48,12 @@ export const Step1 = ({ orderTypes, setOrderTypes }: Props) => {
             name: "landSurvey",
             label: "Land Survey",
             selected: orderTypes.landSurvey,
+            description: "Lorep ilsum Lorep ilsumLorep ilsumLorep ilsum",
+        },
+        {
+            name: "permitResolution",
+            label: "Permit Resolution",
+            selected: orderTypes.permitResolution,
             description: "Lorep ilsum Lorep ilsumLorep ilsumLorep ilsum",
         },
     ];

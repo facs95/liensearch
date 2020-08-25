@@ -7,7 +7,7 @@ import {
     Typography,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import * as firebase from "firebase/app";
+import firebase from "firebase/app";
 
 export const Login: React.FC = () => {
     const classes = useStyles();

@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import * as firebase from "firebase/app";
+import firebase from "firebase/app";
 import { Order, OrderStatus } from "../Interfaces";
-import { Paper, Grid, makeStyles } from "@material-ui/core";
+import { Paper, Grid, makeStyles, Button } from "@material-ui/core";
 import { LoadingContext } from "../context/LoadingContext";
 import { DisplayOrder } from "../components/DisplayOrder";
 import { OrderDetails } from "../components/OrderDetails/OrderDetails";
@@ -10,7 +10,6 @@ import { UploadDocuments } from "../components/UploadDocuments";
 
 export const OrderInfo = () => {
     const [order, setOrder] = useState<Order | null>(null);
-    const [orderStatus, setOrderStatus] = useState<OrderStatus | null>(null);
     const [statusId, setStatusId] = useState("");
 
     const classes = useStyles();
@@ -32,17 +31,6 @@ export const OrderInfo = () => {
                         console.log("No such document!");
                     } else {
                         setOrder({ ...doc.data(), id: doc.id } as Order);
-                        db.collection("orders")
-                            .doc(id)
-                            .collection("orderStatus")
-                            .get()
-                            .then((docs) => {
-                                docs.forEach((doc) => {
-                                    setStatusId(doc.id);
-                                    setOrderStatus(doc.data() as OrderStatus);
-                                });
-                            })
-                            .catch((err) => console.log(err));
                     }
                 })
                 .catch((err) => console.log("here", err))
@@ -52,7 +40,7 @@ export const OrderInfo = () => {
         }
     }, [db, id, setLoading]);
 
-    if (!order || !orderStatus) return <> </>;
+    if (!order) return <> </>;
 
     const orderData = (
         <Paper>
@@ -73,12 +61,14 @@ export const OrderInfo = () => {
                 <Grid item xs={8}>
                     {orderData}
                 </Grid>
-                <Grid item xs={4}>
-                    <OrderDetails
-                        {...{ orderStatus }}
-                        orderId={id}
-                        {...{ statusId }}
-                    />
+                <Grid item container direction="column" xs={4}>
+                    <Grid item>
+                        <OrderDetails
+                            {...{ order }}
+                            orderId={id}
+                            {...{ statusId }}
+                        />
+                    </Grid>
                 </Grid>
             </Grid>
             <Grid item container>

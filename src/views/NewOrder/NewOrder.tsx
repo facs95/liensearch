@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import { FullScreenCreate } from "../../components/FullScreenCreate";
-import { Step2 } from "./Step2";
 import { Step3 } from "./Step3";
 import { Step1 } from "./Step1";
 import { useParams, Redirect, useHistory } from "react-router-dom";
 import { OrderType, OrderData } from "../../Interfaces";
-
-
+import { CreateOrderForm } from "../../components/CreateOrderForm";
 
 const blankData: OrderData = {
-    address: { 
+    address: {
         address1: "",
         address2: "",
         unit: "",
@@ -17,6 +15,8 @@ const blankData: OrderData = {
         state: "",
         zipCode: "",
     },
+    orderNumber: '',
+    specialInstructions: '',
     folio: 0,
     legalDescription: "",
     closingDate: "",
@@ -26,15 +26,18 @@ const blankData: OrderData = {
     listingAgent: "",
     listingAgentPhone: 0,
     landSurvey: {
-        survey: false,
-        surveyCert: false,
+        lenderCertification: '',
+        buyerCertification: '',
+        underwriterCertification: '',
+        titleCompany: '',
+        hardCopy: false,
     },
 };
 export type Associations = Array<{ name: string; number: string }>;
 
 export const blankAssociation = { name: "", number: "" };
 
-export const blankOrderType = {
+export const blankOrderType: OrderType = {
     lienSearch: false,
     permitResolution: false,
     estoppelLetter: false,
@@ -72,7 +75,10 @@ export const NewOrder = () => {
         orderType || blankOrderType
     );
 
-    const { step } = useParams();
+    const { step, id } = useParams();
+
+    const basePath = '/new-order';
+
 
     if (!step) return <Redirect to="/" />;
 
@@ -88,18 +94,21 @@ export const NewOrder = () => {
         {
             label: "Property Information",
             component: (
-                <Step2
+                <CreateOrderForm
                     {...{ setData }}
                     {...{ setAssociations }}
                     {...{ associations }}
                     {...{ orderTypes }}
                     {...{ data }}
+                    {...{basePath}}
                 />
             ),
         },
         {
             label: "Confirm Order",
-            component: <Step3 {...{ data }} orderType={orderTypes} />,
+            component: (
+                <Step3 {...{ id }} {...{ data }} orderType={orderTypes} />
+            ),
         },
     ];
 

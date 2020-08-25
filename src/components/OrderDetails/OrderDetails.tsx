@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
 import {
     Paper,
     Grid,
@@ -8,35 +8,38 @@ import {
     Button,
 } from "@material-ui/core";
 import { OrderStatusController } from "./OrdetStatusController";
-import { OrderStatus } from "../../Interfaces";
+import { Order } from "../../Interfaces";
 import { OrderAssigneeController } from "./OrderAssigneeController";
 import { isEqual } from "lodash";
-import * as firebase from "firebase/app";
+import firebase from "firebase/app";
+import { UserContext } from "../../context/UserContext";
+import { WarnModal } from "../WarnModal";
 
 interface Props {
-    orderStatus: OrderStatus;
+    order: Order;
     orderId: string;
-    statusId: string;
 }
 
-export const OrderDetails = ({ orderStatus, orderId, statusId }: Props) => {
-    const [currentStatus, setCurrentStatus] = useState(orderStatus.status);
+export const OrderDetails = ({ order, orderId }: Props) => {
+    const [currentStatus, setCurrentStatus] = useState(order.status);
     const [currentAssignee, setCurrentAssignee] = useState(
-        orderStatus.assignee
+        order.assignee
     );
     const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [modalTitle, setModalTitle] = useState("");
 
-
+    const user = useContext(UserContext);
     const db = firebase.firestore();
 
     const classes = useStyles();
 
     const newStatus = useMemo(() => {
-        const newstat = { ...orderStatus };
+        const newstat = { ...order };
         newstat.assignee = currentAssignee;
         newstat.status = currentStatus;
         return newstat;
-    }, [currentAssignee, currentStatus, orderStatus]);
+    }, [currentAssignee, currentStatus, order]);
 
     const onApply = async () => {
         setLoading(true);
@@ -44,8 +47,6 @@ export const OrderDetails = ({ orderStatus, orderId, statusId }: Props) => {
             await db
                 .collection("orders")
                 .doc(orderId)
-                .collection("orderStatus")
-                .doc(statusId)
                 .update(newStatus);
         } catch (err) {
             console.log(err);
@@ -54,38 +55,89 @@ export const OrderDetails = ({ orderStatus, orderId, statusId }: Props) => {
         }
     };
 
+    const onHold = () => {
+        setModalTitle("You want to put this order on Hold?");
+        setOpen(true);
+    };
+
+    const onCancel = () => {
+        setModalTitle("You want cancel this order?");
+        setOpen(true);
+    };
+
     return (
-        <Paper>
-            <Grid
-                container
-                direction="column"
-                spacing={3}
-                className={classes.cardContainer}
-            >
-                <Grid item>
-                    <Typography variant="h5">Order Status</Typography>
-                    <Divider />
+        <>
+            <WarnModal
+                {...{ open }}
+                {...{ setOpen }}
+                title={modalTitle}
+                description="Please send an email to facs95@gmail.com with the request and we will take care of it."
+            />
+            <Paper>
+                <Grid
+                    container
+                    direction="column"
+                    spacing={3}
+                    className={classes.cardContainer}
+                >
+                    <Grid item>
+                        <Typography variant="h5">Order Status</Typography>
+                        <Divider />
+                    </Grid>
+                    <OrderStatusController
+                        {...{ currentStatus }}
+                        {...{ setCurrentStatus }}
+                    />
+                    <OrderAssigneeController
+                        {...{ currentAssignee }}
+                        {...{ setCurrentAssignee }}
+                    />
+                    {user?.admin ? (
+                        <Grid item container justify="center">
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                disabled={
+                                    isEqual(order, newStatus) || loading
+                                }
+                                onClick={onApply}
+                            >
+                                Apply Changes
+                            </Button>
+                        </Grid>
+                    ) : (
+                        <Grid
+                            item
+                            container
+                            direction="column"
+                            alignItems="center"
+                            spacing={1}
+                        >
+                            <Grid item xs={6}>
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={onHold}
+                                >
+                                    Hold
+                                </Button>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={onCancel}
+                                >
+                                    Cancel Order
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    )}
                 </Grid>
-                <OrderStatusController
-                    {...{ currentStatus }}
-                    {...{ setCurrentStatus }}
-                />
-                <OrderAssigneeController
-                    {...{ currentAssignee }}
-                    {...{ setCurrentAssignee }}
-                />
-                <Grid item container justify="center">
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        disabled={isEqual(orderStatus, newStatus) || loading}
-                        onClick={onApply}
-                    >
-                        Apply Changes
-                    </Button>
-                </Grid>
-            </Grid>
-        </Paper>
+            </Paper>
+        </>
     );
 };
 

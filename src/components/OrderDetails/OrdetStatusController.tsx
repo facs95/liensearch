@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Grid, Typography, TextField, MenuItem } from "@material-ui/core";
 import {
-    orderStatus as orderStatusType,
+    orderStatusEnumKeys as orderStatusType,
     OrderStatusEnum,
 } from "../../Interfaces";
 import { UserContext } from "../../context/UserContext";

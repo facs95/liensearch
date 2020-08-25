@@ -1,9 +1,10 @@
 import React, { useState, useContext } from "react";
 import { CreateWrapper } from "../../components/CreateWrapper";
-import * as firebase from "firebase/app";
+import firebase from "firebase/app";
 import { OrderType, OrderData, CreateOrder } from "../../Interfaces";
 import { UserContext } from "../../context/UserContext";
 import { DisplayOrder } from "../../components/DisplayOrder";
+import { useHistory } from "react-router-dom";
 
 interface Props {
     data: OrderData;
@@ -14,6 +15,7 @@ export const Step3 = ({ data, orderType }: Props) => {
     const [loading, setLoading] = useState(false);
 
     const userData = useContext(UserContext);
+    const history = useHistory();
 
     const db = firebase.firestore();
 
@@ -23,12 +25,14 @@ export const Step3 = ({ data, orderType }: Props) => {
         requestedBy:  userData?.uid || "",
         orgId: userData?.orgId || "",
         created_on: firebase.firestore.FieldValue.serverTimestamp() as firebase.firestore.Timestamp,
+        status: 'newOrder'
     };
 
     const onSubmit = async () => {
         setLoading(true);
         try {
             await db.collection("orders").add(order);
+            history.push('/');
         } catch (err) {
             console.log(err);
         } finally {
@@ -36,11 +40,7 @@ export const Step3 = ({ data, orderType }: Props) => {
         }
     };
 
-    const content = (
-        <>
-            <DisplayOrder {...{order}} type="create" />
-        </>
-    );
+    const content = <DisplayOrder {...{order}} type="create" />
 
     return (
         <CreateWrapper

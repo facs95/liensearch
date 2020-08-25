@@ -1,4 +1,4 @@
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 
 export interface UserData {
     email: string
@@ -6,8 +6,12 @@ export interface UserData {
     orgId: string
     phoneNumber: string
 }
+
+export interface OrdersStats {
+    count: number
+}
 export interface OrderType {
-    lienSearch: boolean
+    lienSearch:  boolean
     estoppelLetter: boolean
     landSurvey: boolean
     permitResolution: boolean
@@ -15,6 +19,12 @@ export interface OrderType {
 
 export type  Associations = Array<{name: string, number: string}>
 
+export enum OrderTypeEnum {
+    lienSearch = 'Lien Search',
+    estoppelLetter = 'Estoppel Letter',
+    landSurvey = 'Land Survey',
+    permitResolution = 'Permit Resolution'
+};
 
 export enum OrderStatusEnum {
     newOrder = 'New Order',
@@ -26,7 +36,9 @@ export enum OrderStatusEnum {
     finalized = 'Finalized'
 }
 
-export type orderStatus = keyof typeof OrderStatusEnum;
+export type orderStatusEnumKeys = keyof typeof OrderStatusEnum;
+
+export type orderTypeEnumKeys =  keyof typeof OrderTypeEnum
 
 
 export interface OrderData {
@@ -38,6 +50,8 @@ export interface OrderData {
         state: string
         zipCode: string
     }
+    orderNumber: string
+    specialInstructions: string
     folio: number
     legalDescription: string
     requestedBy?: string
@@ -48,8 +62,11 @@ export interface OrderData {
     listingAgent?: string
     listingAgentPhone?: number
     landSurvey?: {
-        survey: boolean,
-        surveyCert: boolean
+        lenderCertification: string
+        buyerCertification: string
+        underwriterCertification: string
+        titleCompany: string
+        hardCopy: boolean
     }
 }
 
@@ -58,20 +75,23 @@ export interface CreateOrder extends OrderData {
     orderType: OrderType
     associations?: Associations
     created_on: firebase.firestore.Timestamp
+    status: orderStatusEnumKeys
 }
 
-export interface Order extends CreateOrder {
+export interface Order extends CreateOrder, OrderStatus {
     id: string
+    orderNumber: string
 }
 
 export interface OrderStatus {
-    status: orderStatus
     assignee: string
-    documentPath: string
 }
 
-export interface Org {
+export interface OrgData {
     name: string;
     users: string[];
-    id: string;
+}
+
+export interface Org extends OrgData {
+    id: string
 }

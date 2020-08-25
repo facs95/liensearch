@@ -5,7 +5,7 @@ import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import { Routes } from "./Routes";
 import { UserContext, User } from "./context/UserContext";
-import * as firebase from "firebase/app";
+import firebase from "firebase/app";
 import "./initFirebase";
 
 const history = createBrowserHistory();

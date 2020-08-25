@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, useCallback } from "react";
 import { UserContext } from "../../context/UserContext";
 import { Redirect } from "react-router-dom";
 import { Grid } from "@material-ui/core";
-import * as firebase from "firebase";
+import firebase from "firebase";
 import { MessageSnackbar } from "../../components/SnackMessage";
 import { SetAdmin } from "./SetAdmin";
 import { CreateNewOrg } from "./CreateNewOrg";

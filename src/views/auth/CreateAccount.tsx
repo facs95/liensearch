@@ -7,7 +7,7 @@ import {
     Typography,
 } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
-import * as firebase from "firebase/app";
+import firebase from "firebase/app";
 import { User } from "../../context/UserContext";
 import { useForm } from "react-hook-form";
 import PhoneNumber from "awesome-phonenumber";

@@ -12,8 +12,9 @@ import {
 import { UserContext } from "../context/UserContext";
 import CloseIcon from "@material-ui/icons/Close";
 import DescriptionIcon from "@material-ui/icons/Description";
+import GetAppIcon from "@material-ui/icons/GetApp";
 import { map } from "lodash";
-import * as firebase from "firebase/app";
+import firebase from "firebase/app";
 import { MessageSnackbar } from "./SnackMessage";
 
 interface Props {
@@ -73,7 +74,7 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
         }
     }, [db, user, docsPath]);
 
-    const onUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (files) {
             const storageRef = db.ref();
@@ -91,6 +92,29 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
                 .catch((err) => catchError(err))
                 .finally(() => setUploadLoading(false));
         }
+    };
+
+    const onDownload = (fileName: string) => {
+        const fileRef = db.ref(`${docsPath}${fileName}`);
+        fileRef
+            .getDownloadURL()
+            .then((url) => {
+                var xhr = new XMLHttpRequest();
+                xhr.responseType = "blob";
+                xhr.onload = function () {
+                    var blob = xhr.response;
+                    const url = window.URL.createObjectURL(blob)
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.setAttribute("download", fileName);
+                    document.body.appendChild(link);
+                    link.click();
+                    link.parentNode?.removeChild(link);
+                };
+                xhr.open("GET", url);
+                xhr.send();
+            })
+            .catch((err) => console.log(err));
     };
 
     useEffect(() => {
@@ -140,6 +164,13 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
                                             {file}
                                         </Typography>
                                     </Grid>
+                                </Grid>
+                                <Grid item>
+                                    <IconButton
+                                        onClick={() => onDownload(file)}
+                                    >
+                                        <GetAppIcon />
+                                    </IconButton>
                                 </Grid>
                                 {user && user.admin && (
                                     <Grid item>
