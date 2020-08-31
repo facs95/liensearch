@@ -8,9 +8,9 @@ import {
 } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import firebase from "firebase/app";
-import { User } from "../../context/UserContext";
 import { useForm } from "react-hook-form";
 import PhoneNumber from "awesome-phonenumber";
+import { User } from "../../Interfaces";
 
 interface UserCreation extends User {
     confirmPassword: string;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import firebase from "firebase/app";
-import { Order, OrderStatus } from "../Interfaces";
+import { Order } from "../Interfaces";
 import { Paper, Grid, makeStyles, Button } from "@material-ui/core";
 import { LoadingContext } from "../context/LoadingContext";
 import { DisplayOrder } from "../components/DisplayOrder";

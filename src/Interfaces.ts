@@ -1,10 +1,13 @@
-import firebase from 'firebase/app';
-
 export interface UserData {
     email: string
     name: string
     orgId: string
     phoneNumber: string
+}
+
+export interface User extends UserData {
+    uid: string
+    admin: boolean
 }
 
 export interface OrdersStats {
@@ -74,17 +77,15 @@ export interface CreateOrder extends OrderData {
     orgId: string
     orderType: OrderType
     associations?: Associations
-    created_on: firebase.firestore.Timestamp
+    created_on: number
     status: orderStatusEnumKeys
-}
-
-export interface Order extends CreateOrder, OrderStatus {
-    id: string
-    orderNumber: string
-}
-
-export interface OrderStatus {
     assignee: string
+}
+
+export interface Order extends CreateOrder {
+    id: string
+    objectID: string //for algolia
+    orderNumber: string
 }
 
 export interface OrgData {

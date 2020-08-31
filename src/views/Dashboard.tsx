@@ -20,6 +20,8 @@ import { UserContext } from "../context/UserContext";
 import { OrderTable } from "../components/OrderTable";
 
 import { Filters, FilterOptions } from "../components/Filters";
+import { SearchAlgolia } from "../components/SearchAlgolia";
+import { OrdersTable } from "../components/OrdersTable";
 
 function storeData(
     arr: Array<Order>,
@@ -48,8 +50,6 @@ export const Dashboard: React.FC = () => {
     const db = firebase.firestore();
 
     const classes = useStyles();
-
-    console.log(filterOrderType);
 
     const checkQuery = (
         query:
@@ -97,8 +97,8 @@ export const Dashboard: React.FC = () => {
         const refOrders = db.collection("orders");
         if (user?.admin) {
             const query = generateQuery(refOrders);
-            query
-                .get()
+            query 
+               .get()
                 .then((querySnapshot) => {
                     const arr: Array<Order> = [];
                     querySnapshot.forEach((doc) => {
@@ -179,14 +179,10 @@ export const Dashboard: React.FC = () => {
                 )}
             </Grid>
             <Grid item container spacing={3} direction="column">
-                <Filters filters={filtersOptions} {...{ isAdmin }} />
-                {loading ? (
-                    <CircularProgress />
-                ) : (
-                    <Grid item>
-                        <OrderTable {...{ orders }} {...{ isAdmin }} />
-                    </Grid>
-                )}
+                {/* <Filters filters={filtersOptions} {...{ isAdmin }} /> */}
+                <Grid item>
+                    <OrdersTable />
+                </Grid>
             </Grid>
         </Grid>
     );

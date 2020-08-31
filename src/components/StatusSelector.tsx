@@ -17,6 +17,7 @@ export const StatusSelector = ({ status, setStatus, withLabel }: Props) => {
             value={status}
             variant="outlined"
             fullWidth
+            size="small"
             onChange={(e) => setStatus(e.target.value as orderStatusEnumKeys)}
         >
             <MenuItem value="">All</MenuItem>

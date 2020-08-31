@@ -16,17 +16,18 @@ export const Step3 = ({ data, orderType }: Props) => {
 
     const userData = useContext(UserContext);
     const history = useHistory();
-    const {id} = useParams();
+    const { id } = useParams();
 
     const db = firebase.firestore();
 
     const order: CreateOrder = {
         ...data,
         orderType,
-        requestedBy:  userData?.uid || "",
+        requestedBy: userData?.uid || "",
         orgId: userData?.orgId || "",
-        created_on: firebase.firestore.FieldValue.serverTimestamp() as firebase.firestore.Timestamp,
-        status: 'newOrder'
+        created_on: Date.now(),
+        status: "newOrder",
+        assignee: "",
     };
 
     const onSubmit = async () => {
@@ -43,7 +44,7 @@ export const Step3 = ({ data, orderType }: Props) => {
 
     const content = (
         <>
-            <DisplayOrder {...{order}} type="create" />
+            <DisplayOrder {...{ order }} type="create" />
         </>
     );
 

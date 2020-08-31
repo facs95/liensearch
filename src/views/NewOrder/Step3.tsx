@@ -24,8 +24,9 @@ export const Step3 = ({ data, orderType }: Props) => {
         orderType,
         requestedBy:  userData?.uid || "",
         orgId: userData?.orgId || "",
-        created_on: firebase.firestore.FieldValue.serverTimestamp() as firebase.firestore.Timestamp,
-        status: 'newOrder'
+        created_on: Date.now(),
+        status: 'newOrder',
+        assignee: ''
     };
 
     const onSubmit = async () => {

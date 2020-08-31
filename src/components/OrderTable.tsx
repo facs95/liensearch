@@ -10,16 +10,39 @@ import {
 } from "@material-ui/core";
 import { Order, OrderStatusEnum } from "../Interfaces";
 import { useHistory } from "react-router-dom";
-import { EmptyState } from "./EmpyState";
 
 const headers = ["Order ID", "Folio", "Address", "Status", "Created"];
 
 interface Props {
-    orders: Order[];
-    isAdmin?: boolean;
+    orders: Order[]
 }
 
-export const OrderTable = ({ orders, isAdmin }: Props) => {
+export const OrderTable = ({orders}: Props) => {
+    return (
+        <Paper>
+            <Table stickyHeader>
+                <TableHead>
+                    <TableRow>
+                        {headers.map((entry, index) => (
+                            <TableCell key={`header${index}`}>
+                                {entry}
+                            </TableCell>
+                        ))}
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {orders.map((order, i) => <Row key={`order-${i}`} {...{order}} />)}
+                </TableBody>
+            </Table>
+        </Paper>
+    );
+};
+
+interface RowProps {
+    order: Order;
+}
+
+const Row = ({ order }: RowProps) => {
     const history = useHistory();
     const classes = useStyles();
 
@@ -28,49 +51,19 @@ export const OrderTable = ({ orders, isAdmin }: Props) => {
     };
 
     return (
-        <>
-            {orders.length === 0 ? (
-                <EmptyState imageFile="orders.svg" title="No Order Found" />
-            ) : (
-                <Paper>
-                    <Table stickyHeader>
-                        <TableHead>
-                            <TableRow>
-                                {headers.map((entry, index) => (
-                                    <TableCell key={`header${index}`}>
-                                        {entry}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {orders?.map((entry, index) => (
-                                <TableRow
-                                    onClick={() => onClick(entry.id)}
-                                    hover
-                                    className={classes.pointer}
-                                    key={`liensearch${index}`}
-                                >
-                                    <TableCell>{entry.id || "--"}</TableCell>
-                                    <TableCell>{entry.folio || "--"}</TableCell>
-                                    <TableCell>
-                                        {entry.address.address1 || "--"}
-                                    </TableCell>
-                                    <TableCell>
-                                        {OrderStatusEnum[entry.status] || "--"}
-                                    </TableCell>
-                                    <TableCell>
-                                        {entry.created_on
-                                            ?.toDate()
-                                            .toLocaleDateString() || "--"}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </Paper>
-            )}
-        </>
+        <TableRow
+            onClick={() => onClick(order.objectID)}
+            hover
+            className={classes.pointer}
+        >
+            <TableCell>{order.objectID|| "--"}</TableCell>
+            <TableCell>{order.folio || "--"}</TableCell>
+            <TableCell>{order.address.address1 || "--"}</TableCell>
+            <TableCell>{OrderStatusEnum[order.status] || "--"}</TableCell>
+            <TableCell>
+                {new Date(order.created_on).toLocaleString() || "--"}
+            </TableCell>
+        </TableRow>
     );
 };
 

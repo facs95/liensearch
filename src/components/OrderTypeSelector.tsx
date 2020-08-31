@@ -15,6 +15,7 @@ export const OrderTypeSelector = ({ orderType, setOrderType }: Props) => {
             value={orderType}
             variant="outlined"
             fullWidth
+            size="small"
             onChange={(e) => setOrderType(e.target.value as orderTypeEnumKeys)}
         >
             <MenuItem value="">All</MenuItem>

@@ -42,6 +42,7 @@ export const OrgSelector = ({
                 variant="outlined"
                 fullWidth
                 value={orgId}
+                size="small"
                 onChange={(e) => setOrgId(e.target.value)}
             >
                 <MenuItem value="">All</MenuItem>

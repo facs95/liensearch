@@ -2,31 +2,30 @@ import React from "react";
 import { Grid, Button } from "@material-ui/core";
 import { StatusSelector } from "./StatusSelector";
 import { OrgSelector } from "./OrgSelector";
-import { orderStatusEnumKeys, orderTypeEnumKeys } from "../Interfaces";
+import { orderStatusEnumKeys, orderTypeEnumKeys, Order } from "../Interfaces";
 import { OrderTypeSelector } from "./OrderTypeSelector";
 import { forOwn } from "lodash";
 
 export interface FilterOptions {
-    status?: {
+    status: {
         value: orderStatusEnumKeys | "";
         setter: React.Dispatch<React.SetStateAction<orderStatusEnumKeys | "">>;
-    };
+    }
+    orderType: {
+        value: orderTypeEnumKeys | "";
+        setter: React.Dispatch<React.SetStateAction<orderTypeEnumKeys | "">>;
+    }
     organizations?: {
         value: string;
         setter: React.Dispatch<React.SetStateAction<string>>;
-    };
-    orderType?: {
-        value: orderTypeEnumKeys | "";
-        setter: React.Dispatch<React.SetStateAction<orderTypeEnumKeys | "">>;
-    };
+    }
 }
 
 interface Props {
-    isAdmin: boolean | undefined;
     filters: FilterOptions;
 }
 
-export const Filters = ({ isAdmin, filters }: Props) => {
+export const Filters = ({ filters }: Props) => {
     const { status, organizations, orderType } = filters;
 
     const clearFilters = () => {
@@ -62,6 +61,7 @@ export const Filters = ({ isAdmin, filters }: Props) => {
             )}
             <Grid item xs={12} sm={3} md={2}>
                 <Button
+                    size="small"
                     variant="contained"
                     color="primary"
                     onClick={clearFilters}

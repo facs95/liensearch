@@ -4,9 +4,10 @@ import { createBrowserHistory } from "history";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import { Routes } from "./Routes";
-import { UserContext, User } from "./context/UserContext";
+import { UserContext } from "./context/UserContext";
 import firebase from "firebase/app";
 import "./initFirebase";
+import { User } from "./Interfaces";
 
 const history = createBrowserHistory();
 

@@ -14,6 +14,7 @@ import { isEqual } from "lodash";
 import firebase from "firebase/app";
 import { UserContext } from "../../context/UserContext";
 import { WarnModal } from "../WarnModal";
+import { MessageSnackbar } from "../SnackMessage";
 
 interface Props {
     order: Order;
@@ -28,6 +29,7 @@ export const OrderDetails = ({ order, orderId }: Props) => {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState("");
+    const [message, setMessage] = useState('');
 
     const user = useContext(UserContext);
     const db = firebase.firestore();
@@ -41,6 +43,8 @@ export const OrderDetails = ({ order, orderId }: Props) => {
         return newstat;
     }, [currentAssignee, currentStatus, order]);
 
+    console.log(newStatus);
+    
     const onApply = async () => {
         setLoading(true);
         try {
@@ -49,7 +53,7 @@ export const OrderDetails = ({ order, orderId }: Props) => {
                 .doc(orderId)
                 .update(newStatus);
         } catch (err) {
-            console.log(err);
+            setMessage(err.message || err);
         } finally {
             setLoading(false);
         }
@@ -67,6 +71,7 @@ export const OrderDetails = ({ order, orderId }: Props) => {
 
     return (
         <>
+            <MessageSnackbar {...{message}} {...{setMessage}} />
             <WarnModal
                 {...{ open }}
                 {...{ setOpen }}
