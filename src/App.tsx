@@ -11,7 +11,13 @@ import { User } from "./Interfaces";
 
 const history = createBrowserHistory();
 
-const theme = createMuiTheme({});
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            main: '#fff200'
+        }
+    }
+});
 
 const App: React.FC = () => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);

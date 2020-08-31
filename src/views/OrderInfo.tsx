@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import firebase from "firebase/app";
 import { Order } from "../Interfaces";
-import { Paper, Grid, makeStyles, Button } from "@material-ui/core";
+import { Paper, Grid, makeStyles } from "@material-ui/core";
 import { LoadingContext } from "../context/LoadingContext";
 import { DisplayOrder } from "../components/DisplayOrder";
 import { OrderDetails } from "../components/OrderDetails/OrderDetails";
@@ -10,7 +10,6 @@ import { UploadDocuments } from "../components/UploadDocuments";
 
 export const OrderInfo = () => {
     const [order, setOrder] = useState<Order | null>(null);
-    const [statusId, setStatusId] = useState("");
 
     const classes = useStyles();
 
@@ -66,7 +65,6 @@ export const OrderInfo = () => {
                         <OrderDetails
                             {...{ order }}
                             orderId={id}
-                            {...{ statusId }}
                         />
                     </Grid>
                 </Grid>

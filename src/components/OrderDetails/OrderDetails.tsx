@@ -43,7 +43,6 @@ export const OrderDetails = ({ order, orderId }: Props) => {
         return newstat;
     }, [currentAssignee, currentStatus, order]);
 
-    console.log(newStatus);
     
     const onApply = async () => {
         setLoading(true);

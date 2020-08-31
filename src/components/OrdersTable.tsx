@@ -88,7 +88,7 @@ export const OrdersTable = () => {
         }
 
         filterArr = generateFilterQuery(filters, filterArr);
-        console.log(filterArr);
+        
         index
             .search(searchQuery, {
                 facetFilters: filterArr,

@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     link: {
         textDecoration: "none",
-        color: "white",
+        color: 'black'
     },
 }));
 

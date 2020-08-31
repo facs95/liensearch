@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, Button } from "@material-ui/core";
 import { StatusSelector } from "./StatusSelector";
 import { OrgSelector } from "./OrgSelector";
-import { orderStatusEnumKeys, orderTypeEnumKeys, Order } from "../Interfaces";
+import { orderStatusEnumKeys, orderTypeEnumKeys } from "../Interfaces";
 import { OrderTypeSelector } from "./OrderTypeSelector";
 import { forOwn } from "lodash";
 

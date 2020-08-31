@@ -20,7 +20,7 @@ interface Props {
 export const OrderTable = ({orders}: Props) => {
     return (
         <Paper>
-            <Table stickyHeader>
+            <Table>
                 <TableHead>
                     <TableRow>
                         {headers.map((entry, index) => (
