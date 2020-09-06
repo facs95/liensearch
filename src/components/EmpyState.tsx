@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Grid, Button } from "@material-ui/core";
+import { Typography, Grid, Button, makeStyles } from "@material-ui/core";
 
 interface Props {
     imageFile: string;
@@ -15,6 +15,9 @@ export const EmptyState = ({
     description,
     button,
 }: Props) => {
+
+    const classes = useStyles();
+
     return (
             <Grid
                 item
@@ -26,13 +29,13 @@ export const EmptyState = ({
             >
                 <Grid item>
                     <img
-                        style={{maxWidth: '400px'}}
+                        className={classes.image}
                         src={`${process.env.PUBLIC_URL}/Illustrations/${imageFile}`}
                         alt=""
                     ></img>
                 </Grid>
                 <Grid item>
-                    <Typography variant="h5">{title}</Typography>
+                    <Typography variant="h6">{title}</Typography>
                 </Grid>
                 {description && (
                     <Grid item xs={8}>
@@ -59,3 +62,10 @@ export const EmptyState = ({
             </Grid>
     );
 };
+
+const useStyles = makeStyles(theme => ({
+    image: {
+        maxWidth: '350px',
+        fill: theme.palette.primary.main
+    }
+}))

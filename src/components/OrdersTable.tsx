@@ -14,6 +14,7 @@ import { UserContext } from "../context/UserContext";
 import { SearchInput } from "./SearchInput";
 import { FilterOptions, Filters } from "./Filters";
 import { transform } from "lodash";
+import { EmptyState } from "./EmpyState";
 
 const searchClient = algoliasearch(
     "1AVZX9L93I",
@@ -88,7 +89,7 @@ export const OrdersTable = () => {
         }
 
         filterArr = generateFilterQuery(filters, filterArr);
-        
+
         index
             .search(searchQuery, {
                 facetFilters: filterArr,
@@ -116,7 +117,11 @@ export const OrdersTable = () => {
                 </Grid>
             </Grid>
             <Grid item>
-                <OrderTable {...{ orders }} />
+                {orders.length === 0 ? (
+                    <EmptyState title="No Orders Found" imageFile="orders.svg" />
+                ) : (
+                    <OrderTable {...{ orders }} />
+                )}
             </Grid>
         </Grid>
     );

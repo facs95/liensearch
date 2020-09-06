@@ -16,6 +16,9 @@ const theme = createMuiTheme({
         primary: {
             main: '#fff200'
         }
+    },
+    typography: {
+        fontFamily: 'Roboto'
     }
 });
 

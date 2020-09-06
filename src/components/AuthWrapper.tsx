@@ -1,34 +1,30 @@
-import React from 'react';
-import {
-    Container, 
-    CssBaseline,
-    makeStyles,
-    Toolbar
-} from '@material-ui/core';
+import React from "react";
+import { Container, makeStyles, Toolbar, CssBaseline } from "@material-ui/core";
 
 interface Props {
-    children: JSX.Element
+    children: JSX.Element;
 }
 
-export const AuthWrapper: React.FC<Props> = ({children}) => {
-
+export const AuthWrapper: React.FC<Props> = ({ children }) => {
     const classes = useStyles();
     return (
         <>
             <CssBaseline />
+            <img
+                alt=""
+                className={classes.logo}
+                src={`${process.env.PUBLIC_URL}/logo.png`}
+            />
             <Container maxWidth="sm">
                 <Toolbar />
-                <div className={classes.root}>
-                    {children}
-                </div>
+                {children}
             </Container>
         </>
-    )
-}
+    );
+};
 
 const useStyles = makeStyles(() => ({
-    root: {
-        display: 'flex',
-        justifyContent: "center"
-    }
-}))
+    logo: {
+        height: 150,
+    },
+}));
