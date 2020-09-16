@@ -25,6 +25,6 @@ export const AuthWrapper: React.FC<Props> = ({ children }) => {
 
 const useStyles = makeStyles(() => ({
     logo: {
-        height: 150,
+        height: 120,
     },
 }));

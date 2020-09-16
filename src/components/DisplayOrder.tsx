@@ -2,7 +2,14 @@ import React, { useContext, useState, useEffect } from "react";
 import { Grid, Typography, Divider, Button } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
-import { Order, OrderType, OrderData, Org, CreateOrder } from "../Interfaces";
+import {
+    Order,
+    OrderType,
+    OrderData,
+    Org,
+    CreateOrder,
+    LandSurveyDetails,
+} from "../Interfaces";
 import { UserContext } from "../context/UserContext";
 import firebase from "firebase";
 import { useHistory } from "react-router-dom";
@@ -28,6 +35,14 @@ const orderInfoText = new Map<keyof OrderData, string>([
     ["buyer", "Buyer"],
     ["listingAgent", "Listing Agent"],
     ["listingAgentPhone", "Listing Agent Phone"],
+    ["specialInstructions", "Special Instructions"],
+]);
+
+const landSurveyDetailsText = new Map<keyof LandSurveyDetails, string>([
+    ["buyerCertification", "Buyer Certification"],
+    ["lenderCertification", "Lender Certification"],
+    ["titleCompany", "Title Company"],
+    ["underwriterCertification", "Underwriter Certficiation"],
 ]);
 
 const orderDetails: Array<keyof OrderData> = [
@@ -38,6 +53,14 @@ const orderDetails: Array<keyof OrderData> = [
     "listingAgent",
     "listingAgentPhone",
     "legalDescription",
+    "specialInstructions",
+];
+
+const landSurveyDetails: Array<keyof LandSurveyDetails> = [
+    "buyerCertification",
+    "lenderCertification",
+    "titleCompany",
+    "underwriterCertification",
 ];
 
 export const DisplayOrder = ({ order, type }: Props) => {
@@ -123,12 +146,60 @@ export const DisplayOrder = ({ order, type }: Props) => {
                     </Grid>
                     <Grid item xs={8}>
                         <Typography variant="body2">
-                            {order[detail] ?? ""}
+                            {order[detail] || "--"}
                         </Typography>
                     </Grid>
                 </Grid>
             );
         });
+    };
+
+    const LandSurveyInfo = () => {
+        return (
+            <>
+                {landSurveyDetails.map((detail) => {
+                    return (
+                        <Grid
+                            item
+                            container
+                            alignItems="center"
+                            justify="space-between"
+                            key={detail}
+                        >
+                            <Grid item xs={4}>
+                                <Typography variant="body1">
+                                    {landSurveyDetailsText.get(detail)}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Typography variant="body2">
+                                    {order.landSurvey![detail] ?? "--"}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    );
+                })}
+                <Grid
+                    item
+                    container
+                    alignItems="center"
+                    justify="space-between"
+                >
+                    <Grid item xs={4}>
+                        <Typography variant="body1">
+                            Include Hard Copy
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={8}>
+                        {order.landSurvey!.hardCopy ? (
+                            <CheckIcon />
+                        ) : (
+                            <CloseIcon />
+                        )}
+                    </Grid>
+                </Grid>
+            </>
+        );
     };
 
     const OwnerInfo = (
@@ -223,6 +294,23 @@ export const DisplayOrder = ({ order, type }: Props) => {
                     </Grid>
                     {getOrderTypes()}
                 </Grid>
+                {order.landSurvey && (
+                    <Grid
+                        item
+                        container
+                        xs={type === "info" ? 12 : 6}
+                        direction="column"
+                        spacing={1}
+                    >
+                        <Grid item>
+                            <Typography variant="h6">
+                                Land Survey Info
+                            </Typography>
+                            <Divider />
+                        </Grid>
+                        {LandSurveyInfo()}
+                    </Grid>
+                )}
 
                 <Grid
                     item

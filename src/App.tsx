@@ -14,12 +14,51 @@ const history = createBrowserHistory();
 const theme = createMuiTheme({
     palette: {
         primary: {
-            main: '#fff200'
-        }
+            main: "#fff200",
+        },
+        secondary: {
+            main: "#e32c2c",
+        },
     },
     typography: {
-        fontFamily: 'Roboto'
-    }
+        fontFamily: "Roboto",
+        fontSize: 12,
+        subtitle1: {
+            fontWeight: 'bold'
+        }
+    },
+    spacing: 6,
+    overrides: {
+        MuiButton: {
+            root: {
+                height: 40,
+            },
+        },
+        MuiFormLabel: {
+            focused: {
+                borderColor: "black",
+            },
+            root: {
+                "&$focused": {
+                    color: "black",
+                },
+            },
+        },
+        MuiTextField: {
+            root: {
+                "&.Mui-focused fieldset": {
+                    borderColor: "green",
+                },
+            },
+        },
+        MuiOutlinedInput: {
+            root: {
+                "&$focused": {
+                    borderColor: "black",
+                },
+            },
+        },
+    },
 });
 
 const App: React.FC = () => {
@@ -33,23 +72,26 @@ const App: React.FC = () => {
             if (user) {
                 try {
                     const token = await user.getIdTokenResult();
-                    const userDoc = await db.collection('users').doc(user.uid).get();
+                    const userDoc = await db
+                        .collection("users")
+                        .doc(user.uid)
+                        .get();
                     let userData;
                     if (userDoc.exists) {
                         userData = await userDoc.data();
                     }
                     setCurrentUser({
                         admin: token.claims.admin ?? false,
-                        orgId: userData?.orgId ?? '',
-                        name: userData?.name ?? '',
-                        phoneNumber: userData?.phoneNumber ?? '',
-                        email: user.email || '',
-                        uid: user.uid || ''
+                        orgId: userData?.orgId ?? "",
+                        name: userData?.name ?? "",
+                        phoneNumber: userData?.phoneNumber ?? "",
+                        email: user.email || "",
+                        uid: user.uid || "",
                     });
                 } catch (err) {
                     console.log(err);
                 } finally {
-                    setLoading(false)
+                    setLoading(false);
                 }
             } else {
                 setCurrentUser(null);

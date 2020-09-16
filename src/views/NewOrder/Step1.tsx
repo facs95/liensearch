@@ -8,9 +8,11 @@ import {
     CardContent,
     makeStyles,
     Divider,
+    CardMedia,
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { OrderType } from "../../Interfaces";
+import { OrderCard } from "../../components/OrderCard";
 
 interface Props {
     orderTypes: OrderType;
@@ -59,6 +61,7 @@ export const Step1 = ({ orderTypes, setOrderTypes }: Props) => {
     ];
 
     const handleDataChange = (type: keyof OrderType) => {
+        console.log('here')
         setOrderTypes((c) => {
             let curr = { ...c };
             curr[type] = !curr[type];
@@ -79,33 +82,14 @@ export const Step1 = ({ orderTypes, setOrderTypes }: Props) => {
             </Grid>
             <Grid item container spacing={2}>
                 {typeCards.map((type, index) => (
-                    <Grid key={`type-${index}`} item xs={6} md={3}>
-                        <Card
-                            raised
-                            className={
-                                type.selected ? classes.cardSelected : undefined
-                            }
-                            onClick={() => handleDataChange(type.name)}
-                        >
-                            <CardActionArea>
-                                <CardContent>
-                                    <Typography
-                                        gutterBottom
-                                        variant="h5"
-                                        component="h2"
-                                    >
-                                        {type.label}
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        color="textSecondary"
-                                        component="p"
-                                    >
-                                        {type.description}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
+                    <Grid
+                        key={`type-${index}`}
+                        item
+                        xs={6}
+                        md={3}
+                        onClick={() => handleDataChange(type.name)}
+                    >
+                        <OrderCard type={type.name} selected={orderTypes[type.name]} />
                     </Grid>
                 ))}
             </Grid>

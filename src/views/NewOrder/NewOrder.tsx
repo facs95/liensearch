@@ -20,7 +20,7 @@ const blankData: OrderData = {
     folio: 0,
     legalDescription: "",
     closingDate: "",
-    neededDate: "",
+    neededDate: new Date().toLocaleDateString(),
     seller: "",
     buyer: "",
     listingAgent: "",

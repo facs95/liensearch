@@ -37,12 +37,12 @@ export const OrderAssigneeController = ({
     return (
         <Grid item container alignItems="center" justify="space-between">
             <Grid item>
-                <Typography variant="body1">Asignee</Typography>
+                <Typography variant="subtitle1">Asignee</Typography>
             </Grid>
             <Grid item xs={7}>
                 {user?.admin ? (
                     <TextField
-                        label="Assign Employee"
+                        label="Assigned Employee"
                         select
                         variant="outlined"
                         fullWidth

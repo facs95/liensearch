@@ -7,6 +7,7 @@ interface Props {
     description?: string;
     button?: { text: string; onClick: () => void; disabled?: boolean };
     documentation?: { text: string; link: string };
+    width?: number;
 }
 
 export const EmptyState = ({
@@ -14,58 +15,59 @@ export const EmptyState = ({
     title,
     description,
     button,
+    width,
 }: Props) => {
-
     const classes = useStyles();
 
     return (
-            <Grid
-                item
-                container
-                direction="column"
-                justify="center"
-                alignItems="center"
-                spacing={3}
-            >
-                <Grid item>
-                    <img
-                        className={classes.image}
-                        src={`${process.env.PUBLIC_URL}/Illustrations/${imageFile}`}
-                        alt=""
-                    ></img>
-                </Grid>
-                <Grid item>
-                    <Typography variant="h6">{title}</Typography>
-                </Grid>
-                {description && (
-                    <Grid item xs={8}>
-                        <Typography align="center" variant="body2">
-                            {description}
-                        </Typography>
-                    </Grid>
-                )}
-
-                {button && (
-                    <Grid item>
-                        <Button
-                            data-test="button_emptyCreate"
-                            disabled={button.disabled}
-                            color="primary"
-                            size="large"
-                            variant="contained"
-                            onClick={button.onClick}
-                        >
-                            {button.text}
-                        </Button>
-                    </Grid>
-                )}
+        <Grid
+            item
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            spacing={3}
+        >
+            <Grid item>
+                <img
+                    style={width ? { maxWidth: width } : undefined}
+                    className={classes.image}
+                    src={`${process.env.PUBLIC_URL}/Illustrations/${imageFile}`}
+                    alt=""
+                ></img>
             </Grid>
+            <Grid item>
+                <Typography variant="h6">{title}</Typography>
+            </Grid>
+            {description && (
+                <Grid item xs={8}>
+                    <Typography align="center" variant="body2">
+                        {description}
+                    </Typography>
+                </Grid>
+            )}
+
+            {button && (
+                <Grid item>
+                    <Button
+                        data-test="button_emptyCreate"
+                        disabled={button.disabled}
+                        color="primary"
+                        size="large"
+                        variant="contained"
+                        onClick={button.onClick}
+                    >
+                        {button.text}
+                    </Button>
+                </Grid>
+            )}
+        </Grid>
     );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     image: {
-        maxWidth: '350px',
-        fill: theme.palette.primary.main
-    }
-}))
+        maxWidth: "350px",
+        fill: theme.palette.primary.main,
+    },
+}));

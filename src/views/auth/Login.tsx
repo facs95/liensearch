@@ -5,10 +5,10 @@ import {
     Grid,
     Typography,
     makeStyles,
-    Paper,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import firebase from "firebase/app";
+import { PaperWrapper } from "../../components/PaperWrapper";
 
 export const Login: React.FC = () => {
     const [email, setEmail] = useState<string>("");
@@ -27,7 +27,7 @@ export const Login: React.FC = () => {
     };
 
     return (
-        <Paper className={classes.paper}>
+        <PaperWrapper>
             <form onSubmit={(e) => onSubmit(e)}>
                 <Grid
                     container
@@ -88,15 +88,15 @@ export const Login: React.FC = () => {
                     )}
                 </Grid>
             </form>
-        </Paper>
+        </PaperWrapper>
     );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     title: {
         alignSelf: "center",
     },
-    paper: {
-        padding: theme.spacing(5)
-    }
+    logo: {
+        height: 150,
+    },
 }));

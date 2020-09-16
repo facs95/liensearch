@@ -16,6 +16,7 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import { map } from "lodash";
 import firebase from "firebase/app";
 import { MessageSnackbar } from "./SnackMessage";
+import { EmptyState } from "./EmpyState";
 
 interface Props {
     orderId: string;
@@ -103,7 +104,7 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
                 xhr.responseType = "blob";
                 xhr.onload = function () {
                     var blob = xhr.response;
-                    const url = window.URL.createObjectURL(blob)
+                    const url = window.URL.createObjectURL(blob);
                     const link = document.createElement("a");
                     link.href = url;
                     link.setAttribute("download", fileName);
@@ -142,47 +143,56 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
                         <Divider />
                     </Grid>
                     <Grid item container direction="column" spacing={2}>
-                        {listOfFiles.map((file, index) => (
-                            <Grid
-                                key={`file-${index}`}
-                                item
-                                container
-                                justify="space-between"
-                                wrap="nowrap"
-                            >
+                        {listOfFiles.length === 0 ? (
+                            <EmptyState
+                                width={200}
+                                title="No documents yet"
+                                imageFile="documents.svg"
+                            />
+                        ) : (
+                            listOfFiles.map((file, index) => (
                                 <Grid
+                                    key={`file-${index}`}
                                     item
                                     container
-                                    spacing={1}
-                                    alignItems="center"
+                                    justify="space-between"
+                                    wrap="nowrap"
                                 >
-                                    <Grid item>
-                                        <DescriptionIcon />
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography variant="body1">
-                                            {file}
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                                <Grid item>
-                                    <IconButton
-                                        onClick={() => onDownload(file)}
+                                    <Grid
+                                        item
+                                        container
+                                        spacing={1}
+                                        alignItems="center"
+                                        wrap="nowrap"
                                     >
-                                        <GetAppIcon />
-                                    </IconButton>
-                                </Grid>
-                                {user && user.admin && (
+                                        <Grid item>
+                                            <DescriptionIcon />
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography variant="body1" noWrap>
+                                                {file}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>
                                     <Grid item>
                                         <IconButton
-                                            onClick={() => deleteFile(file)}
+                                            onClick={() => onDownload(file)}
                                         >
-                                            <CloseIcon />
+                                            <GetAppIcon />
                                         </IconButton>
                                     </Grid>
-                                )}
-                            </Grid>
-                        ))}
+                                    {user && user.admin && (
+                                        <Grid item>
+                                            <IconButton
+                                                onClick={() => deleteFile(file)}
+                                            >
+                                                <CloseIcon />
+                                            </IconButton>
+                                        </Grid>
+                                    )}
+                                </Grid>
+                            ))
+                        )}
                     </Grid>
                     {user && user.admin && (
                         <Grid item container spacing={1}>

@@ -30,7 +30,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     link: {
         textDecoration: "none",
-        color: 'black'
+        color: "black",
+        flexGrow:1
+    },
+    logo: {
+        height: 60,
+        width:140
     },
 }));
 
@@ -61,11 +66,13 @@ export const AppHeader = () => {
     return (
         <AppBar position="absolute">
             <Toolbar>
-                <Typography variant="h6" className={classes.title}>
-                    <Link to="/" className={classes.link}>
-                        Dashboard
-                    </Link>
-                </Typography>
+                <Link to="/" className={classes.link}>
+                    <img
+                        alt=""
+                        className={classes.logo}
+                        src={`${process.env.PUBLIC_URL}/logo-transparent.png`}
+                    />
+                </Link>
                 <IconButton
                     aria-label="account of current user"
                     aria-controls="menu-appbar"
@@ -91,12 +98,10 @@ export const AppHeader = () => {
                     onClose={handleClose}
                 >
                     <MenuItem>
-                      <ListItemAvatar>
-                          <Avatar>
-                            {currentUser?.email.charAt(0)}
-                          </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText>{currentUser?.email}</ListItemText>
+                        <ListItemAvatar>
+                            <Avatar>{currentUser?.email.charAt(0)}</Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>{currentUser?.email}</ListItemText>
                     </MenuItem>
                     {currentUser?.admin && (
                         <MenuItem onClick={redirectAdmin}>Admin</MenuItem>

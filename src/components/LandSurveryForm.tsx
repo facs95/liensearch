@@ -1,12 +1,9 @@
 import React from 'react';
-import { FieldElement } from 'react-hook-form';
 import { Grid, Typography, Divider, FormControl, FormGroup, FormControlLabel, Checkbox } from '@material-ui/core';
 import { CreateForm, InputList } from './CreateForm';
 
 interface Props {
-    register: {
-        <Element extends FieldElement<any> = FieldElement<any>>(): (ref: Element | null) => void;
-    }
+    register:any
 }
 
 export const LandSurveyForm = ({register}: Props) => {

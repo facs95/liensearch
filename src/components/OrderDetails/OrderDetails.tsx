@@ -77,7 +77,7 @@ export const OrderDetails = ({ order, orderId }: Props) => {
                 title={modalTitle}
                 description="Please send an email to facs95@gmail.com with the request and we will take care of it."
             />
-            <Paper>
+            <Paper className={classes.paper}>
                 <Grid
                     container
                     direction="column"
@@ -97,7 +97,7 @@ export const OrderDetails = ({ order, orderId }: Props) => {
                         {...{ setCurrentAssignee }}
                     />
                     {user?.admin ? (
-                        <Grid item container justify="center">
+                        <Grid item container>
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -114,12 +114,12 @@ export const OrderDetails = ({ order, orderId }: Props) => {
                             item
                             container
                             direction="column"
-                            alignItems="center"
                             spacing={1}
                         >
                             <Grid item xs={6}>
                                 <Button
                                     fullWidth
+                                    size="small"
                                     variant="contained"
                                     color="primary"
                                     onClick={onHold}
@@ -130,11 +130,11 @@ export const OrderDetails = ({ order, orderId }: Props) => {
                             <Grid item xs={6}>
                                 <Button
                                     fullWidth
-                                    variant="contained"
-                                    color="secondary"
+                                    size="small"
+                                    variant="outlined"
                                     onClick={onCancel}
                                 >
-                                    Cancel Order
+                                    Cancel
                                 </Button>
                             </Grid>
                         </Grid>
@@ -149,4 +149,7 @@ const useStyles = makeStyles((theme) => ({
     cardContainer: {
         padding: theme.spacing(3),
     },
+    paper: {
+        width: '100%'
+    }
 }));

@@ -72,7 +72,7 @@ export const AssociationForm = ({setAssociations, associations}: Props) => {
                 </Grid>
             ))}
             <Grid item xs={3}>
-                <Button variant='text' onClick={addAssociation} color='primary' startIcon={<AddIcon />}>
+                <Button variant='text' onClick={addAssociation}  startIcon={<AddIcon />}>
                     Add Association
                 </Button> 
             </Grid>

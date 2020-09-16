@@ -57,20 +57,24 @@ export const OrderInfo = () => {
     return (
         <>
             <Grid item container spacing={3}>
-                <Grid item xs={8}>
+                <Grid item sm={12} md={8}>
                     {orderData}
                 </Grid>
-                <Grid item container direction="column" xs={4}>
-                    <Grid item>
-                        <OrderDetails
-                            {...{ order }}
-                            orderId={id}
-                        />
+                <Grid
+                    item
+                    container
+                    direction="column"
+                    sm={12}
+                    md={4}
+                    spacing={3}
+                >
+                    <Grid item container>
+                        <OrderDetails {...{ order }} orderId={id} />
+                    </Grid>
+                    <Grid item container>
+                        <UploadDocuments orderId={id} orgId={order.orgId} />
                     </Grid>
                 </Grid>
-            </Grid>
-            <Grid item container>
-                <UploadDocuments orderId={id} orgId={order.orgId} />
             </Grid>
         </>
     );

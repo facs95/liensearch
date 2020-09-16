@@ -8,21 +8,26 @@ import { UserContext } from "../../context/UserContext";
 
 interface Props {
     currentStatus: orderStatusType;
-    setCurrentStatus: React.Dispatch<React.SetStateAction<keyof typeof OrderStatusEnum>>
+    setCurrentStatus: React.Dispatch<
+        React.SetStateAction<keyof typeof OrderStatusEnum>
+    >;
 }
 
-export const OrderStatusController = ({ currentStatus, setCurrentStatus }: Props) => {
-
+export const OrderStatusController = ({
+    currentStatus,
+    setCurrentStatus,
+}: Props) => {
     const user = useContext(UserContext);
 
     return (
         <Grid item container alignItems="center" justify="space-between">
             <Grid item>
-                <Typography variant="body1">Status</Typography>
+                <Typography variant="subtitle1">Status</Typography>
             </Grid>
             <Grid item xs={7}>
                 {user?.admin ? (
                     <TextField
+                        label="Order Status"
                         select
                         variant="outlined"
                         fullWidth
