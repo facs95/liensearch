@@ -20,40 +20,35 @@ export const Step3 = ({ data, orderType }: Props) => {
 
     const db = firebase.firestore();
 
-    const order: CreateOrder = {
-        ...data,
-        orderType,
-        requestedBy: userData?.uid || "",
-        orgId: userData?.orgId || "",
-        created_on: Date.now(),
-        status: "newOrder",
-        assignee: "",
-    };
+    // const order: CreateOrder = {
+    //     ...data,
+    //     orderType,
+    //     requestedBy: userData?.uid || "",
+    //     orgId: userData?.orgId || "",
+    //     created_on: Date.now(),
+    //     status: "newOrder",
+    //     assignee: "",
+    // };
 
-    const onSubmit = async () => {
-        setLoading(true);
-        try {
-            await db.collection("orders").doc(id).update(order);
-            history.push(`/order/${id}`);
-        } catch (err) {
-            console.log(err);
-        } finally {
-            setLoading(false);
-        }
-    };
+    // const onSubmit = async () => {
+    //     setLoading(true);
+    //     try {
+    //         await db.collection("orders").doc(id).update(order);
+    //         history.push(`/order/${id}`);
+    //     } catch (err) {
+    //         console.log(err);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
-    const content = (
-        <>
-            <DisplayOrder {...{ order }} type="create" />
-        </>
-    );
+    // const content = (
+    //     <>
+    //         <DisplayOrder {...{ order }} type="create" />
+    //     </>
+    // );
 
     return (
-        <CreateWrapper
-            {...{ content }}
-            isLast
-            onNext={onSubmit}
-            disabled={loading}
-        />
+        <div>Hello Wrold</div>
     );
 };

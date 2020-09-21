@@ -173,7 +173,7 @@ export const DisplayOrder = ({ order, type }: Props) => {
                             </Grid>
                             <Grid item xs={8}>
                                 <Typography variant="body2">
-                                    {order.landSurvey![detail] ?? "--"}
+                                    {order.landSurvey![detail] || "--"}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -232,6 +232,8 @@ export const DisplayOrder = ({ order, type }: Props) => {
     }
 
     if (loading) return <></>;
+
+    console.log(order)
 
     return (
         <>

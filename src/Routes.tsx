@@ -18,7 +18,7 @@ export const Routes : React.FC = () => {
             <>
                 <Route exact path='/' render={() => appWrap(<Dashboard />)} />
                 <Route exact path='/new-order/:step' render={() => appWrap(<NewOrder />)} />
-                <Route exact path='/update/:id/:step' render={() => appWrap(<UpdateOrder />)} />
+                <Route exact path='/update/:id/:step' render={() => appWrap(<NewOrder />)} />
                 <Route exact path='/order/:id' render={() => appWrap(<OrderInfo />)} />
                 <Route exact path='/admin/manage' render={() => appWrap(<ManageAdming />)} />
                 {/* <Redirect to="/" /> // Need to understand this */}

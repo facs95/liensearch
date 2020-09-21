@@ -1,34 +1,69 @@
-import React from 'react';
-import { Grid, Typography, Divider, FormControl, FormGroup, FormControlLabel, Checkbox } from '@material-ui/core';
-import { CreateForm, InputList } from './CreateForm';
-
+import React, { useEffect } from "react";
+import { Grid, Typography, Divider } from "@material-ui/core";
+import { LandSurveyDetailsEnum, LandSurveyDetails } from "../Interfaces";
+import { InputGenerator } from "./InputGenerator";
 interface Props {
-    register:any
+    landSurvey: LandSurveyDetails;
+    setLandSurvey: React.Dispatch<React.SetStateAction<LandSurveyDetails>>;
+    setIsLandSurveyReady: React.Dispatch<
+        React.SetStateAction<boolean>
+    >;
 }
 
-export const LandSurveyForm = ({register}: Props) => {
+interface InputList {
+    label: string;
+    key: keyof LandSurveyDetails;
+    isNotRequired?: boolean;
+    xs?: boolean | "auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+    md?: boolean | "auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+    isBoolean?: boolean;
+}
 
-    const inputList: InputList  = [{
-        label: 'Lender Certification',
-        name: 'lenderCertification',
-        xs: 12,
-        md: 6
-    }, {
-        label: 'Buyer Certification',
-        name: 'buyerCertification',
-        xs: 12,
-        md: 6
-    }, {
-        label: 'Underwriter Certification',
-        name: 'underwriterCertification',
-        xs: 12,
-        md: 6
-    }, {
-        label: 'Title Company',
-        name: 'titleCompany',
-        xs: 12,
-        md: 6
-    }]
+export const LandSurveyForm = ({
+    landSurvey,
+    setLandSurvey,
+    setIsLandSurveyReady,
+}: Props) => {
+    const inputList: InputList[] = [
+        {
+            label: LandSurveyDetailsEnum["lenderCertification"],
+            key: "lenderCertification",
+            xs: 12,
+            md: 6,
+        },
+        {
+            label: LandSurveyDetailsEnum["buyerCertification"],
+            key: "buyerCertification",
+            xs: 12,
+            md: 6,
+        },
+        {
+            label: LandSurveyDetailsEnum["underwriterCertification"],
+            key: "underwriterCertification",
+            xs: 12,
+            md: 6,
+        },
+        {
+            label: LandSurveyDetailsEnum["titleCompany"],
+            key: "titleCompany",
+            xs: 12,
+            md: 6,
+        },
+        {
+            label: LandSurveyDetailsEnum["hardCopy"],
+            key: "hardCopy",
+            xs: 12,
+            md: 6,
+            isBoolean: true,
+        },
+    ];
+
+    useEffect(() => {
+        const isReady = !inputList.some(
+            (item) => item.key !== 'hardCopy' && !item.isNotRequired && !landSurvey[item.key]
+        );
+        setIsLandSurveyReady(isReady);
+    }, [inputList, landSurvey, setIsLandSurveyReady]);
 
     return (
         <>
@@ -37,15 +72,19 @@ export const LandSurveyForm = ({register}: Props) => {
                 <Divider />
             </Grid>
             <Grid item container spacing={2}>
-                <CreateForm {...{register}} {...{inputList}} />
-                <Grid item xs={12}>
-                    <FormControl>
-                        <FormGroup>
-                            <FormControlLabel label="Include Hard Copy" control={<Checkbox inputRef={register} name="landSurvey.hardCopy" />} />
-                        </FormGroup>
-                    </FormControl>
-                </Grid>
+                {inputList.map((item, index) => (
+                    <Grid key={`data-${index}`} item xs={item.xs} md={item.md}>
+                        <InputGenerator
+                            name={item.key}
+                            isNotRequired={item.isNotRequired}
+                            value={landSurvey[item.key] ?? ""}
+                            setter={setLandSurvey}
+                            label={item.label}
+                            isBoolean={item.isBoolean}
+                        />
+                    </Grid>
+                ))}
             </Grid>
         </>
-    )
-}
+    );
+};

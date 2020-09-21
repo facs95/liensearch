@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Grid, Typography, Divider, TextField, Button, IconButton } from '@material-ui/core';
 import { Associations, blankAssociation } from '../views/NewOrder/NewOrder';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/CloseOutlined';
+import {some} from 'lodash';
 
 interface Props {
     setAssociations: React.Dispatch<React.SetStateAction<Associations>>,
     associations: Associations
+    setIsAssociationsReady: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 interface AssociationData {
@@ -14,7 +16,7 @@ interface AssociationData {
     number: string
 }
 
-export const AssociationForm = ({setAssociations, associations}: Props) => {
+export const AssociationForm = ({setAssociations, associations, setIsAssociationsReady}: Props) => {
     
     const addAssociation = () => {
         setAssociations(c => [...c, {...blankAssociation}])
@@ -33,6 +35,11 @@ export const AssociationForm = ({setAssociations, associations}: Props) => {
         updatedData[index][name] = e.target.value;
         setAssociations(updatedData);
     };
+
+    useEffect(() => {
+        const isReady = !associations.some(item => some(item, (value) => !value) )
+        setIsAssociationsReady(isReady)
+    }, [associations, setIsAssociationsReady])
 
     return (
         <>

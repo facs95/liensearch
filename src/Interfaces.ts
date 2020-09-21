@@ -39,9 +39,46 @@ export enum OrderStatusEnum {
     finalized = "Finalized",
 }
 
+export enum AddressEnum {
+    address1 = 'Address 1',
+    address2 = 'Address 2',
+    unit = "Unit",
+    city = "City",
+    state = "State",
+    zipCode = "Zip Code"
+}
+
+export enum OrderDataEnum {
+    orderNumber = "Order #",
+    folio = "Folio",
+    legalDescription = "Legal Description",
+    seller = "Seller",
+    buyer = "Buyer",
+    listingAgent = "Listing Agent",
+    listingAgentPhone = "Listing Agent Phone",
+    specialInstructions = "Special Instructions"
+}
+
+export enum LandSurveyDetailsEnum {
+    lenderCertification = "Lender Certification",
+    buyerCertification = "Buyer Certification",
+    underwriterCertification = "Underwriter Certification",
+    titleCompany = "Title Company",
+    hardCopy = "Request Hard Copy"
+}
+
 export type orderStatusEnumKeys = keyof typeof OrderStatusEnum;
 
 export type orderTypeEnumKeys = keyof typeof OrderTypeEnum;
+
+export interface Address {
+    address1: string;
+    address2: string;
+    unit: string;
+    city: string;
+    state: string;
+    zipCode: string;
+}
 
 export interface LandSurveyDetails {
     lenderCertification: string;
@@ -52,14 +89,6 @@ export interface LandSurveyDetails {
 }
 
 export interface OrderData {
-    address: {
-        address1: string;
-        address2: string;
-        unit: string;
-        city: string;
-        state: string;
-        zipCode: string;
-    };
     orderNumber: string;
     specialInstructions: string;
     folio: number;
@@ -71,16 +100,17 @@ export interface OrderData {
     buyer: string;
     listingAgent?: string;
     listingAgentPhone?: number;
-    landSurvey?: LandSurveyDetails
 }
 
 export interface CreateOrder extends OrderData {
     orgId: string;
     orderType: OrderType;
     associations?: Associations;
+    landSurvey?: LandSurveyDetails;
     created_on: number;
     status: orderStatusEnumKeys;
     assignee: string;
+    address: Address
 }
 
 export interface Order extends CreateOrder {

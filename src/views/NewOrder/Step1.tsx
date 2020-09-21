@@ -1,29 +1,21 @@
 import React from "react";
 import { CreateWrapper } from "../../components/CreateWrapper";
-import {
-    Grid,
-    Typography,
-    Card,
-    CardActionArea,
-    CardContent,
-    makeStyles,
-    Divider,
-    CardMedia,
-} from "@material-ui/core";
+import { Grid, Typography, makeStyles, Divider } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { OrderType } from "../../Interfaces";
 import { OrderCard } from "../../components/OrderCard";
 
 interface Props {
+    basePath: string;
     orderTypes: OrderType;
     setOrderTypes: React.Dispatch<React.SetStateAction<OrderType>>;
 }
-export const Step1 = ({ orderTypes, setOrderTypes }: Props) => {
+export const Step1 = ({ basePath, orderTypes, setOrderTypes }: Props) => {
     const classes = useStyles();
     const history = useHistory();
 
     const onNext = () => {
-        history.push("/new-order/2", {
+        history.push(`${basePath}/2`, {
             orderType: orderTypes,
         });
     };
@@ -61,7 +53,6 @@ export const Step1 = ({ orderTypes, setOrderTypes }: Props) => {
     ];
 
     const handleDataChange = (type: keyof OrderType) => {
-        console.log('here')
         setOrderTypes((c) => {
             let curr = { ...c };
             curr[type] = !curr[type];
@@ -89,7 +80,10 @@ export const Step1 = ({ orderTypes, setOrderTypes }: Props) => {
                         md={3}
                         onClick={() => handleDataChange(type.name)}
                     >
-                        <OrderCard type={type.name} selected={orderTypes[type.name]} />
+                        <OrderCard
+                            type={type.name}
+                            selected={orderTypes[type.name]}
+                        />
                     </Grid>
                 ))}
             </Grid>

@@ -78,7 +78,7 @@ const App: React.FC = () => {
                         .get();
                     let userData;
                     if (userDoc.exists) {
-                        userData = await userDoc.data();
+                        userData = userDoc.data();
                     }
                     setCurrentUser({
                         admin: token.claims.admin ?? false,
