@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme: Theme) => ({
         height: 60,
         width:140
     },
+    divider: {
+        backgroundColor: 'grey'
+    }
 }));
 
 export const AppHeader = () => {
@@ -106,7 +109,7 @@ export const AppHeader = () => {
                     {currentUser?.admin && (
                         <MenuItem onClick={redirectAdmin}>Admin</MenuItem>
                     )}
-                    <Divider />
+                    <Divider className={classes.divider} />
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>
             </Toolbar>

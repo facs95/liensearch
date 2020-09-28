@@ -138,6 +138,7 @@ export const NewOrder = () => {
     }, [history, id]);
 
     const basePath = id ? `/update/${id}` : "/new-order";
+    const cancelPath = id ?  `/order/${id}` : '/';
     if (loading) return <CircularProgress />;
     if (!step) return <Redirect to="/" />;
 
@@ -186,7 +187,7 @@ export const NewOrder = () => {
 
     return (
         <FullScreenCreate
-            cancelPath="/"
+            cancelPath={cancelPath}
             {...{ stepComponents }}
             activeStep={step}
             toolbarHeader="Create New Order"

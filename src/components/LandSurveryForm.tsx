@@ -68,7 +68,7 @@ export const LandSurveyForm = ({
     return (
         <>
             <Grid item>
-                <Typography variant="h6">Land Survey</Typography>
+                <Typography variant="h5">Land Survey</Typography>
                 <Divider />
             </Grid>
             <Grid item container spacing={2}>

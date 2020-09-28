@@ -68,7 +68,7 @@ export const AddressForm = ({ address, setAddress, setIsAddressReady }: Props) =
     return (
         <Grid item container spacing={2} xs={12} md={12} direction="column">
             <Grid item>
-                <Typography variant="h6">Property Address</Typography>
+                <Typography variant="h5">Property Address</Typography>
                 <Divider />
             </Grid>
             <Grid item container spacing={2}>

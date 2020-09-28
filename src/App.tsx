@@ -25,6 +25,9 @@ const theme = createMuiTheme({
         fontSize: 12,
         subtitle1: {
             fontWeight: 'bold'
+        },
+        h5: {
+            fontWeight: 600
         }
     },
     spacing: 6,
@@ -33,6 +36,11 @@ const theme = createMuiTheme({
             root: {
                 height: 40,
             },
+        },
+        MuiDivider:{
+            root: {
+                backgroundColor: 'black'
+            }
         },
         MuiFormLabel: {
             focused: {

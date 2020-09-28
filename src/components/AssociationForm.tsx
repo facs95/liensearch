@@ -44,7 +44,7 @@ export const AssociationForm = ({setAssociations, associations, setIsAssociation
     return (
         <>
             <Grid item>
-                <Typography variant="h6">Associations (Estoppel Letter)</Typography>
+                <Typography variant="h5">Associations (Estoppel Letter)</Typography>
                 <Divider />
             </Grid>
             {associations.map((entry, index) => (

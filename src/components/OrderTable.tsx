@@ -11,13 +11,19 @@ import {
 import { Order, OrderStatusEnum } from "../Interfaces";
 import { useHistory } from "react-router-dom";
 
-const headers = ["Order ID", "Folio", "Address", "Status", "Created"];
+const headers = [
+    "Order # / File Name",
+    "Address",
+    "Folio",
+    "Status",
+    "Created",
+];
 
 interface Props {
-    orders: Order[]
+    orders: Order[];
 }
 
-export const OrderTable = ({orders}: Props) => {
+export const OrderTable = ({ orders }: Props) => {
     return (
         <Paper>
             <Table>
@@ -31,7 +37,9 @@ export const OrderTable = ({orders}: Props) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {orders.map((order, i) => <Row key={`order-${i}`} {...{order}} />)}
+                    {orders.map((order, i) => (
+                        <Row key={`order-${i}`} {...{ order }} />
+                    ))}
                 </TableBody>
             </Table>
         </Paper>
@@ -56,9 +64,9 @@ const Row = ({ order }: RowProps) => {
             hover
             className={classes.pointer}
         >
-            <TableCell>{order.objectID|| "--"}</TableCell>
-            <TableCell>{order.folio || "--"}</TableCell>
+            <TableCell>{order.orderNumber || "--"}</TableCell>
             <TableCell>{order.address.address1 || "--"}</TableCell>
+            <TableCell>{order.folio || "--"}</TableCell>
             <TableCell>{OrderStatusEnum[order.status] || "--"}</TableCell>
             <TableCell>
                 {new Date(order.created_on).toLocaleString() || "--"}

@@ -49,7 +49,7 @@ export enum AddressEnum {
 }
 
 export enum OrderDataEnum {
-    orderNumber = "Order #",
+    orderNumber = "Order # / File Name",
     folio = "Folio",
     legalDescription = "Legal Description",
     seller = "Seller",

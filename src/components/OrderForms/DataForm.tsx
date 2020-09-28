@@ -92,7 +92,7 @@ export const DataForm = ({
     return (
         <Grid item container spacing={2} xs={12} direction="column">
             <Grid item>
-                <Typography variant="h6">Order Information</Typography>
+                <Typography variant="h5">Order Information</Typography>
                 <Divider />
             </Grid>
             <Grid item container spacing={2}>
@@ -142,7 +142,7 @@ export const DataForm = ({
                             margin="normal"
                             id="date-picker-inline"
                             inputVariant="outlined"
-                            label={"Needed Date"}
+                            label={"Closing Date"}
                             value={orderData.closingDate}
                             onChange={(e) => {
                                 const newDate = e?.toLocaleDateString();
