@@ -29,15 +29,19 @@ export const Login: React.FC = () => {
     return (
         <PaperWrapper>
             <form onSubmit={(e) => onSubmit(e)}>
+                <img
+                    alt=""
+                    className={classes.logo}
+                    src={`${process.env.PUBLIC_URL}/logo.png`}
+                />
                 <Grid
                     container
                     direction="column"
                     alignItems="stretch"
-                    spacing={4}
+                    spacing={3}
                 >
-                    <Grid item className={classes.title}>
-                        <Typography variant="h5">Login</Typography>
-                    </Grid>
+                    {/* <Grid item className={classes.title}>
+                    </Grid> */}
                     <Grid item>
                         <TextField
                             type="email"
@@ -68,7 +72,7 @@ export const Login: React.FC = () => {
                             variant="contained"
                             color="primary"
                         >
-                            Submit
+                            Login
                         </Button>
                     </Grid>
                     <Grid item container alignItems="center" spacing={1}>
@@ -97,6 +101,6 @@ const useStyles = makeStyles(() => ({
         alignSelf: "center",
     },
     logo: {
-        height: 150,
+        height: 70,
     },
 }));

@@ -10,11 +10,6 @@ export const AuthWrapper: React.FC<Props> = ({ children }) => {
     return (
         <>
             <CssBaseline />
-            <img
-                alt=""
-                className={classes.logo}
-                src={`${process.env.PUBLIC_URL}/logo.png`}
-            />
             <Container maxWidth="sm">
                 <Toolbar />
                 {children}
