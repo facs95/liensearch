@@ -5,16 +5,17 @@ import React, {
     useContext,
     useMemo,
 } from "react";
-import { Grid } from "@material-ui/core";
+import { Grid, IconButton } from "@material-ui/core";
 
 import algoliasearch from "algoliasearch/lite";
 import { OrderTable } from "./OrderTable";
 import { Order, orderStatusEnumKeys, orderTypeEnumKeys } from "../Interfaces";
 import { UserContext } from "../context/UserContext";
 import { SearchInput } from "./SearchInput";
-import { FilterOptions, Filters } from "./Filters";
+import { FilterOptions } from "./Filters";
 import { transform } from "lodash";
 import { EmptyState } from "./EmpyState";
+import FilterListIcon from '@material-ui/icons/FilterList';
 
 const searchClient = algoliasearch(
     "1AVZX9L93I",
@@ -105,20 +106,25 @@ export const OrdersTable = () => {
 
     return (
         <Grid container direction="column" spacing={4}>
-            <Grid item container direction="column" spacing={2}>
-                <Grid item container>
-                    <Filters {...{ filters }} />
-                </Grid>
-                <Grid item>
+            <Grid item container justify="space-between" spacing={2}>
+                <Grid item xs={10}>
                     <SearchInput
                         value={searchQuery}
                         setValue={setSearchQuery}
                     />
                 </Grid>
+                <Grid item>
+                    <IconButton size="small">
+                        <FilterListIcon />
+                    </IconButton>
+                </Grid>
             </Grid>
             <Grid item>
                 {orders.length === 0 ? (
-                    <EmptyState title="No Orders Found" imageFile="orders.svg" />
+                    <EmptyState
+                        title="No Orders Found"
+                        imageFile="orders.svg"
+                    />
                 ) : (
                     <OrderTable {...{ orders }} />
                 )}

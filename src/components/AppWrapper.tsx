@@ -1,42 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
     Toolbar,
     Grid,
     makeStyles,
     LinearProgress,
-} from '@material-ui/core';
+    CssBaseline,
+} from "@material-ui/core";
 
-import {AppHeader} from './AppHeader';
-import { LoadingContext } from '../context/LoadingContext';
+import { AppHeader } from "./AppHeader";
+import { LoadingContext } from "../context/LoadingContext";
+import { LeftNav } from "./LeftNav/LeftNav";
+import { TitleContext } from "../context/TitleContext";
+import { NavigationBar } from "./NavigationBar";
 
 interface Props {
-    children: JSX.Element
+    children: JSX.Element;
 }
 
-export const AppWrapper: React.FC<Props> = ({children}) => {
+export const DRAWER_WIDTH = 240;
 
+export const AppWrapper: React.FC<Props> = ({ children }) => {
     const [loading, setLoading] = useState(false);
+    const [title, setTitle] = useState("");
 
     const classes = useStyles();
 
     return (
-        <>
-            <AppHeader />
-            <Toolbar />
-            {loading && <LinearProgress />}
-            <LoadingContext.Provider value={{loading, setLoading}}>
-                <Grid container direction="column" alignItems="center" spacing={3} className={classes.content}>
-                    {children}
-                </Grid>
-            </LoadingContext.Provider>
-        </>
-    )
-}
+        <LoadingContext.Provider value={{ loading, setLoading }}>
+            <TitleContext.Provider value={{ title, setTitle }}>
+                <div className={classes.root}>
+                    <CssBaseline />
+                    <AppHeader />
+                    <LeftNav />
+                    {loading && <LinearProgress />}
+                    <main className={classes.content}>
+                        <Toolbar />
+                        <div className={classes.bottomMargin}>
+                            <NavigationBar />
+                        </div>
+                        {children}
+                    </main>
+                </div>
+            </TitleContext.Provider>
+        </LoadingContext.Provider>
+    );
+};
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     content: {
-        padding: theme.spacing(3, 4, 6, 4),
-        wordBreak: 'break-word',
-        minWidth: 0
-    }
-}))
+        paddingTop: 20,
+        paddingLeft: 100,
+        paddingRight: 100,
+        width: "100%",
+    },
+    root: {
+        display: "flex",
+    },
+    bottomMargin: {
+        marginBottom: theme.spacing(4)
+    },
+}));

@@ -1,63 +1,30 @@
-import React, { useContext } from "react";
-import { Grid, Typography, Button, makeStyles } from "@material-ui/core";
+import React, { useContext, useEffect } from "react";
+import { Grid, Button, makeStyles, Breadcrumbs, Link } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
 import { OrdersTable } from "../components/OrdersTable";
+import { TitleContext } from "../context/TitleContext";
 
 export const Dashboard: React.FC = () => {
     const history = useHistory();
 
     const user = useContext(UserContext);
+    const { setTitle } = useContext(TitleContext);
+
+    useEffect(() => {
+        setTitle("Dashboard");
+    }, [setTitle]);
 
     const classes = useStyles();
 
     const isAdmin = user?.admin;
 
-    return (
-        <Grid
-            item
-            container
-            direction="column"
-            spacing={5}
-            className={classes.container}
-        >
-            <Grid
-                item
-                container
-                wrap="nowrap"
-                justify="space-between"
-                alignItems="center"
-            >
-                <Grid item>
-                    <Typography variant="h5">Orders</Typography>
-                </Grid>
-                {!isAdmin && (
-                    <Grid item>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="large"
-                            onClick={() => history.push("/new-order/1")}
-                        >
-                            New Order
-                        </Button>
-                    </Grid>
-                )}
-            </Grid>
-            <Grid item container spacing={3} direction="column">
-                <Grid item>
-                    <OrdersTable />
-                </Grid>
-            </Grid>
-        </Grid>
-    );
+    return <OrdersTable />;
 };
 
 const useStyles = makeStyles(() => ({
-    container: {
-        width: "80vw",
-    },
+    container: {},
     pointer: {
         cursor: "pointer",
     },

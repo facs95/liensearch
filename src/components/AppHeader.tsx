@@ -1,9 +1,7 @@
 import React, { useContext } from "react";
 import { Theme } from "@material-ui/core/styles";
 import {
-    AppBar,
     Toolbar,
-    Typography,
     IconButton,
     MenuItem,
     makeStyles,
@@ -12,33 +10,50 @@ import {
     ListItemAvatar,
     Avatar,
     ListItemText,
+    Typography,
 } from "@material-ui/core";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import * as Firebase from "firebase";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import { DRAWER_WIDTH } from "./AppWrapper";
+import { TitleContext } from "../context/TitleContext";
 
 const useStyles = makeStyles((theme: Theme) => ({
-    root: {
-        flexGrow: 1,
-    },
     menuButton: {
         marginRight: theme.spacing(2),
-    },
-    title: {
-        flexGrow: 1,
     },
     link: {
         textDecoration: "none",
         color: "black",
-        flexGrow:1
+        flexGrow: 1,
     },
     logo: {
         height: 60,
-        width:140
+        width: 140,
     },
     divider: {
-        backgroundColor: '#8a818126'
+        backgroundColor: "#8a818126",
+    },
+    appBar: {
+        [theme.breakpoints.up("sm")]: {
+            marginLeft: DRAWER_WIDTH,
+            width: `calc(100% - ${DRAWER_WIDTH}px)`,
+        },
+        top: 0,
+        left: "auto",
+        right: 0,
+        position: "absolute",
+        zIndex: 1100,
+        boxSizing: "border-box",
+    },
+    toolBar: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        paddingLeft: 100,
+        paddingRight: 100,
+        alignItems: 'center',
+        paddingTop: 20
     }
 }));
 
@@ -46,6 +61,8 @@ export const AppHeader = () => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+
+    const { title } = useContext(TitleContext);
 
     const currentUser = useContext(UserContext);
     const history = useHistory();
@@ -67,15 +84,9 @@ export const AppHeader = () => {
     };
 
     return (
-        <AppBar position="absolute">
-            <Toolbar>
-                <Link to="/" className={classes.link}>
-                    <img
-                        alt=""
-                        className={classes.logo}
-                        src={`${process.env.PUBLIC_URL}/logo-transparent.png`}
-                    />
-                </Link>
+        <div className={classes.appBar}>
+            <Toolbar className={classes.toolBar}>
+                <Typography variant="h4">{title}</Typography>
                 <IconButton
                     aria-label="account of current user"
                     aria-controls="menu-appbar"
@@ -113,6 +124,6 @@ export const AppHeader = () => {
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>
             </Toolbar>
-        </AppBar>
+        </div>
     );
 };

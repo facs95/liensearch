@@ -7,6 +7,8 @@ import { LoadingContext } from "../context/LoadingContext";
 import { DisplayOrder } from "../components/DisplayOrder";
 import { OrderDetails } from "../components/OrderDetails/OrderDetails";
 import { UploadDocuments } from "../components/UploadDocuments";
+import { TitleContext } from "../context/TitleContext";
+import { RouterParams } from "../Routes";
 
 export const OrderInfo = () => {
     const [order, setOrder] = useState<Order | null>(null);
@@ -14,8 +16,13 @@ export const OrderInfo = () => {
     const classes = useStyles();
 
     const { setLoading } = useContext(LoadingContext);
+    const { setTitle } = useContext(TitleContext);
 
-    const { id } = useParams();
+    useEffect(() => {
+        setTitle("Order");
+    }, [setTitle]);
+
+    const { id } = useParams<RouterParams>();
 
     const db = firebase.firestore();
 
