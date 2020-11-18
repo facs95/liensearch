@@ -2,13 +2,24 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import firebase from "firebase/app";
 import { Order } from "../Interfaces";
-import { Paper, Grid, makeStyles } from "@material-ui/core";
+import {
+    Paper,
+    Grid,
+    makeStyles,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    Typography,
+} from "@material-ui/core";
 import { LoadingContext } from "../context/LoadingContext";
 import { DisplayOrder } from "../components/DisplayOrder";
 import { OrderDetails } from "../components/OrderDetails/OrderDetails";
 import { UploadDocuments } from "../components/UploadDocuments";
 import { TitleContext } from "../context/TitleContext";
 import { RouterParams } from "../Routes";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { getAddressStr } from "../utils/orders";
+import { CustomAccordion, CustomAccordionProps } from "../components/CutomAccordion";
 
 export const OrderInfo = () => {
     const [order, setOrder] = useState<Order | null>(null);
@@ -60,35 +71,35 @@ export const OrderInfo = () => {
             </Grid>
         </Paper>
     );
+    // {/* <Grid item sm={12} md={8}>
+    //         {orderData}
+    //     </Grid>
+    //     <Grid
+    //         item
+    //         container
+    //         direction="column"
+    //         sm={12}
+    //         md={4}
+    //         spacing={3}
+    //     >
+    //         <Grid item container>
+    //             <OrderDetails {...{ order }} orderId={id} />
+    //         </Grid>
+    //         <Grid item container>
+    //             <UploadDocuments orderId={id} orgId={order.orgId} />
+    //         </Grid>
+    //     </Grid> */}
 
     return (
-        <>
-            <Grid item container spacing={3}>
-                <Grid item sm={12} md={8}>
-                    {orderData}
-                </Grid>
-                <Grid
-                    item
-                    container
-                    direction="column"
-                    sm={12}
-                    md={4}
-                    spacing={3}
-                >
-                    <Grid item container>
-                        <OrderDetails {...{ order }} orderId={id} />
-                    </Grid>
-                    <Grid item container>
-                        <UploadDocuments orderId={id} orgId={order.orgId} />
-                    </Grid>
-                </Grid>
-            </Grid>
-        </>
+        <DisplayOrder {...{order}} type="info" />
     );
 };
 
 const useStyles = makeStyles((theme) => ({
     cardContainer: {
         padding: theme.spacing(3),
+    },
+    accordion: {
+        width: "100%",
     },
 }));

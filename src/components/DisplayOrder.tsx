@@ -13,6 +13,12 @@ import {
 import { UserContext } from "../context/UserContext";
 import firebase from "firebase";
 import { useHistory } from "react-router-dom";
+import {
+    AccordionContentInterface,
+    CustomAccordion,
+    CustomAccordionProps,
+} from "./CutomAccordion";
+import { getAddressStr } from "../utils/orders";
 
 interface Props {
     order: Order | CreateOrder;
@@ -105,127 +111,38 @@ export const DisplayOrder = ({ order, type }: Props) => {
         }
     }, [order, type, db, userData]);
 
-    const getOrderTypes = () => {
+    const getOrderTypes: () => AccordionContentInterface[] = () => {
         const elements = [];
         for (let [key, value] of Object.entries(order.orderType)) {
-            const el = (
-                <Grid
-                    item
-                    container
-                    alignItems="center"
-                    justify="space-between"
-                    key={key}
-                >
-                    <Grid item>
-                        <Typography variant="body1">
-                            {orderTypeText.get(key as keyof OrderType)}
-                        </Typography>
-                    </Grid>
-                    <Grid item>{value ? <CheckIcon /> : <CloseIcon />}</Grid>
-                </Grid>
-            );
+            const el = {
+                subHeader: orderTypeText.get(key as keyof OrderType) ?? "",
+                value: value ? <CheckIcon /> : <CloseIcon />,
+            };
             elements.push(el);
         }
         return elements;
     };
 
-    const displayInfo = () => {
+    const displayInfo: () => AccordionContentInterface[] = () => {
         return orderDetails.map((detail) => {
-            return (
-                <Grid
-                    item
-                    container
-                    alignItems="center"
-                    justify="space-between"
-                    key={detail}
-                >
-                    <Grid item xs={4}>
-                        <Typography variant="body1">
-                            {orderInfoText.get(detail)}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={8}>
-                        <Typography variant="body2">
-                            {order[detail] || "--"}
-                        </Typography>
-                    </Grid>
-                </Grid>
-            );
+            return {
+                subHeader: orderInfoText.get(detail) ?? "",
+                value: order[detail] || "--",
+            };
         });
     };
 
-    const LandSurveyInfo = () => {
-        return (
-            <>
-                {landSurveyDetails.map((detail) => {
-                    return (
-                        <Grid
-                            item
-                            container
-                            alignItems="center"
-                            justify="space-between"
-                            key={detail}
-                        >
-                            <Grid item xs={4}>
-                                <Typography variant="body1">
-                                    {landSurveyDetailsText.get(detail)}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={8}>
-                                <Typography variant="body2">
-                                    {order.landSurvey![detail] || "--"}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    );
-                })}
-                <Grid
-                    item
-                    container
-                    alignItems="center"
-                    justify="space-between"
-                >
-                    <Grid item xs={4}>
-                        <Typography variant="body1">
-                            Include Hard Copy
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={8}>
-                        {order.landSurvey!.hardCopy ? (
-                            <CheckIcon />
-                        ) : (
-                            <CloseIcon />
-                        )}
-                    </Grid>
-                </Grid>
-            </>
-        );
+    const getLandSurveyInfo: () => AccordionContentInterface[] = () => {
+        const details = landSurveyDetails.map((detail) => ({
+            subHeader: landSurveyDetailsText.get(detail) ?? "",
+            value: order.landSurvey![detail] || "--",
+        }));
+        const hardCopy = {
+            subHeader: "Include Hard Copy",
+            value: order.landSurvey!.hardCopy ? <CheckIcon /> : <CloseIcon />,
+        };
+        return [...details, hardCopy];
     };
-
-    const OwnerInfo = (
-        <>
-            <Grid item container alignItems="center" justify="space-between">
-                <Grid item>
-                    <Typography variant="body1">Requested By</Typography>
-                </Grid>
-                <Grid item>
-                    <Typography variant="body2">
-                        {requestedBy ?? "No User Found"}
-                    </Typography>
-                </Grid>
-            </Grid>
-            <Grid item container alignItems="center" justify="space-between">
-                <Grid item>
-                    <Typography variant="body1">Company</Typography>
-                </Grid>
-                <Grid item>
-                    <Typography variant="body2">
-                        {org ? org.name : "No Company Found"}
-                    </Typography>
-                </Grid>
-            </Grid>
-        </>
-    );
 
     function isOrder(order: Order | CreateOrder): order is Order {
         return true;
@@ -233,117 +150,166 @@ export const DisplayOrder = ({ order, type }: Props) => {
 
     if (loading) return <></>;
 
-    console.log(order)
+    const accordions: CustomAccordionProps[] = [
+        {
+            header: "Property Address",
+            content: [
+                {
+                    subHeader: getAddressStr(order.address),
+                },
+            ],
+            defaultExpanded: true,
+        },
+        {
+            header: "Requested By",
+            content: [
+                {
+                    subHeader: "User Email",
+                    value: requestedBy ?? "No user Found",
+                },
+                {
+                    subHeader: "Organization",
+                    value: org ? org.name : "No Company Found",
+                },
+            ],
+        },
+        {
+            header: "Type of Order",
+            content: getOrderTypes(),
+        },
+        {
+            header: "Order Details",
+            content: displayInfo(),
+        },
+    ];
+
+    if (order.landSurvey) {
+        accordions.push({
+            header: "Land Survey Info",
+            content: getLandSurveyInfo()
+        });
+    }
 
     return (
         <>
-            <Grid item>
-                <Typography variant="h5">Review Order</Typography>
-                <Divider />
-            </Grid>
-            <Grid item container spacing={3}>
-                {type === "info" && (
-                    <Grid item container direction="column" spacing={1} xs={4}>
-                        <Grid item>
-                            <Typography variant="h6">Order Owner</Typography>
-                            <Divider />
-                        </Grid>
-                        {OwnerInfo}
-                    </Grid>
-                )}
-                <Grid
-                    item
-                    container
-                    xs={type === "info" ? 4 : 3}
-                    spacing={1}
-                    direction="column"
-                >
-                    <Grid item>
-                        <Typography variant="h6">Property Address</Typography>
-                        <Divider />
-                    </Grid>
-                    <Grid item container direction="column" spacing={1}>
-                        <Grid item>
-                            <Typography>{order?.address.address1}</Typography>
-                        </Grid>
-                        {order?.address.address2 && (
-                            <Grid item>
-                                <Typography>
-                                    {order.address.address2}
-                                </Typography>
-                            </Grid>
-                        )}
-                        {order?.address.unit && (
-                            <Grid item>
-                                <Typography>{order.address.unit}</Typography>
-                            </Grid>
-                        )}
-                        <Grid item>
-                            <Typography>{`${order?.address.city}, ${order?.address.state} ${order?.address.zipCode}`}</Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid
-                    item
-                    container
-                    direction="column"
-                    xs={type === "info" ? 4 : 3}
-                    spacing={1}
-                >
-                    <Grid item>
-                        <Typography variant="h6">Order Type</Typography>
-                        <Divider />
-                    </Grid>
-                    {getOrderTypes()}
-                </Grid>
-                {order.landSurvey && (
-                    <Grid
-                        item
-                        container
-                        xs={type === "info" ? 12 : 6}
-                        direction="column"
-                        spacing={1}
-                    >
-                        <Grid item>
-                            <Typography variant="h6">
-                                Land Survey Info
-                            </Typography>
-                            <Divider />
-                        </Grid>
-                        {LandSurveyInfo()}
-                    </Grid>
-                )}
-
-                <Grid
-                    item
-                    container
-                    xs={type === "info" ? 12 : 6}
-                    direction="column"
-                    spacing={1}
-                >
-                    <Grid item>
-                        <Typography variant="h6">Order Details</Typography>
-                        <Divider />
-                    </Grid>
-                    {displayInfo()}
-                </Grid>
-                {isOrder(order) &&
-                    type === "info" &&
-                    order.status !== "cancelled" &&
-                    order.status !== "finalized" && (
-                        <Grid item>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={() =>
-                                    history.push(`/update/${order.id}/1`)
-                                }
-                            >
-                                Update Order
-                            </Button>
-                        </Grid>
-                    )}
-            </Grid>
+            {accordions.map((accordion) => (
+                <CustomAccordion
+                    header={accordion.header}
+                    content={accordion.content}
+                />
+            ))}
         </>
     );
+
+    // return (
+    //     <>
+
+    //         <Grid item>
+    //             <Typography variant="h5">Review Order</Typography>
+    //             <Divider />
+    //         </Grid>
+    //         <Grid item container spacing={3}>
+    //             {type === "info" && (
+    //                 <Grid item container direction="column" spacing={1} xs={4}>
+    //                     <Grid item>
+    //                         <Typography variant="h6">Order Owner</Typography>
+    //                         <Divider />
+    //                     </Grid>
+    //                     {OwnerInfo}
+    //                 </Grid>
+    //             )}
+    //             <Grid
+    //                 item
+    //                 container
+    //                 xs={type === "info" ? 4 : 3}
+    //                 spacing={1}
+    //                 direction="column"
+    //             >
+    //                 <Grid item>
+    //                     <Typography variant="h6">Property Address</Typography>
+    //                     <Divider />
+    //                 </Grid>
+    //                 <Grid item container direction="column" spacing={1}>
+    //                     <Grid item>
+    //                         <Typography>{order?.address.address1}</Typography>
+    //                     </Grid>
+    //                     {order?.address.address2 && (
+    //                         <Grid item>
+    //                             <Typography>
+    //                                 {order.address.address2}
+    //                             </Typography>
+    //                         </Grid>
+    //                     )}
+    //                     {order?.address.unit && (
+    //                         <Grid item>
+    //                             <Typography>{order.address.unit}</Typography>
+    //                         </Grid>
+    //                     )}
+    //                     <Grid item>
+    //                         <Typography>{`${order?.address.city}, ${order?.address.state} ${order?.address.zipCode}`}</Typography>
+    //                     </Grid>
+    //                 </Grid>
+    //             </Grid>
+    //             <Grid
+    //                 item
+    //                 container
+    //                 direction="column"
+    //                 xs={type === "info" ? 4 : 3}
+    //                 spacing={1}
+    //             >
+    //                 <Grid item>
+    //                     <Typography variant="h6">Order Type</Typography>
+    //                     <Divider />
+    //                 </Grid>
+    //                 {getOrderTypes()}
+    //             </Grid>
+    //             {order.landSurvey && (
+    //                 <Grid
+    //                     item
+    //                     container
+    //                     xs={type === "info" ? 12 : 6}
+    //                     direction="column"
+    //                     spacing={1}
+    //                 >
+    //                     <Grid item>
+    //                         <Typography variant="h6">
+    //                             Land Survey Info
+    //                         </Typography>
+    //                         <Divider />
+    //                     </Grid>
+    //                     {LandSurveyInfo()}
+    //                 </Grid>
+    //             )}
+
+    //             <Grid
+    //                 item
+    //                 container
+    //                 xs={type === "info" ? 12 : 6}
+    //                 direction="column"
+    //                 spacing={1}
+    //             >
+    //                 <Grid item>
+    //                     <Typography variant="h6">Order Details</Typography>
+    //                     <Divider />
+    //                 </Grid>
+    //                 {displayInfo()}
+    //             </Grid>
+    //             {isOrder(order) &&
+    //                 type === "info" &&
+    //                 order.status !== "cancelled" &&
+    //                 order.status !== "finalized" && (
+    //                     <Grid item>
+    //                         <Button
+    //                             variant="contained"
+    //                             color="primary"
+    //                             onClick={() =>
+    //                                 history.push(`/update/${order.id}/1`)
+    //                             }
+    //                         >
+    //                             Update Order
+    //                         </Button>
+    //                     </Grid>
+    //                 )}
+    //         </Grid>
+    //     </>
 };

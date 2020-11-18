@@ -1,10 +1,10 @@
-
-import { Order } from "../Interfaces";
+import { Address, Order } from "../Interfaces";
 import { includes, pickBy } from "lodash";
 
 export const destructureOrder = (data: Order) => {
-    const orderData = pickBy(data, (_, key) =>
-        !includes(["address", "orderType", "associations"], key)
+    const orderData = pickBy(
+        data,
+        (_, key) => !includes(["address", "orderType", "associations"], key)
     );
     const address = data.address;
     const orderType = data.orderType;
@@ -15,6 +15,13 @@ export const destructureOrder = (data: Order) => {
         orderType,
         orderData,
         associations,
-        landSurvey
+        landSurvey,
     };
+};
+
+export const getAddressStr = (address: Address) => {
+    const { address1, address2, unit, zipCode, city, state } = address;
+    return `${address1}${address2 ? ` ${address2}` : ""}${
+        unit ? ` ${unit}` : ""
+    }, ${state} ${city} ${zipCode} `;
 };
