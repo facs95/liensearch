@@ -5,7 +5,6 @@ import {
     Button,
     Paper,
     Typography,
-    Divider,
     IconButton,
     CircularProgress,
 } from "@material-ui/core";
@@ -15,8 +14,8 @@ import DescriptionIcon from "@material-ui/icons/Description";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import { map } from "lodash";
 import firebase from "firebase/app";
-import { MessageSnackbar } from "./SnackMessage";
 import { EmptyState } from "./EmpyState";
+import { SnackContext } from "../context/SnackContext";
 
 interface Props {
     orderId: string;
@@ -25,22 +24,19 @@ interface Props {
 
 export const UploadDocuments = ({ orderId, orgId }: Props) => {
     const [listOfFiles, setListOfFiles] = useState<string[]>([]);
-    const [message, setMessage] = useState("");
-    const [messageType, setMessageType] = useState<"success" | "error">(
-        "error"
-    );
     const [uploadLoading, setUploadLoading] = useState(false);
 
     const docsPath = `org-${orgId}/order-${orderId}/`;
 
+    const { setMessage, setMessageType } = useContext(SnackContext);
     const user = useContext(UserContext);
 
     const db = firebase.storage();
 
-    const catchError = (err: any) => {
+    const catchError = useCallback((err: any) => {
         setMessageType("error");
         setMessage(err && err.message);
-    };
+    }, [setMessage, setMessageType]);
 
     const createSuccess = (message: string) => {
         setMessageType("success");
@@ -73,7 +69,7 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
                 })
                 .catch((err) => catchError(err));
         }
-    }, [db, user, docsPath]);
+    }, [db, user, docsPath, catchError]);
 
     const onUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
@@ -125,31 +121,31 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
     const classes = useStyles();
 
     return (
-        <>
-            <MessageSnackbar
-                {...{ message }}
-                {...{ setMessage }}
-                {...{ messageType }}
-            />
-            <Paper className={classes.fullWidth}>
+        <Paper className={classes.fullWidth}>
+            <Grid
+                container
+                direction="column"
+                spacing={3}
+                className={classes.cardContainer}
+            >
                 <Grid
+                    item
                     container
-                    direction="column"
-                    spacing={3}
-                    className={classes.cardContainer}
+                    justify="space-between"
+                    alignItems="center"
+                    wrap="nowrap"
                 >
-                    <Grid
-                        item
-                        container
-                        justify="space-between"
-                        alignItems="center"
-                        wrap="nowrap"
-                    >
-                        <Grid item>
-                            <Typography variant="h5">Documents</Typography>
-                        </Grid>
-                        {user && user.admin && (
-                        <Grid item container spacing={1} justify="flex-end" alignItems="center">
+                    <Grid item>
+                        <Typography variant="h5">Documents</Typography>
+                    </Grid>
+                    {user && user.admin && (
+                        <Grid
+                            item
+                            container
+                            spacing={1}
+                            justify="flex-end"
+                            alignItems="center"
+                        >
                             {uploadLoading && (
                                 <Grid item>
                                     <CircularProgress />
@@ -177,62 +173,61 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
                             </Grid>
                         </Grid>
                     )}
-                    </Grid>
-                    <Grid item container direction="column" spacing={2}>
-                        {listOfFiles.length === 0 ? (
-                            <EmptyState
-                                width={200}
-                                title="No documents yet"
-                                imageFile="documents.svg"
-                            />
-                        ) : (
-                            listOfFiles.map((file, index) => (
+                </Grid>
+                <Grid item container direction="column" spacing={2}>
+                    {listOfFiles.length === 0 ? (
+                        <EmptyState
+                            width={200}
+                            title="No documents yet"
+                            imageFile="documents.svg"
+                        />
+                    ) : (
+                        listOfFiles.map((file, index) => (
+                            <Grid
+                                key={`file-${index}`}
+                                item
+                                container
+                                justify="space-between"
+                                wrap="nowrap"
+                            >
                                 <Grid
-                                    key={`file-${index}`}
                                     item
                                     container
-                                    justify="space-between"
+                                    spacing={1}
+                                    alignItems="center"
                                     wrap="nowrap"
                                 >
-                                    <Grid
-                                        item
-                                        container
-                                        spacing={1}
-                                        alignItems="center"
-                                        wrap="nowrap"
-                                    >
-                                        <Grid item>
-                                            <DescriptionIcon />
-                                        </Grid>
-                                        <Grid item>
-                                            <Typography variant="body1" noWrap>
-                                                {file}
-                                            </Typography>
-                                        </Grid>
+                                    <Grid item>
+                                        <DescriptionIcon />
                                     </Grid>
                                     <Grid item>
+                                        <Typography variant="body1" noWrap>
+                                            {file}
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                                <Grid item>
+                                    <IconButton
+                                        onClick={() => onDownload(file)}
+                                    >
+                                        <GetAppIcon />
+                                    </IconButton>
+                                </Grid>
+                                {user && user.admin && (
+                                    <Grid item>
                                         <IconButton
-                                            onClick={() => onDownload(file)}
+                                            onClick={() => deleteFile(file)}
                                         >
-                                            <GetAppIcon />
+                                            <CloseIcon />
                                         </IconButton>
                                     </Grid>
-                                    {user && user.admin && (
-                                        <Grid item>
-                                            <IconButton
-                                                onClick={() => deleteFile(file)}
-                                            >
-                                                <CloseIcon />
-                                            </IconButton>
-                                        </Grid>
-                                    )}
-                                </Grid>
-                            ))
-                        )}
-                    </Grid>
+                                )}
+                            </Grid>
+                        ))
+                    )}
                 </Grid>
-            </Paper>
-        </>
+            </Grid>
+        </Paper>
     );
 };
 

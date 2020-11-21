@@ -12,7 +12,12 @@ import { LoadingContext } from "../context/LoadingContext";
 import { LeftNav } from "./LeftNav/LeftNav";
 import { TitleContext } from "../context/TitleContext";
 import { NavigationBar } from "./NavigationBar";
-import { ActionButtonInterface, ActionButtonContext } from "../context/ActionButtonContext";
+import {
+    ActionButtonInterface,
+    ActionButtonContext,
+} from "../context/ActionButtonContext";
+import { MessageSnackbar } from "./SnackMessage";
+import { SnackContext } from "../context/SnackContext";
 
 interface Props {
     children: JSX.Element;
@@ -22,6 +27,10 @@ export const DRAWER_WIDTH = 240;
 
 export const AppWrapper: React.FC<Props> = ({ children }) => {
     const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState<"success" | "error">(
+        "error"
+    );
     const [title, setTitle] = useState("");
     const [
         actionButton,
@@ -36,19 +45,28 @@ export const AppWrapper: React.FC<Props> = ({ children }) => {
                 <ActionButtonContext.Provider
                     value={{ actionButton, setActionButton }}
                 >
-                    <div className={classes.root}>
-                        <CssBaseline />
-                        <AppHeader />
-                        <LeftNav />
-                        {loading && <LinearProgress />}
-                        <main className={classes.content}>
-                            <Toolbar />
-                            <div className={classes.bottomMargin}>
-                                <NavigationBar />
-                            </div>
-                            {children}
-                        </main>
-                    </div>
+                    <SnackContext.Provider
+                        value={{ setMessage, setMessageType }}
+                    >
+                        <MessageSnackbar
+                            {...{ message }}
+                            {...{ setMessage }}
+                            {...{ messageType }}
+                        />
+                        <div className={classes.root}>
+                            <CssBaseline />
+                            <AppHeader />
+                            <LeftNav />
+                            {loading && <LinearProgress />}
+                            <main className={classes.content}>
+                                <Toolbar />
+                                <div className={classes.bottomMargin}>
+                                    <NavigationBar />
+                                </div>
+                                {children}
+                            </main>
+                        </div>
+                    </SnackContext.Provider>
                 </ActionButtonContext.Provider>
             </TitleContext.Provider>
         </LoadingContext.Provider>

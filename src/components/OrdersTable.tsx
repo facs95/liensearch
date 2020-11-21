@@ -15,7 +15,9 @@ import { SearchInput } from "./SearchInput";
 import { FilterOptions } from "./Filters";
 import { transform } from "lodash";
 import { EmptyState } from "./EmpyState";
-import FilterListIcon from '@material-ui/icons/FilterList';
+import FilterListIcon from "@material-ui/icons/FilterList";
+import { useHistory, useLocation } from "react-router-dom";
+import { FilterDrawer } from "./FilterDrawer";
 
 const searchClient = algoliasearch(
     "1AVZX9L93I",
@@ -60,6 +62,32 @@ export const OrdersTable = () => {
     >("");
     const user = useContext(UserContext);
 
+    const history = useHistory();
+    const {
+        pathname,
+        state: { openFilter } = { openFilter: false },
+    } = useLocation<{
+        openFilter: boolean;
+    }>();
+
+    const onFilterClose = () => {
+        history.push({
+            pathname,
+            state: {
+                openFilter: false,
+            },
+        });
+    };
+
+    const onFilterOpen = () => {
+        history.push({
+            pathname,
+            state: {
+                openFilter: true,
+            },
+        });
+    };
+
     const filters = useMemo(() => {
         let filtersOptions: FilterOptions = {
             status: {
@@ -97,7 +125,8 @@ export const OrdersTable = () => {
             })
             .then(({ hits }) => {
                 setOrders(hits as Order[]);
-            });
+            })
+            .catch((err) => console.log(err));
     }, [user, searchQuery, filters]);
 
     useEffect(() => {
@@ -105,30 +134,37 @@ export const OrdersTable = () => {
     }, [getOrders]);
 
     return (
-        <Grid container direction="column" spacing={4}>
-            <Grid item container justify="space-between" spacing={2}>
-                <Grid item xs={10}>
-                    <SearchInput
-                        value={searchQuery}
-                        setValue={setSearchQuery}
-                    />
+        <>
+            <FilterDrawer
+                open={openFilter}
+                onClose={onFilterClose}
+                {...{ filters }}
+            />
+            <Grid container direction="column" spacing={4}>
+                <Grid item container justify="space-between" spacing={2}>
+                    <Grid item xs={10}>
+                        <SearchInput
+                            value={searchQuery}
+                            setValue={setSearchQuery}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <IconButton size="small" onClick={onFilterOpen}>
+                            <FilterListIcon />
+                        </IconButton>
+                    </Grid>
                 </Grid>
                 <Grid item>
-                    <IconButton size="small">
-                        <FilterListIcon />
-                    </IconButton>
+                    {orders.length === 0 ? (
+                        <EmptyState
+                            title="No Orders Found"
+                            imageFile="orders.svg"
+                        />
+                    ) : (
+                        <OrderTable {...{ orders }} />
+                    )}
                 </Grid>
             </Grid>
-            <Grid item>
-                {orders.length === 0 ? (
-                    <EmptyState
-                        title="No Orders Found"
-                        imageFile="orders.svg"
-                    />
-                ) : (
-                    <OrderTable {...{ orders }} />
-                )}
-            </Grid>
-        </Grid>
+        </>
     );
 };

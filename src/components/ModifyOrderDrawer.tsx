@@ -1,25 +1,31 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { Button, Grid, Typography } from "@material-ui/core";
 import { Order } from "../Interfaces";
 import { OrderStatusController } from "./OrderDetails/OrdetStatusController";
 import { CustomDrawer } from "./CustomDrawer";
 import { OrderAssigneeController } from "./OrderDetails/OrderAssigneeController";
 import firebase from "firebase/app";
+import { SnackContext } from "../context/SnackContext";
 
 interface Props {
     open: boolean;
     onClose: () => void;
     order: Order;
-    refreshOrder: () => void
+    refreshOrder: () => void;
 }
 
-export const ModifyOrderDrawer = ({ open, onClose, order, refreshOrder }: Props) => {
+export const ModifyOrderDrawer = ({
+    open,
+    onClose,
+    order,
+    refreshOrder,
+}: Props) => {
     const [currentStatus, setCurrentStatus] = useState(order.status);
     const [currentAssignee, setCurrentAssignee] = useState(order.assignee);
 
     const db = firebase.firestore();
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
+    const { setMessage, setMessageType } = useContext(SnackContext);
 
     const newStatus = useMemo(() => {
         const newstat = { ...order };
@@ -33,8 +39,10 @@ export const ModifyOrderDrawer = ({ open, onClose, order, refreshOrder }: Props)
         try {
             await db.collection("orders").doc(order.id).update(newStatus);
             refreshOrder();
-            setMessage('Order was Succesful')
+            setMessageType('success')
+            setMessage("Order was modified");
         } catch (err) {
+            setMessageType('error')
             setMessage(err.message || err);
         } finally {
             setLoading(false);
