@@ -1,21 +1,18 @@
 import { Breadcrumbs, Button, Grid, Link, makeStyles } from "@material-ui/core";
 import React, { useContext } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
 import { RouterParams } from "../Routes";
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import { ActionButtonContext } from "../context/ActionButtonContext";
 
 export const NavigationBar = () => {
     const { id } = useParams<RouterParams>();
 
     const classes = useStyles();
 
-    const user = useContext(UserContext);
-    const isAdmin = user?.admin;
+    const {actionButton} = useContext(ActionButtonContext);
 
     const history = useHistory();
-
-    
 
     return (
         <Grid container justify="space-between" alignItems="center">
@@ -39,15 +36,15 @@ export const NavigationBar = () => {
                     )}
                 </Breadcrumbs>
             </Grid>
-            {!isAdmin && (
+            {actionButton && (
                 <Grid item>
                     <Button
                         variant="contained"
                         color="primary"
                         size="large"
-                        onClick={() => history.push("/new-order/1")}
+                        onClick={actionButton.action}
                     >
-                        New Order
+                        {actionButton.label}
                     </Button>
                 </Grid>
             )}

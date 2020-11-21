@@ -192,6 +192,7 @@ export const DisplayOrder = ({ order, type }: Props) => {
 
     return (
         <>
+
             {accordions.map((accordion) => (
                 <CustomAccordion
                     header={accordion.header}

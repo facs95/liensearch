@@ -12,6 +12,7 @@ import { LoadingContext } from "../context/LoadingContext";
 import { LeftNav } from "./LeftNav/LeftNav";
 import { TitleContext } from "../context/TitleContext";
 import { NavigationBar } from "./NavigationBar";
+import { ActionButtonInterface, ActionButtonContext } from "../context/ActionButtonContext";
 
 interface Props {
     children: JSX.Element;
@@ -22,25 +23,33 @@ export const DRAWER_WIDTH = 240;
 export const AppWrapper: React.FC<Props> = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState("");
+    const [
+        actionButton,
+        setActionButton,
+    ] = useState<ActionButtonInterface | null>(null);
 
     const classes = useStyles();
 
     return (
         <LoadingContext.Provider value={{ loading, setLoading }}>
             <TitleContext.Provider value={{ title, setTitle }}>
-                <div className={classes.root}>
-                    <CssBaseline />
-                    <AppHeader />
-                    <LeftNav />
-                    {loading && <LinearProgress />}
-                    <main className={classes.content}>
-                        <Toolbar />
-                        <div className={classes.bottomMargin}>
-                            <NavigationBar />
-                        </div>
-                        {children}
-                    </main>
-                </div>
+                <ActionButtonContext.Provider
+                    value={{ actionButton, setActionButton }}
+                >
+                    <div className={classes.root}>
+                        <CssBaseline />
+                        <AppHeader />
+                        <LeftNav />
+                        {loading && <LinearProgress />}
+                        <main className={classes.content}>
+                            <Toolbar />
+                            <div className={classes.bottomMargin}>
+                                <NavigationBar />
+                            </div>
+                            {children}
+                        </main>
+                    </div>
+                </ActionButtonContext.Provider>
             </TitleContext.Provider>
         </LoadingContext.Provider>
     );
@@ -57,6 +66,6 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
     },
     bottomMargin: {
-        marginBottom: theme.spacing(4)
+        marginBottom: theme.spacing(4),
     },
 }));

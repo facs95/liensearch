@@ -1,31 +1,32 @@
 import React, { useContext, useEffect } from "react";
-import { Grid, Button, makeStyles, Breadcrumbs, Link } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
 import { OrdersTable } from "../components/OrdersTable";
 import { TitleContext } from "../context/TitleContext";
+import { ActionButtonContext } from "../context/ActionButtonContext";
 
 export const Dashboard: React.FC = () => {
     const history = useHistory();
 
     const user = useContext(UserContext);
     const { setTitle } = useContext(TitleContext);
+    const {setActionButton} = useContext(ActionButtonContext);
 
     useEffect(() => {
         setTitle("Dashboard");
     }, [setTitle]);
 
-    const classes = useStyles();
 
-    const isAdmin = user?.admin;
+    useEffect(() => {
+        if (!user?.admin) {
+            setActionButton({
+                label: 'New Order',
+                action: () => history.push("/new-order/1")
+            })
+        }
+    }, [user, setActionButton, history])
 
     return <OrdersTable />;
 };
 
-const useStyles = makeStyles(() => ({
-    container: {},
-    pointer: {
-        cursor: "pointer",
-    },
-}));

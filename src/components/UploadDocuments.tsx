@@ -138,9 +138,46 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
                     spacing={3}
                     className={classes.cardContainer}
                 >
-                    <Grid item>
-                        <Typography variant="h5">Documents</Typography>
-                        <Divider />
+                    <Grid
+                        item
+                        container
+                        justify="space-between"
+                        alignItems="center"
+                        wrap="nowrap"
+                    >
+                        <Grid item>
+                            <Typography variant="h5">Documents</Typography>
+                        </Grid>
+                        {user && user.admin && (
+                            <Grid item container spacing={1} justify="flex-end">
+                                {uploadLoading && (
+                                    <Grid item>
+                                        <CircularProgress />
+                                    </Grid>
+                                )}
+                                <Grid item>
+                                    <input
+                                        className={classes.input}
+                                        style={{ display: "none" }}
+                                        id="raised-button-file"
+                                        multiple
+                                        type="file"
+                                        onChange={onUpload}
+                                    />
+                                    <label htmlFor="raised-button-file">
+                                        <Button
+                                            color="primary"
+                                            size="large"
+                                            variant="contained"
+                                            component="span"
+                                            disabled={uploadLoading}
+                                        >
+                                            Upload New File
+                                        </Button>
+                                    </label>
+                                </Grid>
+                            </Grid>
+                        )}
                     </Grid>
                     <Grid item container direction="column" spacing={2}>
                         {listOfFiles.length === 0 ? (
@@ -194,36 +231,6 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
                             ))
                         )}
                     </Grid>
-                    {user && user.admin && (
-                        <Grid item container spacing={1}>
-                            <Grid item>
-                                <input
-                                    className={classes.input}
-                                    style={{ display: "none" }}
-                                    id="raised-button-file"
-                                    multiple
-                                    type="file"
-                                    onChange={onUpload}
-                                />
-                                <label htmlFor="raised-button-file">
-                                    <Button
-                                        color="primary"
-                                        size="large"
-                                        variant="contained"
-                                        component="span"
-                                        disabled={uploadLoading}
-                                    >
-                                        Upload New File
-                                    </Button>
-                                </label>
-                            </Grid>
-                            {uploadLoading && (
-                                <Grid item>
-                                    <CircularProgress />
-                                </Grid>
-                            )}
-                        </Grid>
-                    )}
                 </Grid>
             </Paper>
         </>

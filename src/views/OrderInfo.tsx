@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import firebase from "firebase/app";
-import { Order } from "../Interfaces";
+import { Order, OrderStatusEnum } from "../Interfaces";
 import {
     Paper,
     Grid,
@@ -19,7 +19,13 @@ import { TitleContext } from "../context/TitleContext";
 import { RouterParams } from "../Routes";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { getAddressStr } from "../utils/orders";
-import { CustomAccordion, CustomAccordionProps } from "../components/CutomAccordion";
+import {
+    CustomAccordion,
+    CustomAccordionProps,
+} from "../components/CutomAccordion";
+import { KPI } from "../components/KPI";
+import Battery80Icon from "@material-ui/icons/Battery80";
+import PersonIcon from "@material-ui/icons/Person";
 
 export const OrderInfo = () => {
     const [order, setOrder] = useState<Order | null>(null);
@@ -90,8 +96,31 @@ export const OrderInfo = () => {
     //         </Grid>
     //     </Grid> */}
 
+    const kpis = [
+        {
+            title: "Status",
+            value: OrderStatusEnum[order.status],
+            icon: <Battery80Icon />,
+        },
+        {
+            title: "Asignee",
+            value: order.assignee,
+            icon: <PersonIcon />,
+        },
+    ];
+
     return (
-        <DisplayOrder {...{order}} type="info" />
+        <Grid container direction="column" spacing={3}>
+            <Grid item>
+                <KPI {...{ kpis }} />
+            </Grid>
+            <Grid item>
+                <DisplayOrder {...{ order }} type="info" />
+            </Grid>
+            <Grid item>
+                <UploadDocuments orderId={id} orgId={order.orgId} />
+            </Grid>
+        </Grid>
     );
 };
 

@@ -39,7 +39,7 @@ const theme = createMuiTheme({
         },
         MuiDivider:{
             root: {
-                backgroundColor: 'black'
+                // backgroundColor: 'black'
             }
         },
         MuiFormLabel: {
