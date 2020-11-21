@@ -149,35 +149,34 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
                             <Typography variant="h5">Documents</Typography>
                         </Grid>
                         {user && user.admin && (
-                            <Grid item container spacing={1} justify="flex-end">
-                                {uploadLoading && (
-                                    <Grid item>
-                                        <CircularProgress />
-                                    </Grid>
-                                )}
+                        <Grid item container spacing={1} justify="flex-end" alignItems="center">
+                            {uploadLoading && (
                                 <Grid item>
-                                    <input
-                                        className={classes.input}
-                                        style={{ display: "none" }}
-                                        id="raised-button-file"
-                                        multiple
-                                        type="file"
-                                        onChange={onUpload}
-                                    />
-                                    <label htmlFor="raised-button-file">
-                                        <Button
-                                            color="primary"
-                                            size="large"
-                                            variant="contained"
-                                            component="span"
-                                            disabled={uploadLoading}
-                                        >
-                                            Upload New File
-                                        </Button>
-                                    </label>
+                                    <CircularProgress />
                                 </Grid>
+                            )}
+                            <Grid item>
+                                <input
+                                    className={classes.input}
+                                    style={{ display: "none" }}
+                                    id="raised-button-file"
+                                    multiple
+                                    type="file"
+                                    onChange={onUpload}
+                                />
+                                <label htmlFor="raised-button-file">
+                                    <Button
+                                        size="large"
+                                        component="span"
+                                        variant="outlined"
+                                        disabled={uploadLoading}
+                                    >
+                                        Upload New File
+                                    </Button>
+                                </label>
                             </Grid>
-                        )}
+                        </Grid>
+                    )}
                     </Grid>
                     <Grid item container direction="column" spacing={2}>
                         {listOfFiles.length === 0 ? (

@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState, useContext, useCallback } from "react";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import firebase from "firebase/app";
 import { Order, OrderStatusEnum } from "../Interfaces";
 import {
@@ -26,6 +26,9 @@ import {
 import { KPI } from "../components/KPI";
 import Battery80Icon from "@material-ui/icons/Battery80";
 import PersonIcon from "@material-ui/icons/Person";
+import { ActionButtonContext } from "../context/ActionButtonContext";
+import { UserContext } from "../context/UserContext";
+import { ModifyOrderDrawer } from "../components/ModifyOrderDrawer";
 
 export const OrderInfo = () => {
     const [order, setOrder] = useState<Order | null>(null);
@@ -34,34 +37,69 @@ export const OrderInfo = () => {
 
     const { setLoading } = useContext(LoadingContext);
     const { setTitle } = useContext(TitleContext);
+    const { setActionButton } = useContext(ActionButtonContext);
+    const user = useContext(UserContext);
+    const history = useHistory();
+    const {
+        pathname,
+        state: { updateOrder } = { updateOrder: false },
+    } = useLocation<{ updateOrder: boolean }>();
 
     useEffect(() => {
         setTitle("Order");
     }, [setTitle]);
 
+    useEffect(() => {
+        if (user?.admin) {
+            setActionButton({
+                label: "Modify Order",
+                action: () =>
+                    history.push({
+                        pathname,
+                        state: {
+                            updateOrder: true,
+                        },
+                    }),
+            });
+        } else {
+            setActionButton({
+                label: "Update Order",
+                action: () => history.push(`/update/${order?.id}/1`),
+            });
+        }
+
+        return () => {
+            setActionButton(null);
+        };
+    }, [setActionButton, user, order, history, pathname]);
+
     const { id } = useParams<RouterParams>();
 
     const db = firebase.firestore();
 
-    useEffect(() => {
-        setLoading(true);
+    const refreshOrder = useCallback(() => {
         if (id) {
             db.collection("orders")
-                .doc(id)
-                .get()
-                .then((doc) => {
-                    if (!doc.exists) {
-                        console.log("No such document!");
-                    } else {
-                        setOrder({ ...doc.data(), id: doc.id } as Order);
-                    }
-                })
-                .catch((err) => console.log("here", err))
-                .finally(() => {
-                    setLoading(false);
-                });
+            .doc(id)
+            .get()
+            .then((doc) => {
+                if (!doc.exists) {
+                    console.log("No such document!");
+                } else {
+                    setOrder({ ...doc.data(), id: doc.id } as Order);
+                }
+            })
+            .catch((err) => console.log("here", err))
+            .finally(() => {
+                setLoading(false);
+            });
         }
-    }, [db, id, setLoading]);
+    }, [db, id, setLoading ])
+
+    useEffect(() => {
+        setLoading(true);
+        refreshOrder()
+    }, [setLoading, refreshOrder]);
 
     if (!order) return <> </>;
 
@@ -109,18 +147,35 @@ export const OrderInfo = () => {
         },
     ];
 
+    const onUpdateOrderClose = () => {
+        history.push({
+            pathname,
+            state: {
+                updateOrder: false,
+            },
+        });
+    };
+
     return (
-        <Grid container direction="column" spacing={3}>
-            <Grid item>
-                <KPI {...{ kpis }} />
+        <>
+            <ModifyOrderDrawer
+                {...{ order }}
+                open={updateOrder}
+                onClose={onUpdateOrderClose}
+                {...{refreshOrder}}
+            />
+            <Grid container direction="column" spacing={3}>
+                <Grid item>
+                    <KPI {...{ kpis }} />
+                </Grid>
+                <Grid item>
+                    <DisplayOrder {...{ order }} type="info" />
+                </Grid>
+                <Grid item>
+                    <UploadDocuments orderId={id} orgId={order.orgId} />
+                </Grid>
             </Grid>
-            <Grid item>
-                <DisplayOrder {...{ order }} type="info" />
-            </Grid>
-            <Grid item>
-                <UploadDocuments orderId={id} orgId={order.orgId} />
-            </Grid>
-        </Grid>
+        </>
     );
 };
 

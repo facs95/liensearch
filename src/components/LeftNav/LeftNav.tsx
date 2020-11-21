@@ -39,8 +39,8 @@ export const LeftNav = () => {
                         />
                     </div>
                     <List>
-                        {options.map((option) => (
-                            <ListItem button>
+                        {options.map((option, index) => (
+                            <ListItem key={`left-nav-${index}`} button>
                                 <ListItemIcon>{option.icon}</ListItemIcon>
                                 <ListItemText primary={option.label} />
                             </ListItem>

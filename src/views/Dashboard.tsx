@@ -25,6 +25,9 @@ export const Dashboard: React.FC = () => {
                 action: () => history.push("/new-order/1")
             })
         }
+        return () => {
+            setActionButton(null)
+        }
     }, [user, setActionButton, history])
 
     return <OrdersTable />;

@@ -17,20 +17,24 @@ export interface AccordionContentInterface {
 export interface CustomAccordionProps {
     header: string;
     content: AccordionContentInterface[];
-    defaultExpanded?: boolean
+    defaultExpanded?: boolean;
 }
 
-export const CustomAccordion = ({ header, content, defaultExpanded }: CustomAccordionProps) => {
+export const CustomAccordion = ({
+    header,
+    content,
+    defaultExpanded,
+}: CustomAccordionProps) => {
     const classes = useStyles();
     return (
-        <Accordion {...{defaultExpanded}} className={classes.accordion}>
+        <Accordion {...{ defaultExpanded }} className={classes.accordion}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="h6">{header}</Typography>
             </AccordionSummary>
             <AccordionDetails>
                 <Grid container direction="column" spacing={1}>
-                    {content.map((item) => (
-                        <Grid item container>
+                    {content.map((item, index) => (
+                        <Grid key={`accordion-${index}`} item container>
                             <Grid item xs={6}>
                                 <Typography>{item.subHeader}</Typography>
                             </Grid>

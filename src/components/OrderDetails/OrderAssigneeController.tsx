@@ -35,35 +35,26 @@ export const OrderAssigneeController = ({
     }, [user, db]);
 
     return (
-        <Grid item container alignItems="center" justify="space-between">
-            <Grid item>
-                <Typography variant="subtitle1">Asignee</Typography>
-            </Grid>
-            <Grid item xs={7}>
-                {user?.admin ? (
-                    <TextField
-                        label="Assigned Employee"
-                        select
-                        variant="outlined"
-                        fullWidth
-                        value={currentAssignee}
-                        onChange={(e) => setCurrentAssignee(e.target.value)}
-                    >
-                        {userOptions.map((option, index) => (
-                            <MenuItem
-                                key={`status-${index}`}
-                                value={option.email}
-                            >
-                                {option.email}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                ) : (
-                    <Typography variant="body2">
-                        {currentAssignee ? currentAssignee : "Not Assigned Yet"}
-                    </Typography>
-                )}
-            </Grid>
-        </Grid>
+        <>
+            {user?.admin ? (
+                <TextField
+                    select
+                    variant="outlined"
+                    fullWidth
+                    value={currentAssignee}
+                    onChange={(e) => setCurrentAssignee(e.target.value)}
+                >
+                    {userOptions.map((option, index) => (
+                        <MenuItem key={`status-${index}`} value={option.email}>
+                            {option.email}
+                        </MenuItem>
+                    ))}
+                </TextField>
+            ) : (
+                <Typography variant="body2">
+                    {currentAssignee ? currentAssignee : "Not Assigned Yet"}
+                </Typography>
+            )}
+        </>
     );
 };
