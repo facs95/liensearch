@@ -28,7 +28,7 @@ export const Login: React.FC = () => {
 
     return (
         <PaperWrapper>
-            <form onSubmit={(e) => onSubmit(e)}>
+            <form onSubmit={(e) => onSubmit(e)} className={classes.form}>
                 <img
                     alt=""
                     className={classes.logo}
@@ -38,9 +38,10 @@ export const Login: React.FC = () => {
                     container
                     direction="column"
                     alignItems="stretch"
-                    spacing={3}
+                    spacing={4}
                 >
-                    {/* <Grid item className={classes.title}>
+                    {/* <Grid item >
+                        <Typography align="center" variant="h5">Login</Typography>
                     </Grid> */}
                     <Grid item>
                         <TextField
@@ -96,11 +97,17 @@ export const Login: React.FC = () => {
     );
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
     title: {
         alignSelf: "center",
     },
     logo: {
         height: 70,
+        marginBottom: theme.spacing(3)
+    },
+    form: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
     },
 }));

@@ -18,6 +18,7 @@ export const PaperWrapper = ({children}: Props) => {
 
 const useStyles = makeStyles(theme => ({
     padding: {
-        padding: theme.spacing(5)
+        padding: theme.spacing(5),
+        width: 500
     }
 }))

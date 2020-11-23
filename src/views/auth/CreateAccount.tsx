@@ -54,9 +54,12 @@ export const CreateAccount: React.FC = () => {
 
     return (
         <PaperWrapper>
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-            >
+            <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
+                <img
+                    alt=""
+                    className={classes.logo}
+                    src={`${process.env.PUBLIC_URL}/logo.png`}
+                />
                 <Grid
                     container
                     direction="column"
@@ -105,6 +108,7 @@ export const CreateAccount: React.FC = () => {
                             error={!!errorMessage}
                             fullWidth
                             label="Organization Id"
+                            helperText="Id of the organization you belong"
                             variant="outlined"
                             name="orgId"
                             inputRef={register}
@@ -163,8 +167,17 @@ export const CreateAccount: React.FC = () => {
     );
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
     title: {
         alignSelf: "center",
+    },
+    logo: {
+        height: 70,
+        marginBottom: theme.spacing(3),
+    },
+    form: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
     },
 }));

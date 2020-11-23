@@ -25,6 +25,7 @@ interface Props {
 export const UploadDocuments = ({ orderId, orgId }: Props) => {
     const [listOfFiles, setListOfFiles] = useState<string[]>([]);
     const [uploadLoading, setUploadLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const docsPath = `org-${orgId}/order-${orderId}/`;
 
@@ -67,7 +68,8 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
                 .then((res) => {
                     setListOfFiles(res.items.map((item) => item.name));
                 })
-                .catch((err) => catchError(err));
+                .catch((err) => catchError(err))
+                .finally(() => setLoading(false));
         }
     }, [db, user, docsPath, catchError]);
 
@@ -119,6 +121,8 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
     }, [listFiles]);
 
     const classes = useStyles();
+
+    if (loading) return <CircularProgress />
 
     return (
         <Paper className={classes.fullWidth}>

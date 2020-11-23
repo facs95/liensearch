@@ -1,4 +1,5 @@
 import {
+    Divider,
     Drawer,
     Hidden,
     List,
@@ -7,20 +8,36 @@ import {
     ListItemText,
     makeStyles,
 } from "@material-ui/core";
-import React from "react";
+import React, { useContext } from "react";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import { DRAWER_WIDTH } from "../AppWrapper";
+import { UserContext } from "../../context/UserContext";
+import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
+import { useHistory } from "react-router-dom";
 
 export const LeftNav = () => {
     const classes = useStyles();
+
+    const user = useContext(UserContext);
+    const history = useHistory();
 
     const options = [
         {
             label: "My Orders",
             icon: <LibraryBooksIcon />,
-            action: () => console.log("here"),
+            action: () => history.push("/"),
+            divider: !!user?.admin,
         },
     ];
+
+    if (user?.admin) {
+        options.push({
+            label: "Manage Employees",
+            icon: <SupervisorAccountIcon />,
+            action: () => history.push("/admin/manage"),
+            divider: false,
+        });
+    }
 
     return (
         <nav className={classes.drawer}>
@@ -40,10 +57,17 @@ export const LeftNav = () => {
                     </div>
                     <List>
                         {options.map((option, index) => (
-                            <ListItem key={`left-nav-${index}`} button>
-                                <ListItemIcon>{option.icon}</ListItemIcon>
-                                <ListItemText primary={option.label} />
-                            </ListItem>
+                            <>
+                                <ListItem
+                                    key={`left-nav-${index}`}
+                                    button
+                                    onClick={option.action}
+                                >
+                                    <ListItemIcon>{option.icon}</ListItemIcon>
+                                    <ListItemText primary={option.label} />
+                                </ListItem>
+                                {option.divider && <Divider />}
+                            </>
                         ))}
                     </List>
                 </Drawer>

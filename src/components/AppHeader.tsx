@@ -48,13 +48,13 @@ const useStyles = makeStyles((theme: Theme) => ({
         boxSizing: "border-box",
     },
     toolBar: {
-        display: 'flex',
-        justifyContent: 'space-between',
+        display: "flex",
+        justifyContent: "space-between",
         paddingLeft: 100,
         paddingRight: 100,
-        alignItems: 'center',
-        paddingTop: 20
-    }
+        alignItems: "center",
+        paddingTop: 20,
+    },
 }));
 
 export const AppHeader = () => {
@@ -65,8 +65,7 @@ export const AppHeader = () => {
     const { title } = useContext(TitleContext);
 
     const currentUser = useContext(UserContext);
-    const history = useHistory();
-
+    
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -77,10 +76,6 @@ export const AppHeader = () => {
 
     const handleLogout = async () => {
         await Firebase.auth().signOut();
-    };
-
-    const redirectAdmin = () => {
-        history.push("/admin/manage");
     };
 
     return (
@@ -117,9 +112,6 @@ export const AppHeader = () => {
                         </ListItemAvatar>
                         <ListItemText>{currentUser?.email}</ListItemText>
                     </MenuItem>
-                    {currentUser?.admin && (
-                        <MenuItem onClick={redirectAdmin}>Admin</MenuItem>
-                    )}
                     <Divider className={classes.divider} />
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, makeStyles, Toolbar, CssBaseline } from "@material-ui/core";
+import { makeStyles, CssBaseline } from "@material-ui/core";
 
 interface Props {
     children: JSX.Element;
@@ -8,18 +8,19 @@ interface Props {
 export const AuthWrapper: React.FC<Props> = ({ children }) => {
     const classes = useStyles();
     return (
-        <>
+        <div className={classes.root}>
             <CssBaseline />
-            <Container maxWidth="sm">
-                <Toolbar />
-                {children}
-            </Container>
-        </>
+            {children}
+        </div>
     );
 };
 
-const useStyles = makeStyles(() => ({
-    logo: {
-        height: 120,
+const useStyles = makeStyles(theme=> ({
+    root: {
+        height: '100vh',
+        backgroundColor: theme.palette.primary.main,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 }));
