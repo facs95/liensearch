@@ -19,6 +19,10 @@ export interface FilterOptions {
         value: string;
         setter: React.Dispatch<React.SetStateAction<string>>;
     }
+    employee?: {
+        value: string,
+        setter: React.Dispatch<React.SetStateAction<string>>
+    }
 }
 
 interface Props {

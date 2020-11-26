@@ -6,21 +6,8 @@ import { OrderTypeSelector } from "./OrderTypeSelector";
 import { OrgSelector } from "./OrgSelector";
 import { StatusSelector } from "./StatusSelector";
 import { forOwn } from "lodash";
-
-export interface FilterOptions {
-    status: {
-        value: orderStatusEnumKeys | "";
-        setter: React.Dispatch<React.SetStateAction<orderStatusEnumKeys | "">>;
-    };
-    orderType: {
-        value: orderTypeEnumKeys | "";
-        setter: React.Dispatch<React.SetStateAction<orderTypeEnumKeys | "">>;
-    };
-    organizations?: {
-        value: string;
-        setter: React.Dispatch<React.SetStateAction<string>>;
-    };
-}
+import { FilterOptions } from "./Filters";
+import { OrderAssigneeController } from "./SelectEmployee";
 
 interface Props {
     open: boolean;
@@ -29,28 +16,31 @@ interface Props {
 }
 
 export const FilterDrawer = ({ open, onClose, filters }: Props) => {
-    const { status, organizations, orderType } = filters;
+    const { status, organizations, orderType, employee } = filters;
 
     const [filterStatus, setFilterStatus] = useState<orderStatusEnumKeys | "">(
         status.value
     );
-    const [filterOrg, setFilterOrg] = useState(organizations?.value ?? '');
+    const [filterOrg, setFilterOrg] = useState(organizations?.value ?? "");
+    const [filterEmployee, setFilterEmployee] = useState(employee?.value ?? "");
     const [filterOrderType, setFilterOrderType] = useState<
         orderTypeEnumKeys | ""
     >(orderType.value);
 
     const clearFilters = () => {
         forOwn(filters, (value) => value && value.setter(""));
-        setFilterOrg('');
-        setFilterStatus('');
-        setFilterOrderType('')
+        setFilterOrg("");
+        setFilterStatus("");
+        setFilterOrderType("");
+        setFilterEmployee('');
     };
 
     const applyFilter = () => {
         status.setter(filterStatus);
         orderType.setter(filterOrderType);
-        if (organizations) organizations.setter(filterOrg)
-    }
+        if (organizations) organizations.setter(filterOrg);
+        if (employee) employee.setter(filterEmployee)
+    };
 
     const content = (
         <Grid container spacing={3} direction="column">
@@ -77,6 +67,19 @@ export const FilterDrawer = ({ open, onClose, filters }: Props) => {
                         <OrgSelector
                             orgId={filterOrg}
                             setOrgId={setFilterOrg}
+                        />
+                    </Grid>
+                </Grid>
+            )}
+            {employee && (
+                <Grid item container direction="column" spacing={1}>
+                    <Grid item>
+                        <Typography variant="h6">Employee Assigned</Typography>
+                    </Grid>
+                    <Grid item>
+                        <OrderAssigneeController
+                            currentAssignee={filterEmployee}
+                            setCurrentAssignee={setFilterEmployee}
                         />
                     </Grid>
                 </Grid>

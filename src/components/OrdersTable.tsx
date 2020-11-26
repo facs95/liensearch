@@ -30,6 +30,7 @@ const getFilter: Map<keyof FilterOptions, (value: string) => string> = new Map([
     ["organizations", (value: string) => `orgId:${value}`],
     ["orderType", (value: string) => `orderType.${value}:true`],
     ["status", (value: string) => `status:${value}`],
+    ["employee", (value: string) => `assignee:${value}`]
 ]);
 
 const generateFilterQuery = (
@@ -57,9 +58,11 @@ export const OrdersTable = () => {
         ""
     );
     const [filterOrg, setFilterOrg] = useState("");
+    const [filterEmployee, setFilterEmployee] = useState("");
     const [filterOrderType, setFilterOrderType] = useState<
         orderTypeEnumKeys | ""
     >("");
+
     const user = useContext(UserContext);
 
     const history = useHistory();
@@ -100,13 +103,18 @@ export const OrdersTable = () => {
             },
         };
 
-        if (user?.admin)
+        if (user?.admin) {
             filtersOptions.organizations = {
                 value: filterOrg,
                 setter: setFilterOrg,
             };
+            filtersOptions.employee = {
+                value: filterEmployee,
+                setter: setFilterEmployee,
+            };
+        }
         return filtersOptions;
-    }, [user, filterStatus, filterOrderType, filterOrg]);
+    }, [user, filterStatus, filterOrderType, filterOrg, filterEmployee]);
 
     const getOrders = useCallback(async () => {
         const index = await searchClient.initIndex("orders");
@@ -117,8 +125,9 @@ export const OrdersTable = () => {
             filterArr = [`orgId:${user.orgId}`];
         }
 
+        console.log(filters)
         filterArr = generateFilterQuery(filters, filterArr);
-
+        console.log(filterArr)
         index
             .search(searchQuery, {
                 facetFilters: filterArr,

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Grid, Typography, TextField, MenuItem } from "@material-ui/core";
+import { TextField, MenuItem } from "@material-ui/core";
 import firebase from "firebase/app";
 import { UserData } from "../Interfaces";
 import { UserContext } from "../context/UserContext";
@@ -35,26 +35,21 @@ export const OrderAssigneeController = ({
     }, [user, db]);
 
     return (
-        <Grid item container alignItems="center" justify="space-between">
-            <Grid item>
-                <Typography variant="body1">Asignee</Typography>
-            </Grid>
-            <Grid item xs={7}>
-                <TextField
-                    label="Assign Employee"
-                    select
-                    variant="outlined"
-                    fullWidth
-                    value={currentAssignee}
-                    onChange={(e) => setCurrentAssignee(e.target.value)}
-                >
-                    {userOptions.map((option, index) => (
-                        <MenuItem key={`status-${index}`} value={option.email}>
-                            {option.email}
-                        </MenuItem>
-                    ))}
-                </TextField>
-            </Grid>
-        </Grid>
+        <TextField
+            label="Assigned Employee"
+            select
+            variant="outlined"
+            size="small"
+            fullWidth
+            value={currentAssignee}
+            onChange={(e) => setCurrentAssignee(e.target.value)}
+        >
+            <MenuItem value="">All</MenuItem>
+            {userOptions.map((option, index) => (
+                <MenuItem key={`status-${index}`} value={option.email}>
+                    {option.email}
+                </MenuItem>
+            ))}
+        </TextField>
     );
 };
