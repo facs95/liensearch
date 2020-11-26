@@ -34,7 +34,6 @@ export const CreateAccount: React.FC = () => {
         e && e.preventDefault();
         setErrorMessage("");
         let pn = new PhoneNumber(data.phoneNumber, "US");
-        console.log(pn.getNumber());
         try {
             if (!pn.isValid())
                 throw new Error("Please input valid phone number");

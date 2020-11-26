@@ -5,6 +5,7 @@ import { UserContext } from "./context/UserContext";
 import { AuthWrapper, AppWrapper } from "./components";
 import { OrderInfo } from "./views/OrderInfo";
 import { ManageAdming } from "./views/admin/ManageAdmin";
+import { ForgotPassword } from "./views/auth/ForgotPassword";
 
 const authWrap = (component: JSX.Element): JSX.Element => (
     <AuthWrapper>{component}</AuthWrapper>
@@ -55,6 +56,11 @@ export const Routes: React.FC = () => {
                     exact
                     path="/create-account"
                     render={() => authWrap(<CreateAccount />)}
+                />
+                <Route
+                    exact
+                    path="/forgot-password"
+                    render={() => authWrap(<ForgotPassword />)}
                 />
                 <Redirect to="/" />
             </Switch>

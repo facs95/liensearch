@@ -8,6 +8,8 @@ import { UserContext } from "./context/UserContext";
 import firebase from "firebase/app";
 import "./initFirebase";
 import { User } from "./Interfaces";
+import { SnackContext } from "./context/SnackContext";
+import { MessageSnackbar } from "./components/SnackMessage";
 
 const history = createBrowserHistory();
 
@@ -24,11 +26,11 @@ const theme = createMuiTheme({
         fontFamily: "Roboto",
         fontSize: 12,
         subtitle1: {
-            fontWeight: 'bold'
+            fontWeight: "bold",
         },
         h5: {
-            fontWeight: 600
-        }
+            fontWeight: 600,
+        },
     },
     spacing: 6,
     overrides: {
@@ -37,10 +39,10 @@ const theme = createMuiTheme({
                 height: 40,
             },
         },
-        MuiDivider:{
+        MuiDivider: {
             root: {
                 // backgroundColor: 'black'
-            }
+            },
         },
         MuiFormLabel: {
             focused: {
@@ -72,6 +74,10 @@ const theme = createMuiTheme({
 const App: React.FC = () => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const [messageType, setMessageType] = useState<"success" | "error">(
+        "error"
+    );
+    const [message, setMessage] = useState("");
 
     const db = firebase.firestore();
 
@@ -113,11 +119,18 @@ const App: React.FC = () => {
     return (
         <ThemeProvider theme={theme}>
             <UserContext.Provider value={currentUser}>
-                <Router history={history}>
-                    <Switch>
-                        <Routes />
-                    </Switch>
-                </Router>
+                <SnackContext.Provider value={{ setMessage, setMessageType }}>
+                    <MessageSnackbar
+                        {...{ message }}
+                        {...{ setMessage }}
+                        {...{ messageType }}
+                    />
+                    <Router history={history}>
+                        <Switch>
+                            <Routes />
+                        </Switch>
+                    </Router>
+                </SnackContext.Provider>
             </UserContext.Provider>
         </ThemeProvider>
     );

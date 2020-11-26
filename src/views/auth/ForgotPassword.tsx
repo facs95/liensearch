@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
     TextField,
     Button,
@@ -9,20 +9,25 @@ import {
 import { Link } from "react-router-dom";
 import firebase from "firebase/app";
 import { PaperWrapper } from "../../components/PaperWrapper";
+import { SnackContext } from "../../context/SnackContext";
 
-export const Login: React.FC = () => {
+export const ForgotPassword: React.FC = () => {
     const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [errorMessage, setErrorMessage] = useState<string>("");
+
+    const { setMessage, setMessageType } = useContext(SnackContext);
 
     const classes = useStyles();
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setErrorMessage("");
         try {
-            await firebase.auth().signInWithEmailAndPassword(email, password);
+            await firebase.auth().sendPasswordResetEmail(email);
+            setMessageType("success");
+            setMessage("Email Sent Succesfully");
         } catch (err) {
-            setErrorMessage(err.message);
+            setMessage(
+                err.message ||
+                    "We had troubles sending the email. Please try again."
+            );
         }
     };
 
@@ -40,10 +45,12 @@ export const Login: React.FC = () => {
                     alignItems="stretch"
                     spacing={4}
                 >
+                    {/* <Grid item >
+                        <Typography align="center" variant="h5">Login</Typography>
+                    </Grid> */}
                     <Grid item>
                         <TextField
                             type="email"
-                            error={!!errorMessage}
                             fullWidth
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -52,49 +59,24 @@ export const Login: React.FC = () => {
                         />
                     </Grid>
                     <Grid item>
-                        <TextField
-                            fullWidth
-                            error={!!errorMessage}
-                            type="password"
-                            label="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            variant="outlined"
-                            helperText={
-                                <Grid item>
-                                    <Link to="/forgot-password">
-                                        Forgot Password
-                                    </Link>
-                                </Grid>
-                            }
-                        />
-                    </Grid>
-                    <Grid item>
                         <Button
                             type="submit"
-                            disabled={!email || !password}
+                            disabled={!email}
                             fullWidth
                             variant="contained"
                             color="primary"
                         >
-                            Login
+                            Submit Email
                         </Button>
                     </Grid>
                     <Grid item container alignItems="center" spacing={1}>
                         <Grid item>
-                            <Typography>Dont have an account?</Typography>
+                            <Typography>Already have your password?</Typography>
                         </Grid>
                         <Grid item>
-                            <Link to="/create-account">Create account</Link>
+                            <Link to="/">Login</Link>
                         </Grid>
                     </Grid>
-                    {errorMessage && (
-                        <Grid item>
-                            <Typography color="error">
-                                {errorMessage}
-                            </Typography>
-                        </Grid>
-                    )}
                 </Grid>
             </form>
         </PaperWrapper>
