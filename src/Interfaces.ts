@@ -110,7 +110,8 @@ export interface CreateOrder extends OrderData {
     created_on: number;
     status: orderStatusEnumKeys;
     assignee: string;
-    address: Address
+    address: Address;
+    estimatedDelivery?: string
 }
 
 export interface Order extends CreateOrder {

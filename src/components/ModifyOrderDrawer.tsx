@@ -6,6 +6,7 @@ import { CustomDrawer } from "./CustomDrawer";
 import { OrderAssigneeController } from "./OrderDetails/OrderAssigneeController";
 import firebase from "firebase/app";
 import { SnackContext } from "../context/SnackContext";
+import { EstimatedDeliveryController } from "./OrderDetails/EstimatedDeliveryController";
 
 interface Props {
     open: boolean;
@@ -22,6 +23,9 @@ export const ModifyOrderDrawer = ({
 }: Props) => {
     const [currentStatus, setCurrentStatus] = useState(order.status);
     const [currentAssignee, setCurrentAssignee] = useState(order.assignee);
+    const [estimatedDelivery, setEstimatedDelivery] = useState(
+        order.estimatedDelivery || ""
+    );
 
     const db = firebase.firestore();
     const [loading, setLoading] = useState(false);
@@ -31,18 +35,19 @@ export const ModifyOrderDrawer = ({
         const newstat = { ...order };
         newstat.assignee = currentAssignee;
         newstat.status = currentStatus;
+        newstat.estimatedDelivery = estimatedDelivery;
         return newstat;
-    }, [currentAssignee, currentStatus, order]);
+    }, [currentAssignee, currentStatus, estimatedDelivery, order]);
 
     const onApply = async () => {
         setLoading(true);
         try {
             await db.collection("orders").doc(order.id).update(newStatus);
             refreshOrder();
-            setMessageType('success')
+            setMessageType("success");
             setMessage("Order was modified");
         } catch (err) {
-            setMessageType('error')
+            setMessageType("error");
             setMessage(err.message || err);
         } finally {
             setLoading(false);
@@ -70,6 +75,17 @@ export const ModifyOrderDrawer = ({
                     <OrderAssigneeController
                         {...{ currentAssignee }}
                         {...{ setCurrentAssignee }}
+                    />
+                </Grid>
+            </Grid>
+            <Grid item container direction="column" spacing={1}>
+                <Grid item>
+                    <Typography variant="h6">Estimated Delivery</Typography>
+                </Grid>
+                <Grid item>
+                    <EstimatedDeliveryController
+                        {...{ estimatedDelivery }}
+                        {...{ setEstimatedDelivery }}
                     />
                 </Grid>
             </Grid>

@@ -15,6 +15,7 @@ export const OrderAssigneeController = ({
 }: Props) => {
     const [userOptions, setUserOptions] = useState<UserData[]>([]);
 
+    console.log(typeof(currentAssignee))
     const user = useContext(UserContext);
 
     const db = firebase.firestore();
@@ -35,26 +36,20 @@ export const OrderAssigneeController = ({
     }, [user, db]);
 
     return (
-        <>
-            {user?.admin ? (
-                <TextField
-                    select
-                    variant="outlined"
-                    fullWidth
-                    value={currentAssignee}
-                    onChange={(e) => setCurrentAssignee(e.target.value)}
-                >
-                    {userOptions.map((option, index) => (
-                        <MenuItem key={`status-${index}`} value={option.email}>
-                            {option.email}
-                        </MenuItem>
-                    ))}
-                </TextField>
-            ) : (
-                <Typography variant="body2">
-                    {currentAssignee ? currentAssignee : "Not Assigned Yet"}
-                </Typography>
-            )}
-        </>
+        <TextField
+            select
+            variant="outlined"
+            fullWidth
+            value={currentAssignee || ' '}
+            size="small"
+            onChange={(e) => setCurrentAssignee(e.target.value)}
+        >
+            <MenuItem value=" ">Not Assigned Yet</MenuItem>
+            {userOptions.map((option, index) => (
+                <MenuItem key={`status-${index}`} value={option.email}>
+                    {option.email}
+                </MenuItem>
+            ))}
+        </TextField>
     );
 };

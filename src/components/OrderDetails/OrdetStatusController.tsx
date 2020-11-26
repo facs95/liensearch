@@ -4,7 +4,6 @@ import {
     orderStatusEnumKeys as orderStatusType,
     OrderStatusEnum,
 } from "../../Interfaces";
-import { UserContext } from "../../context/UserContext";
 
 interface Props {
     currentStatus: orderStatusType;
@@ -17,37 +16,23 @@ export const OrderStatusController = ({
     currentStatus,
     setCurrentStatus,
 }: Props) => {
-    const user = useContext(UserContext);
 
     return (
-        <>
-            {user?.admin ? (
-                <TextField
-                    select
-                    variant="outlined"
-                    fullWidth
-                    value={currentStatus}
-                    onChange={(e) =>
-                        setCurrentStatus(
-                            e.target.value as keyof typeof OrderStatusEnum
-                        )
-                    }
-                >
-                    {Object.keys(OrderStatusEnum).map((option, index) => (
-                        <MenuItem key={`status-${index}`} value={option}>
-                            {
-                                OrderStatusEnum[
-                                    option as keyof typeof OrderStatusEnum
-                                ]
-                            }
-                        </MenuItem>
-                    ))}
-                </TextField>
-            ) : (
-                <Typography variant="body2">
-                    {currentStatus ? OrderStatusEnum[currentStatus] : ""}
-                </Typography>
-            )}
-        </>
+        <TextField
+            select
+            variant="outlined"
+            fullWidth
+            size="small"
+            value={currentStatus}
+            onChange={(e) =>
+                setCurrentStatus(e.target.value as keyof typeof OrderStatusEnum)
+            }
+        >
+            {Object.keys(OrderStatusEnum).map((option, index) => (
+                <MenuItem key={`status-${index}`} value={option}>
+                    {OrderStatusEnum[option as keyof typeof OrderStatusEnum]}
+                </MenuItem>
+            ))}
+        </TextField>
     );
 };

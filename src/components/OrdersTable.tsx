@@ -25,7 +25,7 @@ const searchClient = algoliasearch(
 );
 
 //This two have to be always in order
-
+//To add a new filter it has to be added in algolia
 const getFilter: Map<keyof FilterOptions, (value: string) => string> = new Map([
     ["organizations", (value: string) => `orgId:${value}`],
     ["orderType", (value: string) => `orderType.${value}:true`],
