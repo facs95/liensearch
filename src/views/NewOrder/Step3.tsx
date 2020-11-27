@@ -12,18 +12,28 @@ import { UserContext } from "../../context/UserContext";
 import { DisplayOrder } from "../../components/DisplayOrder";
 import { useHistory } from "react-router-dom";
 import { Associations } from "./NewOrder";
+import { Button, Grid } from "@material-ui/core";
+import { EmptyState } from "../../components/EmpyState";
 
 interface Props {
     data: OrderData;
     address: Address;
     landSurvey: LandSurveyDetails;
-    associations: Associations
+    associations: Associations;
     orderType: OrderType;
     id: string;
 }
 
-export const Step3 = ({ data, associations, orderType, address, landSurvey, id }: Props) => {
+export const Step3 = ({
+    data,
+    associations,
+    orderType,
+    address,
+    landSurvey,
+    id,
+}: Props) => {
     const [loading, setLoading] = useState(false);
+    const [orderComplete, setOrderComplete] = useState(false);
 
     const userData = useContext(UserContext);
     const history = useHistory();
@@ -43,8 +53,6 @@ export const Step3 = ({ data, associations, orderType, address, landSurvey, id }
         assignee: "",
     };
 
-    console.log(order)
-
     const onSubmit = async () => {
         setLoading(true);
         try {
@@ -53,7 +61,7 @@ export const Step3 = ({ data, associations, orderType, address, landSurvey, id }
                 history.push(`/order/${id}`);
             } else {
                 await db.collection("orders").add(order);
-                history.push("/");
+                setOrderComplete(true);
             }
         } catch (err) {
             console.log(err);
@@ -62,7 +70,22 @@ export const Step3 = ({ data, associations, orderType, address, landSurvey, id }
         }
     };
 
-    const content = <DisplayOrder {...{ order }} type="create" />;
+    const completeContent = (
+        <EmptyState
+            imageFile="complete.svg"
+            title="Order Complete!"
+            description="We are working on your oder"
+            button={{
+                text: "Go to dashboard",
+                onClick: () => history.push("/"),
+            }}
+        />
+    );
+    const content = orderComplete ? (
+        completeContent
+    ) : (
+        <DisplayOrder {...{ order }} type="create" />
+    );
 
     return (
         <CreateWrapper
@@ -70,6 +93,7 @@ export const Step3 = ({ data, associations, orderType, address, landSurvey, id }
             isLast
             onNext={onSubmit}
             disabled={loading}
+            hideActions={orderComplete}
         />
     );
 };

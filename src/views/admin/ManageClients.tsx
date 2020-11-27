@@ -35,7 +35,6 @@ export const ManageClients = () => {
                 querySnapshot.forEach((doc) => {
                     arr.push({ ...doc.data(), id: doc.id } as Org);
                 });
-                console.log(arr)
                 setOrgs(arr);
                 setSelectedOrg(arr[0].id);
             })

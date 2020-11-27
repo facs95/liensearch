@@ -10,10 +10,20 @@ import {
 interface Props {
     email: string;
     setEmail: React.Dispatch<React.SetStateAction<string>>;
+    name: string;
+    setName: React.Dispatch<React.SetStateAction<string>>;
     onSetNewAdminClick: () => void;
+    loading: boolean
 }
 
-export const SetAdmin = ({ email, setEmail, onSetNewAdminClick }: Props) => {
+export const SetAdmin = ({
+    email,
+    setEmail,
+    name,
+    setName,
+    onSetNewAdminClick,
+    loading
+}: Props) => {
     return (
         <Grid container direction="column" spacing={2}>
             <Grid item container direction="column" wrap="nowrap">
@@ -29,6 +39,17 @@ export const SetAdmin = ({ email, setEmail, onSetNewAdminClick }: Props) => {
                     <TextField
                         size="small"
                         fullWidth
+                        label="Name"
+                        variant="outlined"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        type="email"
+                    />
+                </Grid>
+                <Grid item>
+                    <TextField
+                        size="small"
+                        fullWidth
                         label="Email"
                         variant="outlined"
                         value={email}
@@ -38,7 +59,7 @@ export const SetAdmin = ({ email, setEmail, onSetNewAdminClick }: Props) => {
                 </Grid>
                 <Grid item>
                     <Button
-                        disabled={!email}
+                        disabled={!email || !name || loading}
                         fullWidth
                         variant="contained"
                         onClick={onSetNewAdminClick}

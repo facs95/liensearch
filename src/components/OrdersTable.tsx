@@ -18,6 +18,7 @@ import { EmptyState } from "./EmpyState";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { useHistory, useLocation } from "react-router-dom";
 import { FilterDrawer } from "./FilterDrawer";
+import RefreshIcon from "@material-ui/icons/Refresh";
 
 const searchClient = algoliasearch(
     "1AVZX9L93I",
@@ -30,7 +31,7 @@ const getFilter: Map<keyof FilterOptions, (value: string) => string> = new Map([
     ["organizations", (value: string) => `orgId:${value}`],
     ["orderType", (value: string) => `orderType.${value}:true`],
     ["status", (value: string) => `status:${value}`],
-    ["employee", (value: string) => `assignee:${value}`]
+    ["employee", (value: string) => `assignee:${value}`],
 ]);
 
 const generateFilterQuery = (
@@ -125,9 +126,7 @@ export const OrdersTable = () => {
             filterArr = [`orgId:${user.orgId}`];
         }
 
-        console.log(filters)
         filterArr = generateFilterQuery(filters, filterArr);
-        console.log(filterArr)
         index
             .search(searchQuery, {
                 facetFilters: filterArr,
@@ -137,6 +136,10 @@ export const OrdersTable = () => {
             })
             .catch((err) => console.log(err));
     }, [user, searchQuery, filters]);
+
+    const onRefresh = () => {
+        getOrders();
+    };
 
     useEffect(() => {
         getOrders();
@@ -150,17 +153,24 @@ export const OrdersTable = () => {
                 {...{ filters }}
             />
             <Grid container direction="column" spacing={4}>
-                <Grid item container justify="space-between" spacing={2}>
+                <Grid item container justify="space-between" spacing={2} wrap="nowrap">
                     <Grid item xs={10}>
                         <SearchInput
                             value={searchQuery}
                             setValue={setSearchQuery}
                         />
                     </Grid>
-                    <Grid item>
-                        <IconButton size="small" onClick={onFilterOpen}>
-                            <FilterListIcon />
-                        </IconButton>
+                    <Grid item container spacing={1} justify="flex-end">
+                        <Grid item>
+                            <IconButton size="small" onClick={onRefresh}>
+                                <RefreshIcon />
+                            </IconButton>
+                        </Grid>
+                        <Grid item>
+                            <IconButton size="small" onClick={onFilterOpen}>
+                                <FilterListIcon />
+                            </IconButton>
+                        </Grid>
                     </Grid>
                 </Grid>
                 <Grid item>

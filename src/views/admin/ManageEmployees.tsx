@@ -1,8 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { Employee, Org } from "../../Interfaces";
-import { CreateNewOrg } from "./CreateNewOrg";
+import { Employee } from "../../Interfaces";
 import firebase from "firebase";
-import { UserContext } from "../../context/UserContext";
 import { SnackContext } from "../../context/SnackContext";
 import { Grid } from "@material-ui/core";
 import { TitleContext } from "../../context/TitleContext";
@@ -13,7 +11,9 @@ export const ManageEmployees = () => {
     const db = firebase.firestore();
 
     const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
     const [employees, setEmployees] = useState<Employee[]>([]);
+    const [loading, setLoading] = useState(false);
 
     const { setMessage, setMessageType } = useContext(SnackContext);
 
@@ -43,8 +43,11 @@ export const ManageEmployees = () => {
     }, [getEmployees]);
 
     const setAdmin = () => {
-        const setAdminUser = firebase.functions().httpsCallable("setAdminUser");
-        setAdminUser({ email })
+        setLoading(true)
+        const setAdminUser = firebase
+            .functions()
+            .httpsCallable("createEmployee");
+        setAdminUser({ email, name })
             .then(() => {
                 setMessageType("success");
                 setMessage("Admin Set Succesfully");
@@ -52,6 +55,9 @@ export const ManageEmployees = () => {
             .catch((err) => {
                 setMessageType("error");
                 setMessage(err.message || "Please try again");
+            }).finally(() => {
+                getEmployees()
+                setLoading(false)
             });
     };
 
@@ -65,11 +71,14 @@ export const ManageEmployees = () => {
                 <SetAdmin
                     {...{ email }}
                     {...{ setEmail }}
+                    {...{ name }}
+                    {...{ setName }}
                     {...{ onSetNewAdminClick }}
+                    {...{loading}}
                 />
             </Grid>
             <Grid item>
-                <EmployeesTable {...{employees}} />
+                <EmployeesTable {...{ employees }} />
             </Grid>
         </Grid>
     );

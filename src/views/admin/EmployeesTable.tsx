@@ -41,30 +41,34 @@ export const EmployeesTable = ({ employees }: Props) => {
                 </Grid>
             </Grid>
             <Grid item>
-                <Table component={Paper}>
-                    <TableHead>
-                        <TableRow>
-                            {columns.map((column, index) => (
-                                <TableCell key={`employees-columns-${index}`}>
-                                    {column}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {records.map((row, index) => (
-                            <TableRow key={`employees-row-${index}`}>
-                                {row.columns.map((col, index) => (
+                <Paper>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                {columns.map((column, index) => (
                                     <TableCell
-                                        key={`${columns[index]}-cell-${index}`}
+                                        key={`employees-columns-${index}`}
                                     >
-                                        <Typography>{col.value}</Typography>
+                                        {column}
                                     </TableCell>
                                 ))}
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHead>
+                        <TableBody>
+                            {records.map((row, index) => (
+                                <TableRow key={`employees-row-${index}`}>
+                                    {row.columns.map((col, index) => (
+                                        <TableCell
+                                            key={`${columns[index]}-cell-${index}`}
+                                        >
+                                            <Typography>{col.value}</Typography>
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </Paper>
             </Grid>
         </Grid>
     );
