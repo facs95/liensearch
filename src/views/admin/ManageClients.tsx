@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Org } from "../../Interfaces";
 import { CreateNewOrg } from "./CreateNewOrg";
 import firebase from "firebase";
-import { UserContext } from "../../context/UserContext";
 import { SnackContext } from "../../context/SnackContext";
 import { TitleContext } from "../../context/TitleContext";
 import { Grid } from "@material-ui/core";
@@ -12,7 +11,7 @@ export const ManageClients = () => {
     const db = firebase.firestore();
 
     const [orgs, setOrgs] = useState<Array<Org>>([]);
-    const [selectedOrg, setSelectedOrg] = useState("");
+    const [loading, setLoading] = useState(false);
     const [orgPhoneNumber, setOrgPhoneNumber] = useState("");
     const [orgAddress, setOrgAddress] = useState("");
     const [orgName, setOrgName] = useState("");
@@ -36,7 +35,6 @@ export const ManageClients = () => {
                     arr.push({ ...doc.data(), id: doc.id } as Org);
                 });
                 setOrgs(arr);
-                setSelectedOrg(arr[0].id);
             })
             .catch((err) => console.log(err));
     }, [db]);
@@ -46,6 +44,7 @@ export const ManageClients = () => {
     }, [getOrgs])
 
     const onCreateOrgClick = async () => {
+        setLoading(true)
         try {
             await db.collection("organizations").add({
                 name: orgName,
@@ -61,6 +60,8 @@ export const ManageClients = () => {
         } catch (err) {
             setMessageType("error");
             setMessage(err.message || "Please try again");
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -75,6 +76,7 @@ export const ManageClients = () => {
                     {...{ onCreateOrgClick }}
                     {...{ orgName }}
                     {...{ setOrgName }}
+                    {...{loading}}
                 />
             </Grid>
             <Grid item>

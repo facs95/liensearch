@@ -15,6 +15,7 @@ interface Props {
     address: string
     setAddress: React.Dispatch<React.SetStateAction<string>>
     onCreateOrgClick: () => void;
+    loading: boolean
 }
 
 export const CreateNewOrg = ({
@@ -24,7 +25,8 @@ export const CreateNewOrg = ({
     phoneNumber,
     setAddress,
     address,
-    setPhoneNumber
+    setPhoneNumber,
+    loading
 }: Props) => {
     return (
         <Grid container direction="column" spacing={2}>
@@ -71,7 +73,7 @@ export const CreateNewOrg = ({
                 </Grid>
                 <Grid item>
                     <Button
-                        disabled={!address || !phoneNumber || !orgName}
+                        disabled={!address || !phoneNumber || !orgName || loading}
                         fullWidth
                         variant="contained"
                         onClick={onCreateOrgClick}
