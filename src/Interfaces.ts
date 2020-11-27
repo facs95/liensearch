@@ -131,3 +131,9 @@ export interface OrgData {
 export interface Org extends OrgData {
     id: string;
 }
+
+export interface Employee {
+    id: string
+    email: string
+    name: string
+}

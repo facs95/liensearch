@@ -4,7 +4,6 @@ import { Login, Dashboard, CreateAccount, NewOrder } from "./views";
 import { UserContext } from "./context/UserContext";
 import { AuthWrapper, AppWrapper } from "./components";
 import { OrderInfo } from "./views/OrderInfo";
-import { ManageAdming } from "./views/admin/ManageAdmin";
 import { ForgotPassword } from "./views/auth/ForgotPassword";
 import { AppWrapperParams } from "./components/AppWrapper";
 import { ManageClients } from "./views/admin/ManageClients";
