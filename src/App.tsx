@@ -86,10 +86,18 @@ const App: React.FC = () => {
             if (user) {
                 try {
                     const token = await user.getIdTokenResult();
-                    const userDoc = await db
-                        .collection("users")
-                        .doc(user.uid)
-                        .get();
+                    let userDoc;
+                    if (token.claims.admin) {
+                        userDoc = await db
+                            .collection("employees")
+                            .doc(user.uid)
+                            .get();
+                    } else {
+                        userDoc = await db
+                            .collection("users")
+                            .doc(user.uid)
+                            .get();
+                    }
                     let userData;
                     if (userDoc.exists) {
                         userData = userDoc.data();

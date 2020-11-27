@@ -8,6 +8,7 @@ import { ForgotPassword } from "./views/auth/ForgotPassword";
 import { AppWrapperParams } from "./components/AppWrapper";
 import { ManageClients } from "./views/admin/ManageClients";
 import { ManageEmployees } from "./views/admin/ManageEmployees";
+import { UserProfile } from "./views/UserProfile";
 
 const authWrap = (component: JSX.Element): JSX.Element => (
     <AuthWrapper>{component}</AuthWrapper>
@@ -42,6 +43,13 @@ export const Routes: React.FC = () => {
                     exact
                     path="/order/:id"
                     render={() => appWrap(<OrderInfo />)}
+                />
+                <Route
+                    exact
+                    path="/profile"
+                    render={() =>
+                        appWrap(<UserProfile />, { noBreadCrumb: true })
+                    }
                 />
                 {currentUser.admin && (
                     <>

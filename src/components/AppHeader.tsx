@@ -14,10 +14,10 @@ import {
 } from "@material-ui/core";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import * as Firebase from "firebase";
-import { useHistory } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { DRAWER_WIDTH } from "./AppWrapper";
 import { TitleContext } from "../context/TitleContext";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) => ({
     menuButton: {
@@ -65,6 +65,7 @@ export const AppHeader = () => {
     const { title } = useContext(TitleContext);
 
     const currentUser = useContext(UserContext);
+    const history = useHistory();
     
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -106,7 +107,7 @@ export const AppHeader = () => {
                     open={open}
                     onClose={handleClose}
                 >
-                    <MenuItem>
+                    <MenuItem onClick={() => history.push('/profile')}>
                         <ListItemAvatar>
                             <Avatar>{currentUser?.email.charAt(0)}</Avatar>
                         </ListItemAvatar>

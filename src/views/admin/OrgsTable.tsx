@@ -31,7 +31,7 @@ export const OrgsTable = ({ orgs }: Props) => {
                 value: org.phoneNumber,
             },
             {
-                value: org.orderCount,
+                value: org.orderCount || 0,
             },
         ],
     }));
