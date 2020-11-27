@@ -6,16 +6,19 @@ import { AuthWrapper, AppWrapper } from "./components";
 import { OrderInfo } from "./views/OrderInfo";
 import { ManageAdming } from "./views/admin/ManageAdmin";
 import { ForgotPassword } from "./views/auth/ForgotPassword";
+import { AppWrapperParams } from "./components/AppWrapper";
+import { ManageClients } from "./views/admin/ManageClients";
 
 const authWrap = (component: JSX.Element): JSX.Element => (
     <AuthWrapper>{component}</AuthWrapper>
 );
-const appWrap = (component: JSX.Element): JSX.Element => (
-    <AppWrapper>{component}</AppWrapper>
-);
+const appWrap = (
+    component: JSX.Element,
+    options?: AppWrapperParams
+): JSX.Element => <AppWrapper {...options}>{component}</AppWrapper>;
 
 export interface RouterParams {
-    id: string
+    id: string;
 }
 
 export const Routes: React.FC = () => {
@@ -40,11 +43,28 @@ export const Routes: React.FC = () => {
                     path="/order/:id"
                     render={() => appWrap(<OrderInfo />)}
                 />
-                <Route
-                    exact
-                    path="/admin/manage"
-                    render={() => appWrap(<ManageAdming />)}
-                />
+                {currentUser.admin && (
+                    <>
+                        <Route
+                            exact
+                            path="/admin/employees"
+                            render={() =>
+                                appWrap(<ManageAdming />, {
+                                    noBreadCrumb: true,
+                                })
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/admin/clients"
+                            render={() =>
+                                appWrap(<ManageClients />, {
+                                    noBreadCrumb: true,
+                                })
+                            }
+                        />
+                    </>
+                )}
                 <Redirect to="/" />
             </Switch>
         );

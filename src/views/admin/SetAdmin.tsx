@@ -15,10 +15,10 @@ interface Props {
 
 export const SetAdmin = ({ email, setEmail, onSetNewAdminClick }: Props) => {
     return (
-        <>
+        <Grid container direction="column" spacing={2}>
             <Grid item container direction="column" wrap="nowrap">
                 <Grid item xs={12}>
-                    <Typography variant="h6">Set New Admin</Typography>
+                    <Typography variant="h6">Add New Employee</Typography>
                 </Grid>
                 <Grid item xs={12}>
                     <Divider />
@@ -44,10 +44,10 @@ export const SetAdmin = ({ email, setEmail, onSetNewAdminClick }: Props) => {
                         onClick={onSetNewAdminClick}
                         color="primary"
                     >
-                        Set Admin
+                        Create Employee
                     </Button>
                 </Grid>
             </Grid>
-        </>
+        </Grid>
     );
 };

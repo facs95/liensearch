@@ -16,13 +16,21 @@ import {
     ActionButtonContext,
 } from "../context/ActionButtonContext";
 
-interface Props {
+export interface AppWrapperParams {
+    noPadding?: boolean;
+    noBreadCrumb?: boolean;
+}
+interface Props extends AppWrapperParams {
     children: JSX.Element;
 }
 
 export const DRAWER_WIDTH = 240;
 
-export const AppWrapper: React.FC<Props> = ({ children }) => {
+export const AppWrapper: React.FC<Props> = ({
+    children,
+    noBreadCrumb,
+    noPadding,
+}) => {
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState("");
     const [
@@ -43,11 +51,17 @@ export const AppWrapper: React.FC<Props> = ({ children }) => {
                         <AppHeader />
                         <LeftNav />
                         {loading && <LinearProgress />}
-                        <main className={classes.content}>
+                        <main
+                            className={`${classes.content} ${
+                                !noPadding ? classes.paddingContent : undefined
+                            }`}
+                        >
                             <Toolbar />
-                            <div className={classes.bottomMargin}>
-                                <NavigationBar />
-                            </div>
+                            {!noBreadCrumb && (
+                                <div className={classes.bottomMargin}>
+                                    <NavigationBar />
+                                </div>
+                            )}
                             {children}
                         </main>
                     </div>
@@ -60,9 +74,11 @@ export const AppWrapper: React.FC<Props> = ({ children }) => {
 const useStyles = makeStyles((theme) => ({
     content: {
         paddingTop: 20,
+        width: "100%",
+    },
+    paddingContent: {
         paddingLeft: 100,
         paddingRight: 100,
-        width: "100%",
     },
     root: {
         display: "flex",

@@ -13,6 +13,7 @@ import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import { DRAWER_WIDTH } from "../AppWrapper";
 import { UserContext } from "../../context/UserContext";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
+import BusinessIcon from '@material-ui/icons/Business';
 import { useHistory } from "react-router-dom";
 
 export const LeftNav = () => {
@@ -34,7 +35,12 @@ export const LeftNav = () => {
         options.push({
             label: "Manage Employees",
             icon: <SupervisorAccountIcon />,
-            action: () => history.push("/admin/manage"),
+            action: () => history.push("/admin/employees"),
+            divider: false,
+        },{
+            label: "Manage Clients",
+            icon: <BusinessIcon />,
+            action: () => history.push("/admin/clients"),
             divider: false,
         });
     }

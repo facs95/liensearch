@@ -1,13 +1,16 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import { UserContext } from "../../context/UserContext";
 import { Redirect } from "react-router-dom";
-import { Grid } from "@material-ui/core";
+import { AppBar, Grid, makeStyles, Tab, Tabs } from "@material-ui/core";
 import firebase from "firebase";
 import { MessageSnackbar } from "../../components/SnackMessage";
 import { SetAdmin } from "./SetAdmin";
 import { CreateNewOrg } from "./CreateNewOrg";
 import { AddUserToOrg } from "./AddUserToOrg";
 import { Org } from "../../Interfaces";
+import { TitleContext } from "../../context/TitleContext";
+
+const tabs = ["Manage Employees", "Clients"];
 
 export const ManageAdming = () => {
     const db = firebase.firestore();
@@ -24,6 +27,17 @@ export const ManageAdming = () => {
     const [messageType, setMessageType] = useState<"success" | "error">(
         "success"
     );
+    const [currenTab, setCurrentTab] = useState(0);
+
+    const classes = useStyles();
+
+    const {setTitle} = useContext(TitleContext);
+
+    useEffect(() => {
+        if (setTitle) {
+            setTitle('Admin Management')
+        }
+    }, [setTitle])
 
     const getOrgs = useCallback(() => {
         db.collection("organizations")
@@ -97,22 +111,10 @@ export const ManageAdming = () => {
         }
     };
 
-    return (
-        <>
-            <MessageSnackbar
-                message={errorMessage}
-                setMessage={setErrorMessage}
-                {...{ messageType }}
-            />
-            <Grid item xs={4} container justify="center" spacing={3}>
-                <Grid item container spacing={3}>
-                    <SetAdmin
-                        {...{ email }}
-                        {...{ setEmail }}
-                        {...{ onSetNewAdminClick }}
-                    />
-                </Grid>
-                <Grid item container spacing={3}>
+    const getItem = (index: number) => {
+        switch (index) {
+            case 1:
+                return (
                     <CreateNewOrg
                         phoneNumber={orgPhoneNumber}
                         setPhoneNumber={setOrgPhoneNumber}
@@ -122,18 +124,82 @@ export const ManageAdming = () => {
                         {...{ orgName }}
                         {...{ setOrgName }}
                     />
-                </Grid>
-                <Grid item container spacing={3}>
-                    <AddUserToOrg
-                        {...{ orgs }}
-                        {...{ userToOrg }}
-                        {...{ setUserToOrg }}
-                        {...{ selectedOrg }}
-                        {...{ setSelectedOrg }}
-                        {...{ onAddUserToOrgClick }}
+                );
+            default:
+                return (
+                    <SetAdmin
+                        {...{ email }}
+                        {...{ setEmail }}
+                        {...{ onSetNewAdminClick }}
                     />
-                </Grid>
-            </Grid>
+                );
+        }
+    };
+
+    return (
+        <>
+            <MessageSnackbar
+                message={errorMessage}
+                setMessage={setErrorMessage}
+                {...{ messageType }}
+            />
+            <AppBar position="static">
+                <Tabs
+                    value={currenTab}
+                    onChange={(_, v) => setCurrentTab(v)}
+                    aria-label="simple tabs example"
+                >
+                    {tabs.map((tab, index) => (
+                        <Tab label={tab} key={`tab-${index}`} />
+                    ))}
+                </Tabs>
+            </AppBar>
+            <div className={classes.contentContainer}>{getItem(currenTab)}</div>
         </>
     );
+    // return (
+    //     <>
+    //         <MessageSnackbar
+    //             message={errorMessage}
+    //             setMessage={setErrorMessage}
+    //             {...{ messageType }}
+    //         />
+    //         <Grid item xs={4} container justify="center" spacing={3}>
+    //             <Grid item container spacing={3}>
+    //                 <SetAdmin
+    //                     {...{ email }}
+    //                     {...{ setEmail }}
+    //                     {...{ onSetNewAdminClick }}
+    //                 />
+    //             </Grid>
+    //             <Grid item container spacing={3}>
+    //                 <CreateNewOrg
+    //                     phoneNumber={orgPhoneNumber}
+    //                     setPhoneNumber={setOrgPhoneNumber}
+    //                     address={orgAddress}
+    //                     setAddress={setOrgAddress}
+    //                     {...{ onCreateOrgClick }}
+    //                     {...{ orgName }}
+    //                     {...{ setOrgName }}
+    //                 />
+    //             </Grid>
+    //             <Grid item container spacing={3}>
+    //                 <AddUserToOrg
+    //                     {...{ orgs }}
+    //                     {...{ userToOrg }}
+    //                     {...{ setUserToOrg }}
+    //                     {...{ selectedOrg }}
+    //                     {...{ setSelectedOrg }}
+    //                     {...{ onAddUserToOrgClick }}
+    //                 />
+    //             </Grid>
+    //         </Grid>
+    //     </>
+    // );
 };
+
+const useStyles = makeStyles((theme) => ({
+    contentContainer: {
+        marginTop: theme.spacing(5)
+    },
+}));

@@ -27,7 +27,7 @@ export const CreateNewOrg = ({
     setPhoneNumber
 }: Props) => {
     return (
-        <>
+        <Grid container direction="column" spacing={2}>
             <Grid item container direction="column" wrap="nowrap">
                 <Grid item xs={12}>
                     <Typography variant="h6">
@@ -81,6 +81,6 @@ export const CreateNewOrg = ({
                     </Button>
                 </Grid>
             </Grid>
-        </>
+        </Grid>
     );
 };

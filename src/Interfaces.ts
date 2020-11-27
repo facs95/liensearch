@@ -123,6 +123,9 @@ export interface Order extends CreateOrder {
 export interface OrgData {
     name: string;
     users: string[];
+    orderCount: number;
+    phoneNumber: string
+    address: string
 }
 
 export interface Org extends OrgData {
