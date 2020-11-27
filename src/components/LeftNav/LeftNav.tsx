@@ -14,13 +14,14 @@ import { DRAWER_WIDTH } from "../AppWrapper";
 import { UserContext } from "../../context/UserContext";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import BusinessIcon from '@material-ui/icons/Business';
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 export const LeftNav = () => {
     const classes = useStyles();
 
     const user = useContext(UserContext);
     const history = useHistory();
+    const {pathname} = useLocation();
 
     const options = [
         {
@@ -28,6 +29,7 @@ export const LeftNav = () => {
             icon: <LibraryBooksIcon />,
             action: () => history.push("/"),
             divider: !!user?.admin,
+            selected: ['/', '/orders'].includes(pathname)
         },
     ];
 
@@ -37,11 +39,13 @@ export const LeftNav = () => {
             icon: <SupervisorAccountIcon />,
             action: () => history.push("/admin/employees"),
             divider: false,
+            selected: pathname === '/admin/employees'
         },{
             label: "Manage Clients",
             icon: <BusinessIcon />,
             action: () => history.push("/admin/clients"),
             divider: false,
+            selected: pathname === "/admin/clients"
         });
     }
 
@@ -68,6 +72,7 @@ export const LeftNav = () => {
                                     key={`left-nav-${index}`}
                                     button
                                     onClick={option.action}
+                                    selected={option.selected}
                                 >
                                     <ListItemIcon>{option.icon}</ListItemIcon>
                                     <ListItemText primary={option.label} />

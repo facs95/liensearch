@@ -8,6 +8,7 @@ import { ManageAdming } from "./views/admin/ManageAdmin";
 import { ForgotPassword } from "./views/auth/ForgotPassword";
 import { AppWrapperParams } from "./components/AppWrapper";
 import { ManageClients } from "./views/admin/ManageClients";
+import { ManageEmployees } from "./views/admin/ManageEmployees";
 
 const authWrap = (component: JSX.Element): JSX.Element => (
     <AuthWrapper>{component}</AuthWrapper>
@@ -49,7 +50,7 @@ export const Routes: React.FC = () => {
                             exact
                             path="/admin/employees"
                             render={() =>
-                                appWrap(<ManageAdming />, {
+                                appWrap(<ManageEmployees />, {
                                     noBreadCrumb: true,
                                 })
                             }
