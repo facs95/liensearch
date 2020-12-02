@@ -9,7 +9,7 @@ import { useHistory } from "react-router-dom";
 import {
     Associations,
     OrderData,
-    OrderType,
+    OrderTypesInterface,
     LandSurveyDetails,
     Address,
 } from "../Interfaces";
@@ -24,7 +24,7 @@ interface Props {
     landSurvey: LandSurveyDetails;
     address: Address;
     associations: Associations;
-    orderTypes: OrderType;
+    orderTypes: OrderTypesInterface;
     data: OrderData;
     basePath: string;
 }
@@ -60,8 +60,8 @@ export const CreateOrderForm = ({
     const isReady =
         isAddressReady &&
         isDataReady &&
-        (orderTypes.estoppelLetter ? isAssociationsReady : true) &&
-        (orderTypes.landSurvey ? isLandSurveyReady : true);
+        (orderTypes.estoppelLetter.isActive ? isAssociationsReady : true) &&
+        (orderTypes.landSurvey.isActive ? isLandSurveyReady : true);
 
     const content = (
         <>
@@ -80,13 +80,13 @@ export const CreateOrderForm = ({
                 />
             </Grid>
             <Grid item container spacing={2}>
-                {orderTypes.estoppelLetter && (
+                {orderTypes.estoppelLetter.isActive && (
                     <Grid
                         item
                         container
                         spacing={2}
                         xs={12}
-                        md={orderTypes.landSurvey ? 6 : 12}
+                        md={orderTypes.landSurvey.isActive ? 6 : 12}
                         direction="column"
                     >
                         <AssociationForm
@@ -96,13 +96,13 @@ export const CreateOrderForm = ({
                         />
                     </Grid>
                 )}
-                {orderTypes.landSurvey && (
+                {orderTypes.landSurvey.isActive && (
                     <Grid
                         item
                         container
                         spacing={2}
                         xs={12}
-                        md={orderTypes.estoppelLetter ? 6 : 12}
+                        md={orderTypes.estoppelLetter.isActive ? 6 : 12}
                         direction="column"
                     >
                         <LandSurveyForm

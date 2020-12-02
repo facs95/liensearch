@@ -1,8 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useMemo } from "react";
 import { CreateWrapper } from "../../components/CreateWrapper";
 import firebase from "firebase/app";
 import {
-    OrderType,
+    OrderTypesInterface,
     OrderData,
     CreateOrder,
     Address,
@@ -12,7 +12,6 @@ import { UserContext } from "../../context/UserContext";
 import { DisplayOrder } from "../../components/DisplayOrder";
 import { useHistory } from "react-router-dom";
 import { Associations } from "./NewOrder";
-import { Button, Grid } from "@material-ui/core";
 import { EmptyState } from "../../components/EmpyState";
 
 interface Props {
@@ -20,7 +19,7 @@ interface Props {
     address: Address;
     landSurvey: LandSurveyDetails;
     associations: Associations;
-    orderType: OrderType;
+    orderType: OrderTypesInterface;
     id: string;
 }
 
@@ -40,18 +39,25 @@ export const Step3 = ({
 
     const db = firebase.firestore();
 
-    const order: CreateOrder = {
-        ...data,
-        address,
-        landSurvey,
-        associations,
-        orderType,
-        requestedBy: userData?.uid || "",
-        orgId: userData?.orgId || "",
-        created_on: Date.now(),
-        status: "newOrder",
-        assignee: "",
-    };
+    const order = useMemo(() => {
+        let o: CreateOrder = {
+            ...data,
+            address,
+            orderType,
+            requestedBy: userData?.uid || "",
+            orgId: userData?.orgId || "",
+            created_on: Date.now(),
+            status: 'inProgress',
+            assignee: "",
+        };
+        if (orderType.landSurvey.isActive) {
+            o.landSurvey = landSurvey;
+        }
+        if (orderType.estoppelLetter.isActive) {
+            o.associations = associations;
+        }
+        return o;
+    }, [data, landSurvey, associations, orderType, address, userData]);
 
     const onSubmit = async () => {
         setLoading(true);

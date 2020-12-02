@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, useCallback } from "react";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import firebase from "firebase/app";
 import { Order, OrderStatusEnum } from "../Interfaces";
-import { Grid, makeStyles } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import { LoadingContext } from "../context/LoadingContext";
 import { DisplayOrder } from "../components/DisplayOrder";
 import { UploadDocuments } from "../components/UploadDocuments";
@@ -15,13 +15,14 @@ import { ActionButtonContext } from "../context/ActionButtonContext";
 import { UserContext } from "../context/UserContext";
 import { ModifyOrderDrawer } from "../components/ModifyOrderDrawer";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
+import { StatusChip } from "../components/StatusChip";
 
 export const OrderInfo = () => {
     const [order, setOrder] = useState<Order | null>(null);
 
     const { setLoading } = useContext(LoadingContext);
     const { setTitle } = useContext(TitleContext);
-    const { setActionButton } = useContext(ActionButtonContext);
+    const { setNavigationBar } = useContext(ActionButtonContext);
     const user = useContext(UserContext);
     const history = useHistory();
     const {
@@ -30,12 +31,12 @@ export const OrderInfo = () => {
     } = useLocation<{ updateOrder: boolean }>();
 
     useEffect(() => {
-        setTitle("Order");
+        setTitle("Order Info");
     }, [setTitle]);
 
     useEffect(() => {
         if (user?.admin) {
-            setActionButton({
+            setNavigationBar({
                 label: "Modify Order",
                 action: () =>
                     history.push({
@@ -44,18 +45,20 @@ export const OrderInfo = () => {
                             updateOrder: true,
                         },
                     }),
+                breadcrumbText: order?.orderCount,
             });
         } else {
-            setActionButton({
+            setNavigationBar({
                 label: "Update Order",
                 action: () => history.push(`/update/${order?.id}/1`),
+                breadcrumbText: order?.orderCount,
             });
         }
 
         return () => {
-            setActionButton(null);
+            setNavigationBar(null);
         };
-    }, [setActionButton, user, order, history, pathname]);
+    }, [setNavigationBar, user, order, history, pathname]);
 
     const { id } = useParams<RouterParams>();
 
@@ -123,6 +126,14 @@ export const OrderInfo = () => {
                 {...{ refreshOrder }}
             />
             <Grid container direction="column" spacing={3}>
+                <Grid item container alignItems="center" spacing={2}>
+                    <Grid item>
+                        <Typography variant="h5">Order Status:</Typography>
+                    </Grid>
+                    <Grid item>
+                        <StatusChip status={order.status} />
+                    </Grid>
+                </Grid>
                 <Grid item>
                     <KPI {...{ kpis }} />
                 </Grid>

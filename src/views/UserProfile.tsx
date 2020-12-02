@@ -1,13 +1,11 @@
 import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import React, { useContext, useEffect, useState } from "react";
 import { TitleContext } from "../context/TitleContext";
-import { UserContext } from "../context/UserContext";
 import firebase from "firebase/app";
 import { SnackContext } from "../context/SnackContext";
 
 export const UserProfile = () => {
     const { setTitle } = useContext(TitleContext);
-    const user = useContext(UserContext);
     const { setMessage, setMessageType } = useContext(SnackContext);
 
     const [currentPassword, setCurrentPassword] = useState("");

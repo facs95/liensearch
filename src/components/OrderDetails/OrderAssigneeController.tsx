@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Grid, Typography, TextField, MenuItem } from "@material-ui/core";
+import { TextField, MenuItem } from "@material-ui/core";
 import firebase from "firebase/app";
 import { UserData } from "../../Interfaces";
 import { UserContext } from "../../context/UserContext";
@@ -15,7 +15,6 @@ export const OrderAssigneeController = ({
 }: Props) => {
     const [userOptions, setUserOptions] = useState<UserData[]>([]);
 
-    console.log(typeof(currentAssignee))
     const user = useContext(UserContext);
 
     const db = firebase.firestore();

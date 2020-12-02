@@ -1,6 +1,6 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
-import { orderStatusEnumKeys, orderTypeEnumKeys } from "../Interfaces";
+import { orderTypeStatusEnumKeys, orderTypeEnumKeys } from "../Interfaces";
 import { CustomDrawer } from "./CustomDrawer";
 import { OrderTypeSelector } from "./OrderTypeSelector";
 import { OrgSelector } from "./OrgSelector";
@@ -18,7 +18,7 @@ interface Props {
 export const FilterDrawer = ({ open, onClose, filters }: Props) => {
     const { status, organizations, orderType, employee } = filters;
 
-    const [filterStatus, setFilterStatus] = useState<orderStatusEnumKeys | "">(
+    const [filterStatus, setFilterStatus] = useState<orderTypeStatusEnumKeys | "">(
         status.value
     );
     const [filterOrg, setFilterOrg] = useState(organizations?.value ?? "");

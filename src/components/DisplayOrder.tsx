@@ -1,10 +1,9 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Grid, Typography, Divider, Button } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
 import {
     Order,
-    OrderType,
+    OrderTypesInterface,
     OrderData,
     Org,
     CreateOrder,
@@ -12,7 +11,6 @@ import {
 } from "../Interfaces";
 import { UserContext } from "../context/UserContext";
 import firebase from "firebase";
-import { useHistory } from "react-router-dom";
 import {
     AccordionContentInterface,
     CustomAccordion,
@@ -25,7 +23,7 @@ interface Props {
     type: "create" | "info";
 }
 
-const orderTypeText = new Map<keyof OrderType, string>([
+const orderTypeText = new Map<keyof OrderTypesInterface, string>([
     ["lienSearch", "Lien Search"],
     ["estoppelLetter", "Estoppel Letter"],
     ["landSurvey", "Land Survey"],
@@ -72,7 +70,6 @@ const landSurveyDetails: Array<keyof LandSurveyDetails> = [
 export const DisplayOrder = ({ order, type }: Props) => {
     const userData = useContext(UserContext);
     const db = firebase.firestore();
-    const history = useHistory();
 
     const [org, setOrg] = useState<Org | null>(null);
     const [requestedBy, setRequestedBy] = useState<string | null>(null);
@@ -115,8 +112,8 @@ export const DisplayOrder = ({ order, type }: Props) => {
         const elements = [];
         for (let [key, value] of Object.entries(order.orderType)) {
             const el = {
-                subHeader: orderTypeText.get(key as keyof OrderType) ?? "",
-                value: value ? <CheckIcon /> : <CloseIcon />,
+                subHeader: orderTypeText.get(key as keyof OrderTypesInterface) ?? "",
+                value: value.isActive ? <CheckIcon /> : <CloseIcon />,
             };
             elements.push(el);
         }
@@ -143,10 +140,6 @@ export const DisplayOrder = ({ order, type }: Props) => {
         };
         return [...details, hardCopy];
     };
-
-    function isOrder(order: Order | CreateOrder): order is Order {
-        return true;
-    }
 
     if (loading) return <></>;
 
@@ -183,7 +176,7 @@ export const DisplayOrder = ({ order, type }: Props) => {
         },
     ];
 
-    if (order.landSurvey) {
+    if (order.orderType.landSurvey.isActive) {
         accordions.push({
             header: "Land Survey Info",
             content: getLandSurveyInfo()
@@ -202,116 +195,4 @@ export const DisplayOrder = ({ order, type }: Props) => {
             ))}
         </>
     );
-
-    // return (
-    //     <>
-
-    //         <Grid item>
-    //             <Typography variant="h5">Review Order</Typography>
-    //             <Divider />
-    //         </Grid>
-    //         <Grid item container spacing={3}>
-    //             {type === "info" && (
-    //                 <Grid item container direction="column" spacing={1} xs={4}>
-    //                     <Grid item>
-    //                         <Typography variant="h6">Order Owner</Typography>
-    //                         <Divider />
-    //                     </Grid>
-    //                     {OwnerInfo}
-    //                 </Grid>
-    //             )}
-    //             <Grid
-    //                 item
-    //                 container
-    //                 xs={type === "info" ? 4 : 3}
-    //                 spacing={1}
-    //                 direction="column"
-    //             >
-    //                 <Grid item>
-    //                     <Typography variant="h6">Property Address</Typography>
-    //                     <Divider />
-    //                 </Grid>
-    //                 <Grid item container direction="column" spacing={1}>
-    //                     <Grid item>
-    //                         <Typography>{order?.address.address1}</Typography>
-    //                     </Grid>
-    //                     {order?.address.address2 && (
-    //                         <Grid item>
-    //                             <Typography>
-    //                                 {order.address.address2}
-    //                             </Typography>
-    //                         </Grid>
-    //                     )}
-    //                     {order?.address.unit && (
-    //                         <Grid item>
-    //                             <Typography>{order.address.unit}</Typography>
-    //                         </Grid>
-    //                     )}
-    //                     <Grid item>
-    //                         <Typography>{`${order?.address.city}, ${order?.address.state} ${order?.address.zipCode}`}</Typography>
-    //                     </Grid>
-    //                 </Grid>
-    //             </Grid>
-    //             <Grid
-    //                 item
-    //                 container
-    //                 direction="column"
-    //                 xs={type === "info" ? 4 : 3}
-    //                 spacing={1}
-    //             >
-    //                 <Grid item>
-    //                     <Typography variant="h6">Order Type</Typography>
-    //                     <Divider />
-    //                 </Grid>
-    //                 {getOrderTypes()}
-    //             </Grid>
-    //             {order.landSurvey && (
-    //                 <Grid
-    //                     item
-    //                     container
-    //                     xs={type === "info" ? 12 : 6}
-    //                     direction="column"
-    //                     spacing={1}
-    //                 >
-    //                     <Grid item>
-    //                         <Typography variant="h6">
-    //                             Land Survey Info
-    //                         </Typography>
-    //                         <Divider />
-    //                     </Grid>
-    //                     {LandSurveyInfo()}
-    //                 </Grid>
-    //             )}
-
-    //             <Grid
-    //                 item
-    //                 container
-    //                 xs={type === "info" ? 12 : 6}
-    //                 direction="column"
-    //                 spacing={1}
-    //             >
-    //                 <Grid item>
-    //                     <Typography variant="h6">Order Details</Typography>
-    //                     <Divider />
-    //                 </Grid>
-    //                 {displayInfo()}
-    //             </Grid>
-    //             {isOrder(order) &&
-    //                 type === "info" &&
-    //                 order.status !== "cancelled" &&
-    //                 order.status !== "finalized" && (
-    //                     <Grid item>
-    //                         <Button
-    //                             variant="contained"
-    //                             color="primary"
-    //                             onClick={() =>
-    //                                 history.push(`/update/${order.id}/1`)
-    //                             }
-    //                         >
-    //                             Update Order
-    //                         </Button>
-    //                     </Grid>
-    //                 )}
-    //         </Grid>
-    //     </>
 };

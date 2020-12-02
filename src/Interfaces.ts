@@ -13,14 +13,15 @@ export interface User extends UserData {
 export interface OrdersStats {
     count: number;
 }
-export interface OrderType {
-    lienSearch: boolean;
-    estoppelLetter: boolean;
-    landSurvey: boolean;
-    permitResolution: boolean;
-}
 
 export type Associations = Array<{ name: string; number: string }>;
+
+export enum OrderStatusEnum {
+    inProgress = 'In Progress',
+    finalized = 'Finalized',
+    cancelled = 'Cancelled',
+    hold = 'Hold'
+}
 
 export enum OrderTypeEnum {
     lienSearch = "Lien Search",
@@ -29,7 +30,7 @@ export enum OrderTypeEnum {
     permitResolution = "Permit Resolution",
 }
 
-export enum OrderStatusEnum {
+export enum OrderTypeStatusEnum {
     newOrder = "New Order",
     hold = "Hold",
     informationRequested = "Information Requested",
@@ -69,7 +70,36 @@ export enum LandSurveyDetailsEnum {
 
 export type orderStatusEnumKeys = keyof typeof OrderStatusEnum;
 
+export type orderTypeStatusEnumKeys = keyof typeof OrderTypeStatusEnum;
+
 export type orderTypeEnumKeys = keyof typeof OrderTypeEnum;
+
+export const emptyOrderType: OrderTypeInterface = {
+    isActive: false,
+    status: 'newOrder',
+    assignee: '',
+    estimatedDelivery: ''
+}
+
+export const emptyOrdersType: OrderTypesInterface = {
+    lienSearch: {...emptyOrderType},
+    estoppelLetter: {...emptyOrderType},
+    landSurvey: {...emptyOrderType},
+    permitResolution: {...emptyOrderType}
+}
+
+export interface OrderTypeInterface {
+    isActive: boolean
+    status: orderTypeStatusEnumKeys
+    assignee: string
+    estimatedDelivery: string
+}
+export interface OrderTypesInterface {
+    lienSearch: OrderTypeInterface
+    estoppelLetter: OrderTypeInterface;
+    landSurvey: OrderTypeInterface;
+    permitResolution: OrderTypeInterface;
+}
 
 export interface Address {
     address1: string;
@@ -104,7 +134,7 @@ export interface OrderData {
 
 export interface CreateOrder extends OrderData {
     orgId: string;
-    orderType: OrderType;
+    orderType: OrderTypesInterface;
     associations?: Associations;
     landSurvey?: LandSurveyDetails;
     created_on: number;
@@ -117,7 +147,7 @@ export interface CreateOrder extends OrderData {
 export interface Order extends CreateOrder {
     id: string;
     objectID: string; //for algolia
-    orderNumber: string;
+    orderCount: number
 }
 
 export interface OrgData {

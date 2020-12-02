@@ -11,7 +11,7 @@ export const Dashboard: React.FC = () => {
 
     const user = useContext(UserContext);
     const { setTitle } = useContext(TitleContext);
-    const {setActionButton} = useContext(ActionButtonContext);
+    const {setNavigationBar} = useContext(ActionButtonContext);
 
     useEffect(() => {
         setTitle("Dashboard");
@@ -20,15 +20,13 @@ export const Dashboard: React.FC = () => {
 
     useEffect(() => {
         if (!user?.admin) {
-            setActionButton({
+            setNavigationBar({
                 label: 'New Order',
-                action: () => history.push("/new-order/1")
+                action: () => history.push("/new-order/1"),
             })
         }
-        return () => {
-            setActionButton(null)
-        }
-    }, [user, setActionButton, history])
+        
+    }, [user, setNavigationBar, history])
 
     return <OrdersTable />;
 };

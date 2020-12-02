@@ -31,7 +31,7 @@ export const NavigationBar = () => {
                             className={classes.link}
                         >
                             <LibraryBooksIcon className={classes.icon} />       
-                            {id}
+                            {actionButton?.breadcrumbText || id}
                         </Link>
                     )}
                 </Breadcrumbs>

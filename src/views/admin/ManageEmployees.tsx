@@ -46,7 +46,7 @@ export const ManageEmployees = () => {
         setLoading(true)
         const setAdminUser = firebase
             .functions()
-            .httpsCallable("createEmployee");
+            .httpsCallable("users-createEmployee");
         setAdminUser({ email, name })
             .then(() => {
                 setMessageType("success");

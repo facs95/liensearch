@@ -4,11 +4,12 @@ import { Step3 } from "./Step3";
 import { Step1 } from "./Step1";
 import { useParams, Redirect, useHistory } from "react-router-dom";
 import {
-    OrderType,
+    OrderTypesInterface,
     OrderData,
     Address,
     LandSurveyDetails,
     Order,
+    emptyOrdersType
 } from "../../Interfaces";
 import firebase from "firebase/app";
 import { CreateOrderForm } from "../../components/CreateOrderForm";
@@ -50,15 +51,8 @@ export type Associations = Array<{ name: string; number: string }>;
 
 export const blankAssociation = { name: "", number: "" };
 
-export const blankOrderType: OrderType = {
-    lienSearch: false,
-    permitResolution: false,
-    estoppelLetter: false,
-    landSurvey: false,
-};
-
 interface locationState {
-    orderType: OrderType;
+    preOrderType: OrderTypesInterface;
     data: OrderData;
     associations: Associations;
 }
@@ -69,11 +63,11 @@ export const NewOrder = () => {
     const {
         location: {
             state: {
-                orderType,
+                preOrderType,
                 data: preData,
                 associations: preAssocations,
             } = {
-                orderType: null,
+                preOrderType: null,
                 data: null,
                 associations: [{ ...blankAssociation }],
             },
@@ -89,8 +83,9 @@ export const NewOrder = () => {
     const [associations, setAssociations] = useState<Associations>(
         preAssocations || [{ ...blankAssociation }]
     );
-    const [orderTypes, setOrderTypes] = useState<OrderType>(
-        orderType || blankOrderType
+
+    const [orderTypes, setOrderTypes] = useState<OrderTypesInterface>(
+        {...preOrderType || emptyOrdersType}
     );
 
     const { step, id } = useParams();
@@ -138,7 +133,7 @@ export const NewOrder = () => {
     }, [history, id]);
 
     const basePath = id ? `/update/${id}` : "/new-order";
-    const cancelPath = id ?  `/order/${id}` : '/';
+    const cancelPath = id ? `/order/${id}` : "/";
     if (loading) return <CircularProgress />;
     if (!step) return <Redirect to="/" />;
 

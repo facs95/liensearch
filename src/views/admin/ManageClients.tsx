@@ -50,6 +50,7 @@ export const ManageClients = () => {
                 name: orgName,
                 users: [],
                 phoneNumber: orgPhoneNumber,
+                orderCount: 0,
                 address: orgAddress,
                 created_on: firebase.firestore.FieldValue.serverTimestamp(),
             });

@@ -2,14 +2,14 @@ import React from "react";
 import { Grid, Button } from "@material-ui/core";
 import { StatusSelector } from "./StatusSelector";
 import { OrgSelector } from "./OrgSelector";
-import { orderStatusEnumKeys, orderTypeEnumKeys } from "../Interfaces";
+import { orderTypeStatusEnumKeys, orderTypeEnumKeys } from "../Interfaces";
 import { OrderTypeSelector } from "./OrderTypeSelector";
 import { forOwn } from "lodash";
 
 export interface FilterOptions {
     status: {
-        value: orderStatusEnumKeys | "";
-        setter: React.Dispatch<React.SetStateAction<orderStatusEnumKeys | "">>;
+        value: orderTypeStatusEnumKeys | "";
+        setter: React.Dispatch<React.SetStateAction<orderTypeStatusEnumKeys | "">>;
     }
     orderType: {
         value: orderTypeEnumKeys | "";

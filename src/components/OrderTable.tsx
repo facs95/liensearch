@@ -8,8 +8,9 @@ import {
     TableBody,
     makeStyles,
 } from "@material-ui/core";
-import { Order, OrderStatusEnum } from "../Interfaces";
+import { Order } from "../Interfaces";
 import { useHistory } from "react-router-dom";
+import { StatusChip } from "./StatusChip";
 
 const headers = [
     "Order # / File Name",
@@ -67,7 +68,9 @@ const Row = ({ order }: RowProps) => {
             <TableCell>{order.orderNumber || "--"}</TableCell>
             <TableCell>{order.address.address1 || "--"}</TableCell>
             <TableCell>{order.folio || "--"}</TableCell>
-            <TableCell>{OrderStatusEnum[order.status] || "--"}</TableCell>
+            <TableCell>
+                <StatusChip size="small" status={order.status} />
+            </TableCell>
             <TableCell>
                 {new Date(order.created_on).toLocaleString() || "--"}
             </TableCell>

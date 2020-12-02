@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { Typography, TextField, MenuItem } from "@material-ui/core";
+import React from "react";
+import { TextField, MenuItem } from "@material-ui/core";
 import {
     orderStatusEnumKeys as orderStatusType,
     OrderStatusEnum,

@@ -1,17 +1,16 @@
 import React from "react";
 import { CreateWrapper } from "../../components/CreateWrapper";
-import { Grid, Typography, makeStyles, Divider } from "@material-ui/core";
+import { Grid, Typography, Divider } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import { OrderType } from "../../Interfaces";
+import { OrderTypesInterface } from "../../Interfaces";
 import { OrderCard } from "../../components/OrderCard";
 
 interface Props {
     basePath: string;
-    orderTypes: OrderType;
-    setOrderTypes: React.Dispatch<React.SetStateAction<OrderType>>;
+    orderTypes: OrderTypesInterface;
+    setOrderTypes: React.Dispatch<React.SetStateAction<OrderTypesInterface>>;
 }
 export const Step1 = ({ basePath, orderTypes, setOrderTypes }: Props) => {
-    const classes = useStyles();
     const history = useHistory();
 
     const onNext = () => {
@@ -21,7 +20,7 @@ export const Step1 = ({ basePath, orderTypes, setOrderTypes }: Props) => {
     };
 
     const typeCards: {
-        name: keyof OrderType;
+        name: keyof OrderTypesInterface;
         label: string;
         selected: boolean;
         description: string;
@@ -29,33 +28,33 @@ export const Step1 = ({ basePath, orderTypes, setOrderTypes }: Props) => {
         {
             name: "lienSearch",
             label: "Lien Search",
-            selected: orderTypes.lienSearch,
+            selected: orderTypes.lienSearch.isActive,
             description: "Lorep ilsum Lorep ilsumLorep ilsumLorep ilsum",
         },
         {
             name: "estoppelLetter",
             label: "Estoppel Letter",
-            selected: orderTypes.estoppelLetter,
+            selected: orderTypes.estoppelLetter.isActive,
             description: "Lorep ilsum Lorep ilsumLorep ilsumLorep ilsum",
         },
         {
             name: "landSurvey",
             label: "Land Survey",
-            selected: orderTypes.landSurvey,
+            selected: orderTypes.landSurvey.isActive,
             description: "Lorep ilsum Lorep ilsumLorep ilsumLorep ilsum",
         },
         {
             name: "permitResolution",
             label: "Permit Resolution",
-            selected: orderTypes.permitResolution,
+            selected: orderTypes.permitResolution.isActive,
             description: "Lorep ilsum Lorep ilsumLorep ilsumLorep ilsum",
         },
     ];
 
-    const handleDataChange = (type: keyof OrderType) => {
+    const handleDataChange = (type: keyof OrderTypesInterface) => {
         setOrderTypes((c) => {
             let curr = { ...c };
-            curr[type] = !curr[type];
+            curr[type].isActive = !c[type].isActive;
             return curr;
         });
     };
@@ -82,7 +81,7 @@ export const Step1 = ({ basePath, orderTypes, setOrderTypes }: Props) => {
                     >
                         <OrderCard
                             type={type.name}
-                            selected={orderTypes[type.name]}
+                            selected={orderTypes[type.name].isActive}
                         />
                     </Grid>
                 ))}
@@ -90,12 +89,12 @@ export const Step1 = ({ basePath, orderTypes, setOrderTypes }: Props) => {
         </>
     );
 
-    return <CreateWrapper {...{ content }} isFirst {...{ onNext }} />;
+    return (
+        <CreateWrapper
+            {...{ content }}
+            isFirst
+            {...{ onNext }}
+            disabled={!typeCards.find((card) => card.selected)}
+        />
+    );
 };
-
-const useStyles = makeStyles((theme) => ({
-    cardSelected: {
-        border: "solid",
-        borderColor: theme.palette.primary.main,
-    },
-}));

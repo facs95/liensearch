@@ -9,7 +9,7 @@ import { Grid, IconButton } from "@material-ui/core";
 
 import algoliasearch from "algoliasearch/lite";
 import { OrderTable } from "./OrderTable";
-import { Order, orderStatusEnumKeys, orderTypeEnumKeys } from "../Interfaces";
+import { Order, orderTypeStatusEnumKeys, orderTypeEnumKeys } from "../Interfaces";
 import { UserContext } from "../context/UserContext";
 import { SearchInput } from "./SearchInput";
 import { FilterOptions } from "./Filters";
@@ -19,11 +19,6 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import { useHistory, useLocation } from "react-router-dom";
 import { FilterDrawer } from "./FilterDrawer";
 import RefreshIcon from "@material-ui/icons/Refresh";
-
-const searchClient = algoliasearch(
-    "1AVZX9L93I",
-    "68be777ac13a6002caf326d9bcfbf90a"
-);
 
 //This two have to be always in order
 //To add a new filter it has to be added in algolia
@@ -55,7 +50,7 @@ const generateFilterQuery = (
 export const OrdersTable = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [filterStatus, setFilterStatus] = useState<orderStatusEnumKeys | "">(
+    const [filterStatus, setFilterStatus] = useState<orderTypeStatusEnumKeys | "">(
         ""
     );
     const [filterOrg, setFilterOrg] = useState("");
@@ -118,6 +113,10 @@ export const OrdersTable = () => {
     }, [user, filterStatus, filterOrderType, filterOrg, filterEmployee]);
 
     const getOrders = useCallback(async () => {
+        const searchClient = algoliasearch(
+            "1AVZX9L93I",
+            "68be777ac13a6002caf326d9bcfbf90a"
+        );
         const index = await searchClient.initIndex("orders");
 
         let filterArr: string[] = [];
@@ -132,6 +131,7 @@ export const OrdersTable = () => {
                 facetFilters: filterArr,
             })
             .then(({ hits }) => {
+                console.log(hits)
                 setOrders(hits as Order[]);
             })
             .catch((err) => console.log(err));

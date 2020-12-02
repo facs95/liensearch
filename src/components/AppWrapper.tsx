@@ -35,7 +35,7 @@ export const AppWrapper: React.FC<Props> = ({
     const [title, setTitle] = useState("");
     const [
         actionButton,
-        setActionButton,
+        setNavigationBar,
     ] = useState<ActionButtonInterface | null>(null);
 
     const classes = useStyles();
@@ -44,7 +44,7 @@ export const AppWrapper: React.FC<Props> = ({
         <LoadingContext.Provider value={{ loading, setLoading }}>
             <TitleContext.Provider value={{ title, setTitle }}>
                 <ActionButtonContext.Provider
-                    value={{ actionButton, setActionButton }}
+                    value={{ actionButton, setNavigationBar }}
                 >
                     <div className={classes.root}>
                         <CssBaseline />

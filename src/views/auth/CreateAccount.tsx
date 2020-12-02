@@ -37,7 +37,7 @@ export const CreateAccount: React.FC = () => {
         try {
             if (!pn.isValid())
                 throw new Error("Please input valid phone number");
-            const createUser = firebase.functions().httpsCallable("createUser");
+            const createUser = firebase.functions().httpsCallable("users-createUser");
             await createUser({
                 email: data.email,
                 password: data.password,
