@@ -3,8 +3,8 @@ import { useHistory, useLocation, useParams } from "react-router-dom";
 import firebase from "firebase/app";
 import {
     Order,
-    OrderStatusEnum,
     OrderTypeEnum,
+    orderTypeEnumKeys,
     OrderTypeInterface,
     OrderTypeStatusEnum,
 } from "../Interfaces";
@@ -35,8 +35,8 @@ export const OrderInfo = () => {
     const history = useHistory();
     const {
         pathname,
-        state: { updateOrder } = { updateOrder: false },
-    } = useLocation<{ updateOrder: boolean }>();
+        state: { updateOrder, modifyType } = { updateOrder: false, modifyType: undefined },
+    } = useLocation<{ updateOrder: boolean, modifyType: orderTypeEnumKeys | undefined }>();
 
     useEffect(() => {
         setTitle("Order Info");
@@ -145,23 +145,55 @@ export const OrderInfo = () => {
     const kpis: KpiInterface[] = [
         {
             title: OrderTypeEnum.lienSearch,
-            data: getTypeData(order.orderType.lienSearch),
-            action: () => {},
+            data:  getTypeData(order.orderType.lienSearch),
+            action: order.orderType.lienSearch.isActive && user?.admin ?  () => {
+                history.push({
+                    pathname,
+                    state: {
+                        updateOrder: true,
+                        modifyType: 'lienSearch'
+                    },
+                });
+            } : undefined,
         },
         {
             title: OrderTypeEnum.estoppelLetter,
-            data: getTypeData(order.orderType.estoppelLetter),
-            action: () => {},
+            data:  getTypeData(order.orderType.estoppelLetter),
+            action: order.orderType.estoppelLetter.isActive && user?.admin ? () => {
+                history.push({
+                    pathname,
+                    state: {
+                        updateOrder: true,
+                        modifyType: 'estoppelLetter'
+                    },
+                });
+            } : undefined,
         },
         {
             title: OrderTypeEnum.permitResolution,
             data: getTypeData(order.orderType.permitResolution),
-            action: () => {},
+            action: order.orderType.permitResolution.isActive && user?.admin ? () => {
+                history.push({
+                    pathname,
+                    state: {
+                        updateOrder: true,
+                        modifyType: 'permitResolution'
+                    },
+                }) 
+            } : undefined,
         },
         {
             title: OrderTypeEnum.landSurvey,
             data: getTypeData(order.orderType.landSurvey),
-            action: () => {},
+            action: order.orderType.landSurvey.isActive && user?.admin ? () => {
+                history.push({
+                    pathname,
+                    state: {
+                        updateOrder: true,
+                        modifyType: 'landSurvey'
+                    },
+                }) 
+            } : undefined
         },
     ];
 
@@ -170,6 +202,7 @@ export const OrderInfo = () => {
             pathname,
             state: {
                 updateOrder: false,
+                modifyType: undefined
             },
         });
     };
@@ -181,6 +214,7 @@ export const OrderInfo = () => {
                 open={updateOrder}
                 onClose={onUpdateOrderClose}
                 {...{ refreshOrder }}
+                orderType={modifyType}
             />
             <Grid container direction="column" spacing={3}>
                 <Grid item container alignItems="center" spacing={2}>

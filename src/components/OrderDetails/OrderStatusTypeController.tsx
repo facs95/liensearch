@@ -1,22 +1,22 @@
 import React from "react";
 import { TextField, MenuItem } from "@material-ui/core";
 import {
-    orderStatusEnumKeys as orderStatusType,
-    OrderStatusEnum,
+    OrderTypeStatusEnum, orderTypeStatusEnumKeys
 } from "../../Interfaces";
 
 interface Props {
-    currentStatus: orderStatusType;
+    currentStatus: orderTypeStatusEnumKeys;
     setCurrentStatus: React.Dispatch<
-        React.SetStateAction<keyof typeof OrderStatusEnum>
+        React.SetStateAction<orderTypeStatusEnumKeys>
     >;
 }
 
-export const OrderStatusController = ({
+export const OrderStatusTypeController = ({
     currentStatus,
     setCurrentStatus,
 }: Props) => {
 
+    console.log(currentStatus)
     return (
         <TextField
             select
@@ -25,12 +25,12 @@ export const OrderStatusController = ({
             size="small"
             value={currentStatus}
             onChange={(e) =>
-                setCurrentStatus(e.target.value as keyof typeof OrderStatusEnum)
+                setCurrentStatus(e.target.value as orderTypeStatusEnumKeys)
             }
         >
-            {Object.keys(OrderStatusEnum).map((option, index) => (
+            {Object.keys(OrderTypeStatusEnum).map((option, index) => (
                 <MenuItem key={`status-${index}`} value={option}>
-                    {OrderStatusEnum[option as keyof typeof OrderStatusEnum]}
+                    {OrderTypeStatusEnum[option as orderTypeStatusEnumKeys]}
                 </MenuItem>
             ))}
         </TextField>

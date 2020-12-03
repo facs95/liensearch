@@ -1,5 +1,12 @@
-import { Grid, makeStyles, Paper, Typography } from "@material-ui/core";
+import {
+    Grid,
+    IconButton,
+    makeStyles,
+    Paper,
+    Typography,
+} from "@material-ui/core";
 import React, { isValidElement } from "react";
+import EditRoundedIcon from "@material-ui/icons/EditRounded";
 
 interface Data {
     title: string;
@@ -9,7 +16,7 @@ interface Data {
 export interface KpiInterface {
     data: Data[];
     title: string;
-    action: () => void;
+    action?: () => void;
 }
 
 interface Props {
@@ -65,10 +72,27 @@ export const KPI = ({ kpis }: Props) => {
                             spacing={2}
                             className={classes.container}
                         >
-                            <Grid item>
-                                <Typography variant="h6">
-                                    {kpi.title}
-                                </Typography>
+                            <Grid
+                                item
+                                container
+                                wrap="nowrap"
+                                justify="space-between"
+                            >
+                                <Grid item>
+                                    <Typography variant="h6">
+                                        {kpi.title}
+                                    </Typography>
+                                </Grid>
+                                {kpi.action && (
+                                    <Grid item>
+                                        <IconButton
+                                            size="small"
+                                            onClick={kpi.action}
+                                        >
+                                            <EditRoundedIcon />
+                                        </IconButton>
+                                    </Grid>
+                                )}
                             </Grid>
                             <Grid item container spacing={2}>
                                 {kpi.data.map((data) => getItem(data))}
