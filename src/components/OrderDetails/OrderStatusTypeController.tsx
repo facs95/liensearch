@@ -16,7 +16,6 @@ export const OrderStatusTypeController = ({
     setCurrentStatus,
 }: Props) => {
 
-    console.log(currentStatus)
     return (
         <TextField
             select

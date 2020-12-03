@@ -48,7 +48,6 @@ export const Step3 = ({
             orgId: userData?.orgId || "",
             created_on: Date.now(),
             status: 'inProgress',
-            assignee: "",
         };
         if (orderType.landSurvey.isActive) {
             o.landSurvey = landSurvey;

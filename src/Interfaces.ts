@@ -139,9 +139,7 @@ export interface CreateOrder extends OrderData {
     landSurvey?: LandSurveyDetails;
     created_on: number;
     status: orderStatusEnumKeys;
-    assignee: string;
     address: Address;
-    estimatedDelivery?: string
 }
 
 export interface Order extends CreateOrder {

@@ -5,7 +5,7 @@ import React, {
     useContext,
     useMemo,
 } from "react";
-import { Grid, IconButton } from "@material-ui/core";
+import { Badge, Grid, IconButton } from "@material-ui/core";
 
 import algoliasearch from "algoliasearch/lite";
 import { OrderTable } from "./OrderTable";
@@ -22,16 +22,27 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 
 //This two have to be always in order
 //To add a new filter it has to be added in algolia
-const getFilter: Map<keyof FilterOptions, (value: string) => string> = new Map([
-    ["organizations", (value: string) => `orgId:${value}`],
-    ["orderType", (value: string) => `orderType.${value}.isActive:true`],
-    ["status", (value: string) => `status:${value}`],
-    ["employee", (value: string) => `assignee:${value}`],
+const getFilter: Map<
+    keyof FilterOptions,
+    (value: string) => string[]
+> = new Map([
+    ["organizations", (value: string) => [`orgId:${value}`]],
+    ["orderType", (value: string) => [`orderType.${value}.isActive:true`]],
+    ["status", (value: string) => [`status:${value}`]],
+    [
+        "employee",
+        (value: string) => [
+            `orderType.lienSearch.assignee:${value}`,
+            `orderType.landSurvey.assignee:${value}`,
+            `orderType.permitResolution.assignee:${value}`,
+            `orderType.estoppelLetter.assignee:${value}`,
+        ],
+    ],
 ]);
 
 const generateFilterQuery = (
     filters: FilterOptions,
-    initialValue?: string[]
+    initialValue?: Array<string[]>
 ) => {
     return transform(
         { ...filters },
@@ -119,10 +130,10 @@ export const OrdersTable = () => {
         );
         const index = await searchClient.initIndex("orders");
 
-        let filterArr: string[] = [];
+        let filterArr: Array<string[]> = [];
 
         if (user && !user?.admin) {
-            filterArr = [`orgId:${user.orgId}`];
+            filterArr = [[`orgId:${user.orgId}`]];
         }
 
         filterArr = generateFilterQuery(filters, filterArr);
@@ -131,7 +142,7 @@ export const OrdersTable = () => {
                 facetFilters: filterArr,
             })
             .then(({ hits }) => {
-                console.log(hits)
+                console.log(hits);
                 setOrders(hits as Order[]);
             })
             .catch((err) => console.log(err));
@@ -153,7 +164,13 @@ export const OrdersTable = () => {
                 {...{ filters }}
             />
             <Grid container direction="column" spacing={4}>
-                <Grid item container justify="space-between" spacing={2} wrap="nowrap">
+                <Grid
+                    item
+                    container
+                    justify="space-between"
+                    spacing={2}
+                    wrap="nowrap"
+                >
                     <Grid item xs={10}>
                         <SearchInput
                             value={searchQuery}
@@ -168,7 +185,17 @@ export const OrdersTable = () => {
                         </Grid>
                         <Grid item>
                             <IconButton size="small" onClick={onFilterOpen}>
-                                <FilterListIcon />
+                                <Badge
+                                    color="error"
+                                    variant="dot"
+                                    invisible={
+                                        !Object.values(filters).find(
+                                            (type) => !!type.value
+                                        )
+                                    }
+                                >
+                                    <FilterListIcon />
+                                </Badge>
                             </IconButton>
                         </Grid>
                     </Grid>
