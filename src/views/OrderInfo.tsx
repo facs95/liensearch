@@ -1,14 +1,20 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import firebase from "firebase/app";
-import { Order, OrderStatusEnum } from "../Interfaces";
+import {
+    Order,
+    OrderStatusEnum,
+    OrderTypeEnum,
+    OrderTypeInterface,
+    OrderTypeStatusEnum,
+} from "../Interfaces";
 import { Grid, Typography } from "@material-ui/core";
 import { LoadingContext } from "../context/LoadingContext";
 import { DisplayOrder } from "../components/DisplayOrder";
 import { UploadDocuments } from "../components/UploadDocuments";
 import { TitleContext } from "../context/TitleContext";
 import { RouterParams } from "../Routes";
-import { KPI } from "../components/KPI";
+import { KPI, KpiInterface } from "../components/KPI";
 import Battery80Icon from "@material-ui/icons/Battery80";
 import PersonIcon from "@material-ui/icons/Person";
 import { ActionButtonContext } from "../context/ActionButtonContext";
@@ -16,6 +22,8 @@ import { UserContext } from "../context/UserContext";
 import { ModifyOrderDrawer } from "../components/ModifyOrderDrawer";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import { StatusChip } from "../components/StatusChip";
+import LocalAirportIcon from "@material-ui/icons/LocalAirport";
+import { ActiveIcon } from "../components/ActiveIcon";
 
 export const OrderInfo = () => {
     const [order, setOrder] = useState<Order | null>(null);
@@ -90,21 +98,70 @@ export const OrderInfo = () => {
 
     if (!order) return <> </>;
 
-    const kpis = [
+    const getIsActiveComponent = (isActive: boolean) => (
+        <Grid container spacing={1} alignItems="center">
+            <Grid item>
+                <Typography>{isActive ? "Ordered" : "Not Ordered"}</Typography>
+            </Grid>
+            <Grid item>
+                <ActiveIcon {...{ isActive }} />
+            </Grid>
+        </Grid>
+    );
+
+    const getTypeData = (type: OrderTypeInterface) => {
+        return [
+            {
+                title: "Active",
+                value: getIsActiveComponent(type.isActive),
+                icon: <LocalAirportIcon />,
+            },
+            {
+                title: "Status",
+                value: type.isActive ? OrderTypeStatusEnum[type.status] : "--",
+                icon: <Battery80Icon />,
+            },
+            {
+                title: "Assignee",
+                value: type.isActive
+                    ? type.assignee
+                        ? type.assignee
+                        : "Not Assigned Yet"
+                    : "--",
+                icon: <PersonIcon />,
+            },
+            {
+                title: "Estimated Delivery",
+                value: type.isActive
+                    ? type.estimatedDelivery
+                        ? type.estimatedDelivery
+                        : "TBD"
+                    : "--",
+                icon: <CalendarTodayIcon />,
+            },
+        ];
+    };
+
+    const kpis: KpiInterface[] = [
         {
-            title: "Status",
-            value: OrderStatusEnum[order.status],
-            icon: <Battery80Icon />,
+            title: OrderTypeEnum.lienSearch,
+            data: getTypeData(order.orderType.lienSearch),
+            action: () => {},
         },
         {
-            title: "Asignee",
-            value: order.assignee || "Not assigned yet",
-            icon: <PersonIcon />,
+            title: OrderTypeEnum.estoppelLetter,
+            data: getTypeData(order.orderType.estoppelLetter),
+            action: () => {},
         },
         {
-            title: "Estimated Delivery",
-            value: order.estimatedDelivery || "TBD",
-            icon: <CalendarTodayIcon />,
+            title: OrderTypeEnum.permitResolution,
+            data: getTypeData(order.orderType.permitResolution),
+            action: () => {},
+        },
+        {
+            title: OrderTypeEnum.landSurvey,
+            data: getTypeData(order.orderType.landSurvey),
+            action: () => {},
         },
     ];
 

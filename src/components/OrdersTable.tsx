@@ -9,7 +9,7 @@ import { Grid, IconButton } from "@material-ui/core";
 
 import algoliasearch from "algoliasearch/lite";
 import { OrderTable } from "./OrderTable";
-import { Order, orderTypeStatusEnumKeys, orderTypeEnumKeys } from "../Interfaces";
+import { Order, orderTypeEnumKeys, orderStatusEnumKeys } from "../Interfaces";
 import { UserContext } from "../context/UserContext";
 import { SearchInput } from "./SearchInput";
 import { FilterOptions } from "./Filters";
@@ -24,7 +24,7 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 //To add a new filter it has to be added in algolia
 const getFilter: Map<keyof FilterOptions, (value: string) => string> = new Map([
     ["organizations", (value: string) => `orgId:${value}`],
-    ["orderType", (value: string) => `orderType.${value}:true`],
+    ["orderType", (value: string) => `orderType.${value}.isActive:true`],
     ["status", (value: string) => `status:${value}`],
     ["employee", (value: string) => `assignee:${value}`],
 ]);
@@ -50,7 +50,7 @@ const generateFilterQuery = (
 export const OrdersTable = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [filterStatus, setFilterStatus] = useState<orderTypeStatusEnumKeys | "">(
+    const [filterStatus, setFilterStatus] = useState<orderStatusEnumKeys | "">(
         ""
     );
     const [filterOrg, setFilterOrg] = useState("");

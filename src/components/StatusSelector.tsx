@@ -1,11 +1,11 @@
 import React from "react";
 import { TextField, MenuItem } from "@material-ui/core";
-import { OrderTypeStatusEnum, orderTypeStatusEnumKeys } from "../Interfaces";
+import { OrderStatusEnum, orderStatusEnumKeys } from "../Interfaces";
 
 
 interface Props {
-    status: orderTypeStatusEnumKeys | '';
-    setStatus: React.Dispatch<React.SetStateAction<orderTypeStatusEnumKeys | ''>>
+    status: orderStatusEnumKeys | '';
+    setStatus: React.Dispatch<React.SetStateAction<orderStatusEnumKeys | ''>>
     withLabel?: boolean
 }
 
@@ -18,12 +18,12 @@ export const StatusSelector = ({ status, setStatus, withLabel }: Props) => {
             variant="outlined"
             fullWidth
             size="small"
-            onChange={(e) => setStatus(e.target.value as orderTypeStatusEnumKeys)}
+            onChange={(e) => setStatus(e.target.value as orderStatusEnumKeys)}
         >
             <MenuItem value="">All</MenuItem>
-            {Object.keys(OrderTypeStatusEnum).map((s, index) => (
+            {Object.keys(OrderStatusEnum).map((s, index) => (
                 <MenuItem key={`${index}-${s}`} value={s}>
-                    {OrderTypeStatusEnum[s as orderTypeStatusEnumKeys]}
+                    {OrderStatusEnum[s as orderStatusEnumKeys]}
                 </MenuItem>
             ))}
         </TextField>
