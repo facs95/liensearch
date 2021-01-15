@@ -225,11 +225,11 @@ export const OrderInfo = () => {
                         <StatusChip status={order.status} />
                     </Grid>
                 </Grid>
-                <Grid item>
-                    <KPI {...{ kpis }} />
+                <Grid item container>
+                    <DisplayOrder {...{ order }} type="info" />
                 </Grid>
                 <Grid item>
-                    <DisplayOrder {...{ order }} type="info" />
+                    <KPI {...{ kpis }} />
                 </Grid>
                 <Grid item>
                     <UploadDocuments orderId={id} orgId={order.orgId} />

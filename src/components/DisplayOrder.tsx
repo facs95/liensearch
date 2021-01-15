@@ -133,45 +133,38 @@ export const DisplayOrder = ({ order, type }: Props) => {
 
     const accordions: CustomAccordionProps[] = [
         {
-            header: "Property Address",
-            content: [
-                {
-                    subHeader: getAddressStr(order.address),
-                },
-            ],
+            header: "Order Details",
             defaultExpanded: true,
-        },
-        {
-            header: "Requested By",
             content: [
                 {
-                    subHeader: "User Email",
+                    subHeader: 'Property Address',
+                    value: getAddressStr(order.address),
+                },
+                ...displayInfo(),
+                {
+                    subHeader: "Requested By User",
                     value: requestedBy ?? "No user Found",
                 },
                 {
-                    subHeader: "Organization",
+                    subHeader: "Requested By Organization",
                     value: org ? org.name : "No Company Found",
                 },
             ],
-        },
-        {
-            header: "Order Details",
-            content: displayInfo(),
-        },
+        }
     ];
 
     if (order.orderType.landSurvey.isActive) {
         accordions.push({
             header: "Land Survey Info",
-            content: getLandSurveyInfo()
+            content: getLandSurveyInfo(),
         });
     }
 
     return (
         <>
-
             {accordions.map((accordion, index) => (
                 <CustomAccordion
+                    defaultExpanded={accordion.defaultExpanded}
                     key={`displayOrder-${index}`}
                     header={accordion.header}
                     content={accordion.content}
