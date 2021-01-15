@@ -45,7 +45,7 @@ export const OrderInfo = () => {
     useEffect(() => {
         if (user?.admin) {
             setNavigationBar({
-                label: "Modify Order",
+                label: "Update Order",
                 action: () =>
                     history.push({
                         pathname,
@@ -57,7 +57,7 @@ export const OrderInfo = () => {
             });
         } else {
             setNavigationBar({
-                label: "Update Order",
+                label: "Modify Order",
                 action: () => history.push(`/update/${order?.id}/1`),
                 breadcrumbText: order?.orderCount,
             });

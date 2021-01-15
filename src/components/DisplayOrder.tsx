@@ -3,7 +3,6 @@ import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
 import {
     Order,
-    OrderTypesInterface,
     OrderData,
     Org,
     CreateOrder,
@@ -22,13 +21,6 @@ interface Props {
     order: Order | CreateOrder;
     type: "create" | "info";
 }
-
-const orderTypeText = new Map<keyof OrderTypesInterface, string>([
-    ["lienSearch", "Lien Search"],
-    ["estoppelLetter", "Estoppel Letter"],
-    ["landSurvey", "Land Survey"],
-    ["permitResolution", "Permit Resolution"],
-]);
 
 const orderInfoText = new Map<keyof OrderData, string>([
     ["folio", "Folio"],
@@ -140,7 +132,6 @@ export const DisplayOrder = ({ order, type }: Props) => {
                     subHeader: 'Property Address',
                     value: getAddressStr(order.address),
                 },
-                ...displayInfo(),
                 {
                     subHeader: "Requested By User",
                     value: requestedBy ?? "No user Found",
@@ -149,6 +140,7 @@ export const DisplayOrder = ({ order, type }: Props) => {
                     subHeader: "Requested By Organization",
                     value: org ? org.name : "No Company Found",
                 },
+                ...displayInfo(),
             ],
         }
     ];

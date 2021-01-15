@@ -66,9 +66,6 @@ export const CreateOrderForm = ({
 
     const content = (
         <>
-            <Grid item>
-                <SearchPlacesInput />
-            </Grid>
             <Grid item container spacing={2}>
                 <AddressForm
                     {...{ setIsAddressReady }}
