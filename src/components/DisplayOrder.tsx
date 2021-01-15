@@ -108,18 +108,6 @@ export const DisplayOrder = ({ order, type }: Props) => {
         }
     }, [order, type, db, userData]);
 
-    const getOrderTypes: () => AccordionContentInterface[] = () => {
-        const elements = [];
-        for (let [key, value] of Object.entries(order.orderType)) {
-            const el = {
-                subHeader: orderTypeText.get(key as keyof OrderTypesInterface) ?? "",
-                value: value.isActive ? <CheckIcon /> : <CloseIcon />,
-            };
-            elements.push(el);
-        }
-        return elements;
-    };
-
     const displayInfo: () => AccordionContentInterface[] = () => {
         return orderDetails.map((detail) => {
             return {
@@ -165,10 +153,6 @@ export const DisplayOrder = ({ order, type }: Props) => {
                     value: org ? org.name : "No Company Found",
                 },
             ],
-        },
-        {
-            header: "Type of Order",
-            content: getOrderTypes(),
         },
         {
             header: "Order Details",
