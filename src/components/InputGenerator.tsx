@@ -12,6 +12,7 @@ interface Props<T extends object> {
     isNumber?: boolean;
     label: string;
     name: keyof T;
+    title?: string
     value: string | number | boolean;
     setter: React.Dispatch<React.SetStateAction<T>>;
     isBoolean?: boolean;
@@ -21,6 +22,7 @@ export function InputGenerator<T extends object>({
     isNotRequired,
     name,
     isNumber,
+    title,
     label,
     value,
     setter,
@@ -61,6 +63,7 @@ export function InputGenerator<T extends object>({
         </FormControl>
     ) : (
         <TextField
+            name={title}
             fullWidth
             autoComplete="nope"
             required={!isNotRequired}
