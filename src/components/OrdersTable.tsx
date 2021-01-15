@@ -142,7 +142,6 @@ export const OrdersTable = () => {
                 facetFilters: filterArr,
             })
             .then(({ hits }) => {
-                console.log(hits);
                 setOrders(hits as Order[]);
             })
             .catch((err) => console.log(err));

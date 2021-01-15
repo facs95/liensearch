@@ -26,8 +26,9 @@ interface Props {
 export const KPI = ({ kpis }: Props) => {
     const classes = useStyles();
 
-    const getItem = (kpi: Data) => (
+    const getItem = (kpi: Data, index: number) => (
         <Grid
+            key={`${kpi.title}-${index}`}
             item
             container
             alignItems="center"
@@ -95,7 +96,9 @@ export const KPI = ({ kpis }: Props) => {
                                 )}
                             </Grid>
                             <Grid item container spacing={2}>
-                                {kpi.data.map((data) => getItem(data))}
+                                {kpi.data.map((data, index) =>
+                                    getItem(data, index)
+                                )}
                             </Grid>
                         </Grid>
                     </Paper>
