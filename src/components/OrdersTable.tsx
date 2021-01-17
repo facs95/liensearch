@@ -19,6 +19,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import { useHistory, useLocation } from "react-router-dom";
 import { FilterDrawer } from "./FilterDrawer";
 import RefreshIcon from "@material-ui/icons/Refresh";
+import { ALGOLIA_CONFIG } from "../config";
 
 //This two have to be always in order
 //To add a new filter it has to be added in algolia
@@ -125,8 +126,8 @@ export const OrdersTable = () => {
 
     const getOrders = useCallback(async () => {
         const searchClient = algoliasearch(
-            "1AVZX9L93I",
-            "68be777ac13a6002caf326d9bcfbf90a"
+            ALGOLIA_CONFIG.appId,
+            ALGOLIA_CONFIG.apiKey
         );
         const index = await searchClient.initIndex("orders");
 

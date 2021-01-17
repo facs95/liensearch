@@ -1,6 +1,7 @@
 {
   "projects": {
     "staging": "lien-search-262720",
-    "default": "lien-search-262720"
+    "default": "lien-search-262720",
+    "production": "lien-search-prod"
   }
 }
