@@ -5,7 +5,7 @@ import React, {
     useContext,
     useMemo,
 } from "react";
-import { Badge, Grid, IconButton } from "@material-ui/core";
+import { Badge, CircularProgress, Grid, IconButton } from "@material-ui/core";
 
 import algoliasearch from "algoliasearch/lite";
 import { OrderTable } from "./OrderTable";
@@ -70,6 +70,7 @@ export const OrdersTable = () => {
     const [filterOrderType, setFilterOrderType] = useState<
         orderTypeEnumKeys | ""
     >("");
+    const [loading, setLoading] = useState(true);
 
     const user = useContext(UserContext);
 
@@ -125,6 +126,7 @@ export const OrdersTable = () => {
     }, [user, filterStatus, filterOrderType, filterOrg, filterEmployee]);
 
     const getOrders = useCallback(async () => {
+        setLoading(true);
         const searchClient = algoliasearch(
             ALGOLIA_CONFIG.appId,
             ALGOLIA_CONFIG.apiKey
@@ -145,7 +147,8 @@ export const OrdersTable = () => {
             .then(({ hits }) => {
                 setOrders(hits as Order[]);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => console.log(err))
+            .finally(() => setLoading(false));
     }, [user, searchQuery, filters]);
 
     const onRefresh = () => {
@@ -155,6 +158,8 @@ export const OrdersTable = () => {
     useEffect(() => {
         getOrders();
     }, [getOrders]);
+
+    if (orders.length === 0 && loading) return <CircularProgress />;
 
     return (
         <>
