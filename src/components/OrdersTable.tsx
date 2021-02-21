@@ -70,7 +70,6 @@ export const OrdersTable = () => {
     const [filterOrderType, setFilterOrderType] = useState<
         orderTypeEnumKeys | ""
     >("");
-    const [loading, setLoading] = useState(true);
 
     const user = useContext(UserContext);
 
@@ -126,7 +125,6 @@ export const OrdersTable = () => {
     }, [user, filterStatus, filterOrderType, filterOrg, filterEmployee]);
 
     const getOrders = useCallback(async () => {
-        setLoading(true);
         const searchClient = algoliasearch(
             ALGOLIA_CONFIG.appId,
             ALGOLIA_CONFIG.apiKey
@@ -148,7 +146,6 @@ export const OrdersTable = () => {
                 setOrders(hits as Order[]);
             })
             .catch((err) => console.log(err))
-            .finally(() => setLoading(false));
     }, [user, searchQuery, filters]);
 
     const onRefresh = () => {
@@ -159,7 +156,6 @@ export const OrdersTable = () => {
         getOrders();
     }, [getOrders]);
 
-    if (orders.length === 0 && loading) return <CircularProgress />;
 
     return (
         <>

@@ -15,7 +15,7 @@ export const Step1 = ({ basePath, orderTypes, setOrderTypes }: Props) => {
 
     const onNext = () => {
         history.push(`${basePath}/2`, {
-            orderType: orderTypes,
+            preOrderType: orderTypes,
         });
     };
 

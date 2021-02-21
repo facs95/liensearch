@@ -52,7 +52,7 @@ export const CreateOrderForm = ({
     const onSubmit = () => {
         setData(data);
         history.push(`${basePath}/3`, {
-            orderType: orderTypes,
+            preOrderType: orderTypes,
             data,
             associations,
         });
@@ -65,20 +65,22 @@ export const CreateOrderForm = ({
         (orderTypes.landSurvey.isActive ? isLandSurveyReady : true);
 
     const content = (
-        <>
+        <Grid container direction="column" spacing={2}>
             <Grid item container spacing={2}>
-                <AddressForm
-                    {...{ setIsAddressReady }}
-                    {...{ address }}
-                    {...{ setAddress }}
-                />
-            </Grid>
-            <Grid item container spacing={2}>
-                <DataForm
-                    {...{ setIsDataReady }}
-                    orderData={data}
-                    setOrderData={setData}
-                />
+                <Grid item container xs={12} md={6} spacing={2}>
+                    <AddressForm
+                        {...{ setIsAddressReady }}
+                        {...{ address }}
+                        {...{ setAddress }}
+                    />
+                </Grid>
+                <Grid item container xs={12} md={6}>
+                    <DataForm
+                        {...{ setIsDataReady }}
+                        orderData={data}
+                        setOrderData={setData}
+                    />
+                </Grid>
             </Grid>
             <Grid item container spacing={2}>
                 {orderTypes.estoppelLetter.isActive && (
@@ -114,7 +116,7 @@ export const CreateOrderForm = ({
                     </Grid>
                 )}
             </Grid>
-        </>
+        </Grid>
     );
 
     return (

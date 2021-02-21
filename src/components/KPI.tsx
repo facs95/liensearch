@@ -41,14 +41,14 @@ export const KPI = ({ kpis }: Props) => {
             </Grid>
             <Grid item container direction="column">
                 <Grid item>
+                    <Typography variant="body2">{kpi.title}</Typography>
+                </Grid>
+                <Grid item>
                     {isValidElement(kpi.value) ? (
                         kpi.value
                     ) : (
                         <Typography>{kpi.value}</Typography>
                     )}
-                </Grid>
-                <Grid item>
-                    <Typography variant="body2">{kpi.title}</Typography>
                 </Grid>
             </Grid>
         </Grid>
@@ -63,7 +63,8 @@ export const KPI = ({ kpis }: Props) => {
                     container
                     justify="space-between"
                     wrap="nowrap"
-                    xs={6}
+                    md={12}
+                    lg={6}
                 >
                     <Paper className={classes.paper}>
                         <Grid

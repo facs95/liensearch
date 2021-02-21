@@ -34,14 +34,19 @@ export const CustomAccordion = ({
             <AccordionDetails>
                 <Grid container direction="column" spacing={1}>
                     {content.map((item, index) => (
-                        <Grid key={`accordion-${index}`} item container>
-                            <Grid item xs={6}>
-                                <Typography>{item.subHeader}</Typography>
-                            </Grid>
-                            <Grid item xs={6}>
+                        <Grid
+                            key={`accordion-${index}`}
+                            item
+                            container
+                            wrap="nowrap"
+                        >
+                            <Grid item xs={6} md={4} lg={2}>
                                 <Typography variant="body2">
-                                    {item.value}
+                                    {item.subHeader}
                                 </Typography>
+                            </Grid>
+                            <Grid item xs={6} md={10} lg={10}>
+                                <Typography>{item.value}</Typography>
                             </Grid>
                         </Grid>
                     ))}

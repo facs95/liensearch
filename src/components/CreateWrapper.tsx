@@ -28,13 +28,12 @@ export const CreateWrapper = ({
 
     return (
         <Grid
-            item
             container
             direction="column"
             spacing={3}
             className={classes.container}
         >
-            {content}
+            <Grid item>{content}</Grid>
             {!hideActions && (
                 <Grid
                     item

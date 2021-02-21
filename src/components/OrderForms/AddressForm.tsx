@@ -29,14 +29,12 @@ export const AddressForm = ({
             label: AddressEnum["address1"],
             key: "address1",
             title: "street-address",
-            md: 6,
             xs: 12,
         },
         {
             label: AddressEnum["address2"],
             key: "address2",
             isNotRequired: true,
-            md: 6,
             xs: 12,
         },
         {
