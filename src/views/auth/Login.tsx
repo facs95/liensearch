@@ -14,15 +14,19 @@ export const Login: React.FC = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
+    const [loading, setLoading] = useState(false);
 
     const classes = useStyles();
     const onSubmit = async (e: React.FormEvent) => {
+        setLoading(true)
         e.preventDefault();
         setErrorMessage("");
         try {
             await firebase.auth().signInWithEmailAndPassword(email, password);
         } catch (err) {
             setErrorMessage(err.message);
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -72,7 +76,7 @@ export const Login: React.FC = () => {
                     <Grid item>
                         <Button
                             type="submit"
-                            disabled={!email || !password}
+                            disabled={!email || !password || loading}
                             fullWidth
                             variant="contained"
                             color="primary"

@@ -24,6 +24,7 @@ export const CreateAccount: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string>("");
 
     const { register, handleSubmit } = useForm<UserCreation>();
+    const [loading, setLoading] = useState(false);
 
     const history = useHistory();
 
@@ -32,6 +33,7 @@ export const CreateAccount: React.FC = () => {
         e: BaseSyntheticEvent<object, any, any> | undefined
     ) => {
         e && e.preventDefault();
+        setLoading(true)
         setErrorMessage("");
         let pn = new PhoneNumber(data.phoneNumber, "US");
         try {
@@ -48,6 +50,8 @@ export const CreateAccount: React.FC = () => {
             history.push("/");
         } catch (err) {
             setErrorMessage(err.message);
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -141,6 +145,7 @@ export const CreateAccount: React.FC = () => {
                             fullWidth
                             variant="contained"
                             color="primary"
+                            disabled={loading}
                         >
                             Submit
                         </Button>
