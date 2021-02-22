@@ -103,8 +103,8 @@ export interface OrderTypesInterface {
 
 export interface Address {
     address1: string;
-    address2: string;
-    unit: string;
+    address2?: string;
+    unit?: string;
     city: string;
     state: string;
     zipCode: string;

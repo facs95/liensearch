@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Address, AddressEnum } from "../../Interfaces";
 import { InputGenerator } from "../InputGenerator";
 import { Grid, Typography, Divider } from "@material-ui/core";
+import MaterialAutoCompletePlaces from "../MaterialAutoCompletePlaces";
 
 interface Props {
     address: Address;
@@ -13,7 +14,7 @@ interface InputList {
     label: string;
     key: keyof Address;
     isNotRequired?: boolean;
-    title?: string
+    title?: string;
     xs?: boolean | "auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
     md?: boolean | "auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
     isNumber?: boolean;
@@ -32,38 +33,32 @@ export const AddressForm = ({
             xs: 12,
         },
         {
-            label: AddressEnum["address2"],
-            key: "address2",
-            isNotRequired: true,
-            xs: 12,
-        },
-        {
             label: AddressEnum["unit"],
             key: "unit",
-            title: 'unit',
+            title: "unit",
             isNotRequired: true,
-            md: 3,
+            md: 6,
             xs: 12,
         },
         {
             label: AddressEnum["city"],
             key: "city",
-            title: 'address-level2',
-            md: 3,
+            title: "address-level2",
+            md: 6,
             xs: 12,
         },
         {
             label: AddressEnum["state"],
             key: "state",
-            title: 'address-level1',
-            md: 3,
+            title: "address-level1",
+            md: 6,
             xs: 12,
         },
         {
             label: AddressEnum["zipCode"],
             key: "zipCode",
-            title: 'postal-code',
-            md: 3,
+            title: "postal-code",
+            md: 6,
             xs: 12,
         },
     ];
@@ -80,6 +75,9 @@ export const AddressForm = ({
             <Grid item>
                 <Typography variant="h5">Property Address</Typography>
                 <Divider />
+            </Grid>
+            <Grid item>
+                <MaterialAutoCompletePlaces {...{setAddress}} />
             </Grid>
             <Grid item container spacing={2}>
                 {inputList.map((item, index) => (

@@ -60,7 +60,7 @@ export const Step1 = ({ basePath, orderTypes, setOrderTypes }: Props) => {
     };
 
     const content = (
-        <>
+        <Grid container direction="column" spacing={2}>
             <Grid item>
                 <Typography variant="h6">Select Type of Order</Typography>
                 <Divider />
@@ -86,7 +86,7 @@ export const Step1 = ({ basePath, orderTypes, setOrderTypes }: Props) => {
                     </Grid>
                 ))}
             </Grid>
-        </>
+        </Grid>
     );
 
     return (

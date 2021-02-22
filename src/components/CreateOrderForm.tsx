@@ -15,7 +15,6 @@ import {
 } from "../Interfaces";
 
 import { DataForm } from "./OrderForms/DataForm";
-import { SearchPlacesInput } from "./SearchPlacesInput";
 
 interface Props {
     setData: React.Dispatch<React.SetStateAction<OrderData>>;
