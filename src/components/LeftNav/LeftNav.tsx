@@ -16,7 +16,12 @@ import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import BusinessIcon from "@material-ui/icons/Business";
 import { useHistory, useLocation } from "react-router-dom";
 
-export const LeftNav = () => {
+interface Props {
+    drawerOpen: boolean;
+    setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const LeftNav = ({ drawerOpen, setDrawerOpen }: Props) => {
     const classes = useStyles();
 
     const user = useContext(UserContext);
@@ -52,37 +57,59 @@ export const LeftNav = () => {
         );
     }
 
+    const drawer = (
+        <>
+            <div className={classes.logoContainer}>
+                <img
+                    alt=""
+                    className={classes.logo}
+                    src={`${process.env.PUBLIC_URL}/logo-transparent.png`}
+                />
+            </div>
+            <List>
+                {options.map((option, index) => (
+                    <React.Fragment key={`left-nav-${index}`}>
+                        <ListItem
+                            button
+                            onClick={option.action}
+                            selected={option.selected}
+                        >
+                            <ListItemIcon>{option.icon}</ListItemIcon>
+                            <ListItemText primary={option.label} />
+                        </ListItem>
+                        {option.divider && <Divider />}
+                    </React.Fragment>
+                ))}
+            </List>
+        </>
+    );
+
     return (
         <nav className={classes.drawer}>
-            <Hidden xsDown implementation="js">
+            <Hidden smDown implementation="js">
                 <Drawer
                     anchor="left"
                     variant="permanent"
                     open
                     classes={{ paper: classes.drawerPaper }}
                 >
-                    <div className={classes.logoContainer}>
-                        <img
-                            alt=""
-                            className={classes.logo}
-                            src={`${process.env.PUBLIC_URL}/logo-transparent.png`}
-                        />
-                    </div>
-                    <List>
-                        {options.map((option, index) => (
-                            <React.Fragment key={`left-nav-${index}`}>
-                                <ListItem
-                                    button
-                                    onClick={option.action}
-                                    selected={option.selected}
-                                >
-                                    <ListItemIcon>{option.icon}</ListItemIcon>
-                                    <ListItemText primary={option.label} />
-                                </ListItem>
-                                {option.divider && <Divider />}
-                            </React.Fragment>
-                        ))}
-                    </List>
+                    {drawer}
+                </Drawer>
+            </Hidden>
+            <Hidden mdUp implementation="js">
+                <Drawer
+                    variant="temporary"
+                    anchor="left"
+                    open={drawerOpen}
+                    onClose={() => setDrawerOpen(false)}
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                    ModalProps={{
+                        keepMounted: true, // Better open performance on mobile.
+                    }}
+                >
+                    {drawer}
                 </Drawer>
             </Hidden>
         </nav>
@@ -95,7 +122,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.primary.main,
     },
     drawer: {
-        [theme.breakpoints.up("sm")]: {
+        [theme.breakpoints.up("md")]: {
             width: DRAWER_WIDTH,
             flexShrink: 0,
         },

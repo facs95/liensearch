@@ -17,7 +17,6 @@ import {
 } from "../context/ActionButtonContext";
 
 export interface AppWrapperParams {
-    noPadding?: boolean;
     noBreadCrumb?: boolean;
 }
 interface Props extends AppWrapperParams {
@@ -26,37 +25,27 @@ interface Props extends AppWrapperParams {
 
 export const DRAWER_WIDTH = 240;
 
-export const AppWrapper: React.FC<Props> = ({
-    children,
-    noBreadCrumb,
-    noPadding,
-}) => {
-    const [loading, setLoading] = useState(false);
+export const AppWrapper: React.FC<Props> = ({ children, noBreadCrumb }) => {
     const [title, setTitle] = useState("");
     const [
         actionButton,
         setNavigationBar,
     ] = useState<ActionButtonInterface | null>(null);
+    const [drawerOpen, setDrawerOpen] = useState(false);
 
     const classes = useStyles();
 
     return (
-        <LoadingContext.Provider value={{ loading, setLoading }}>
-            <TitleContext.Provider value={{ title, setTitle }}>
-                <ActionButtonContext.Provider
-                    value={{ actionButton, setNavigationBar }}
-                >
-                    <div className={classes.root}>
-                        <CssBaseline />
-                        <AppHeader />
-                        <LeftNav />
-                        {loading && <LinearProgress />}
-                        <main
-                            className={`${classes.content} ${
-                                !noPadding ? classes.paddingContent : undefined
-                            }`}
-                        >
-                            <Toolbar />
+        <TitleContext.Provider value={{ title, setTitle }}>
+            <ActionButtonContext.Provider
+                value={{ actionButton, setNavigationBar }}
+            >
+                <div className={classes.root}>
+                    <CssBaseline />
+                    <LeftNav {...{ drawerOpen }} {...{ setDrawerOpen }} />
+                    <div className={classes.container}>
+                        <AppHeader {...{ setDrawerOpen }} />
+                        <main className={classes.content}>
                             {!noBreadCrumb && (
                                 <div className={classes.bottomMargin}>
                                     <NavigationBar />
@@ -65,25 +54,26 @@ export const AppWrapper: React.FC<Props> = ({
                             {children}
                         </main>
                     </div>
-                </ActionButtonContext.Provider>
-            </TitleContext.Provider>
-        </LoadingContext.Provider>
+                </div>
+            </ActionButtonContext.Provider>
+        </TitleContext.Provider>
     );
 };
 
 const useStyles = makeStyles((theme) => ({
     content: {
-        paddingTop: 20,
         width: "100%",
-    },
-    paddingContent: {
-        paddingLeft: 100,
-        paddingRight: 100,
     },
     root: {
         display: "flex",
     },
     bottomMargin: {
         marginBottom: theme.spacing(4),
+    },
+    container: {
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        padding: theme.spacing(2, 5),
     },
 }));
