@@ -7,42 +7,82 @@ import {
     TableCell,
     TableBody,
     makeStyles,
+    TableContainer,
+    withStyles,
+    TablePagination,
 } from "@material-ui/core";
 import { Order } from "../Interfaces";
 import { useHistory } from "react-router-dom";
 import { StatusChip } from "./StatusChip";
 
 const headers = [
-    "Order # / File Name",
     "Address",
+    "Order # / File Name",
     "Folio",
     "Status",
     "Created",
+    "Closing Date"
 ];
+
+const StyledTableRow = withStyles((theme) => ({
+    root: {
+        "&:nth-of-type(odd)": {
+            backgroundColor: theme.palette.action.hover,
+        },
+    },
+}))(TableRow);
 
 interface Props {
     orders: Order[];
+    page: number;
+    totalOrders: number;
+    rowsPerPage: number;
+    setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
+    setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const OrderTable = ({ orders }: Props) => {
+export const OrderTable = ({
+    orders,
+    page,
+    totalOrders,
+    rowsPerPage,
+    setRowsPerPage,
+    setPage,
+}: Props) => {
+    const classes = useStyles();
     return (
         <Paper>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        {headers.map((entry, index) => (
-                            <TableCell key={`header${index}`}>
-                                {entry}
-                            </TableCell>
+            <TableContainer className={classes.container}>
+                <Table size="small" stickyHeader className={classes.table}>
+                    <TableHead>
+                        <TableRow>
+                            {headers.map((entry, index) => (
+                                <TableCell key={`header${index}`}>
+                                    {entry}
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {orders.map((order, i) => (
+                            <Row key={`order-${i}`} {...{ order }} />
                         ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {orders.map((order, i) => (
-                        <Row key={`order-${i}`} {...{ order }} />
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <TablePagination
+                component="div"
+                {...{ page }}
+                {...{ rowsPerPage }}
+                count={totalOrders}
+                nextIconButtonProps={{
+                    disabled: orders.length < rowsPerPage,
+                }}
+                onChangePage={(_, page) => setPage(page)}
+                onChangeRowsPerPage={(e) =>
+                    setRowsPerPage(parseInt(e.target.value))
+                }
+            />
         </Paper>
     );
 };
@@ -60,29 +100,33 @@ const Row = ({ order }: RowProps) => {
     };
 
     return (
-        <TableRow
+        <StyledTableRow
             onClick={() => onClick(order.objectID)}
-            hover
             className={classes.pointer}
         >
-            <TableCell>{order.orderNumber || "--"}</TableCell>
             <TableCell>{order.address.address1 || "--"}</TableCell>
+            <TableCell>{order.orderNumber || "--"}</TableCell>
             <TableCell>{order.folio || "--"}</TableCell>
             <TableCell>
                 <StatusChip size="small" status={order.status} />
             </TableCell>
             <TableCell>
-                {new Date(order.created_on).toLocaleString() || "--"}
+                {new Date(order.created_on).toDateString() || "--"}
             </TableCell>
-        </TableRow>
+            <TableCell>
+                {new Date(order.closingDate).toDateString() || "--"}
+            </TableCell>
+        </StyledTableRow>
     );
 };
 
 const useStyles = makeStyles(() => ({
-    container: {
-        width: "80vw",
-    },
     pointer: {
         cursor: "pointer",
     },
+    container: {
+        height: "calc(100vh - 280px)",
+        whiteSpace: "nowrap",
+    },
+    table: {},
 }));

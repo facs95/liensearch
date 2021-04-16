@@ -32,8 +32,8 @@ const theme = createMuiTheme({
             fontWeight: 600,
         },
         body2: {
-            fontWeight: 600
-        }
+            fontWeight: 600,
+        },
     },
     spacing: 6,
     overrides: {

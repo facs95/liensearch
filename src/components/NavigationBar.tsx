@@ -41,7 +41,6 @@ export const NavigationBar = () => {
                     <Button
                         variant="contained"
                         color="primary"
-                        size="large"
                         onClick={actionButton.action}
                     >
                         {actionButton.label}

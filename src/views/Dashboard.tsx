@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
-import { OrdersTable } from "../components/OrdersTable";
+import { Orders } from "../components/Orders";
 import { TitleContext } from "../context/TitleContext";
 import { ActionButtonContext } from "../context/ActionButtonContext";
 
@@ -28,6 +28,6 @@ export const Dashboard: React.FC = () => {
         
     }, [user, setNavigationBar, history])
 
-    return <OrdersTable />;
+    return <Orders />;
 };
 

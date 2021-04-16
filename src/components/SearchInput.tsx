@@ -8,7 +8,6 @@ interface Props {
 }
 
 export const SearchInput = ({ value, setValue }: Props) => {
-
     return (
         <Grid item container spacing={1} alignItems="flex-end">
             <Grid item>
@@ -16,7 +15,8 @@ export const SearchInput = ({ value, setValue }: Props) => {
             </Grid>
             <Grid item xs={9}>
                 <TextField
-                    InputProps={{disableUnderline: true}}
+                    InputProps={{ disableUnderline: true }}
+                    data-lpignore="true"
                     fullWidth
                     {...{ value }}
                     onChange={(e) => setValue(e.target.value)}

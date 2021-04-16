@@ -17,10 +17,10 @@ export interface OrdersStats {
 export type Associations = Array<{ name: string; number: string }>;
 
 export enum OrderStatusEnum {
-    inProgress = 'In Progress',
-    finalized = 'Finalized',
-    cancelled = 'Cancelled',
-    hold = 'Hold'
+    inProgress = "In Progress",
+    finalized = "Finalized",
+    cancelled = "Cancelled",
+    hold = "Hold",
 }
 
 export enum OrderTypeEnum {
@@ -41,12 +41,12 @@ export enum OrderTypeStatusEnum {
 }
 
 export enum AddressEnum {
-    address1 = 'Address 1',
-    address2 = 'Address 2',
+    address1 = "Address 1",
+    address2 = "Address 2",
     unit = "Unit",
     city = "City",
     state = "State",
-    zipCode = "Zip Code"
+    zipCode = "Zip Code",
 }
 
 export enum OrderDataEnum {
@@ -57,7 +57,7 @@ export enum OrderDataEnum {
     buyer = "Buyer",
     listingAgent = "Listing Agent",
     listingAgentPhone = "Listing Agent Phone",
-    specialInstructions = "Special Instructions"
+    specialInstructions = "Special Instructions",
 }
 
 export enum LandSurveyDetailsEnum {
@@ -65,7 +65,7 @@ export enum LandSurveyDetailsEnum {
     buyerCertification = "Buyer Certification",
     underwriterCertification = "Underwriter Certification",
     titleCompany = "Title Company",
-    hardCopy = "Request Hard Copy"
+    hardCopy = "Request Hard Copy",
 }
 
 export type orderStatusEnumKeys = keyof typeof OrderStatusEnum;
@@ -76,26 +76,26 @@ export type orderTypeEnumKeys = keyof typeof OrderTypeEnum;
 
 export const emptyOrderType: OrderTypeInterface = {
     isActive: false,
-    status: 'newOrder',
-    assignee: '',
-    estimatedDelivery: ''
-}
+    status: "newOrder",
+    assignee: "",
+    estimatedDelivery: "",
+};
 
 export const emptyOrdersType: OrderTypesInterface = {
-    lienSearch: {...emptyOrderType},
-    estoppelLetter: {...emptyOrderType},
-    landSurvey: {...emptyOrderType},
-    permitResolution: {...emptyOrderType}
-}
+    lienSearch: { ...emptyOrderType },
+    estoppelLetter: { ...emptyOrderType },
+    landSurvey: { ...emptyOrderType },
+    permitResolution: { ...emptyOrderType },
+};
 
 export interface OrderTypeInterface {
-    isActive: boolean
-    status: orderTypeStatusEnumKeys
-    assignee: string
-    estimatedDelivery: string
+    isActive: boolean;
+    status: orderTypeStatusEnumKeys;
+    assignee: string;
+    estimatedDelivery: string;
 }
 export interface OrderTypesInterface {
-    lienSearch: OrderTypeInterface
+    lienSearch: OrderTypeInterface;
     estoppelLetter: OrderTypeInterface;
     landSurvey: OrderTypeInterface;
     permitResolution: OrderTypeInterface;
@@ -124,6 +124,7 @@ export interface OrderData {
     folio: number;
     legalDescription: string;
     requestedBy?: string;
+    requestedByEmail?: string;
     closingDate: string;
     neededDate: string;
     seller: string;
@@ -145,15 +146,15 @@ export interface CreateOrder extends OrderData {
 export interface Order extends CreateOrder {
     id: string;
     objectID: string; //for algolia
-    orderCount: number
+    orderCount: number;
 }
 
 export interface OrgData {
     name: string;
     users: string[];
     orderCount: number;
-    phoneNumber: string
-    address: string
+    phoneNumber: string;
+    address: string;
 }
 
 export interface Org extends OrgData {
@@ -161,7 +162,7 @@ export interface Org extends OrgData {
 }
 
 export interface Employee {
-    id: string
-    email: string
-    name: string
+    id: string;
+    email: string;
+    name: string;
 }

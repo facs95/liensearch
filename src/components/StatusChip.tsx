@@ -36,6 +36,8 @@ const useStyles = (size: size) => makeStyles((theme) => ({
         padding: size === 'small' ? theme.spacing(0.5, 1) : theme.spacing(1, 2),
         borderRadius: theme.shape.borderRadius,
         color: "white",
-        display: 'inline-block'
+        display: 'inline-block',
+        minWidth: 80,
+        textAlign: 'center'
     },
 }));

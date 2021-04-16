@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { Redirect, useHistory, useLocation, useParams } from "react-router-dom";
 import firebase from "firebase/app";
 import {
     Order,
@@ -8,7 +8,7 @@ import {
     OrderTypeInterface,
     OrderTypeStatusEnum,
 } from "../Interfaces";
-import { Grid, Typography } from "@material-ui/core";
+import { CircularProgress, Grid, Typography } from "@material-ui/core";
 import { LoadingContext } from "../context/LoadingContext";
 import { DisplayOrder } from "../components/DisplayOrder";
 import { UploadDocuments } from "../components/UploadDocuments";
@@ -28,15 +28,22 @@ import { ActiveIcon } from "../components/ActiveIcon";
 export const OrderInfo = () => {
     const [order, setOrder] = useState<Order | null>(null);
 
-    const { setLoading } = useContext(LoadingContext);
     const { setTitle } = useContext(TitleContext);
     const { setNavigationBar } = useContext(ActionButtonContext);
+
+    const [loading, setLoading] = useState(true);
     const user = useContext(UserContext);
     const history = useHistory();
     const {
         pathname,
-        state: { updateOrder, modifyType } = { updateOrder: false, modifyType: undefined },
-    } = useLocation<{ updateOrder: boolean, modifyType: orderTypeEnumKeys | undefined }>();
+        state: { updateOrder, modifyType } = {
+            updateOrder: false,
+            modifyType: undefined,
+        },
+    } = useLocation<{
+        updateOrder: boolean;
+        modifyType: orderTypeEnumKeys | undefined;
+    }>();
 
     useEffect(() => {
         setTitle("Order Info");
@@ -73,6 +80,7 @@ export const OrderInfo = () => {
     const db = firebase.firestore();
 
     const refreshOrder = useCallback(() => {
+        setLoading(true);
         if (id) {
             db.collection("orders")
                 .doc(id)
@@ -92,11 +100,11 @@ export const OrderInfo = () => {
     }, [db, id, setLoading]);
 
     useEffect(() => {
-        setLoading(true);
         refreshOrder();
     }, [setLoading, refreshOrder]);
 
-    if (!order) return <> </>;
+    if (loading) return <CircularProgress />;
+    if (!order) return <Redirect to="/" />;
 
     const getIsActiveComponent = (isActive: boolean) => (
         <Grid container spacing={1} alignItems="center">
@@ -145,55 +153,67 @@ export const OrderInfo = () => {
     const kpis: KpiInterface[] = [
         {
             title: OrderTypeEnum.lienSearch,
-            data:  getTypeData(order.orderType.lienSearch),
-            action: order.orderType.lienSearch.isActive && user?.admin ?  () => {
-                history.push({
-                    pathname,
-                    state: {
-                        updateOrder: true,
-                        modifyType: 'lienSearch'
-                    },
-                });
-            } : undefined,
+            data: getTypeData(order.orderType.lienSearch),
+            action:
+                order.orderType.lienSearch.isActive && user?.admin
+                    ? () => {
+                          history.push({
+                              pathname,
+                              state: {
+                                  updateOrder: true,
+                                  modifyType: "lienSearch",
+                              },
+                          });
+                      }
+                    : undefined,
         },
         {
             title: OrderTypeEnum.estoppelLetter,
-            data:  getTypeData(order.orderType.estoppelLetter),
-            action: order.orderType.estoppelLetter.isActive && user?.admin ? () => {
-                history.push({
-                    pathname,
-                    state: {
-                        updateOrder: true,
-                        modifyType: 'estoppelLetter'
-                    },
-                });
-            } : undefined,
+            data: getTypeData(order.orderType.estoppelLetter),
+            action:
+                order.orderType.estoppelLetter.isActive && user?.admin
+                    ? () => {
+                          history.push({
+                              pathname,
+                              state: {
+                                  updateOrder: true,
+                                  modifyType: "estoppelLetter",
+                              },
+                          });
+                      }
+                    : undefined,
         },
         {
             title: OrderTypeEnum.permitResolution,
             data: getTypeData(order.orderType.permitResolution),
-            action: order.orderType.permitResolution.isActive && user?.admin ? () => {
-                history.push({
-                    pathname,
-                    state: {
-                        updateOrder: true,
-                        modifyType: 'permitResolution'
-                    },
-                }) 
-            } : undefined,
+            action:
+                order.orderType.permitResolution.isActive && user?.admin
+                    ? () => {
+                          history.push({
+                              pathname,
+                              state: {
+                                  updateOrder: true,
+                                  modifyType: "permitResolution",
+                              },
+                          });
+                      }
+                    : undefined,
         },
         {
             title: OrderTypeEnum.landSurvey,
             data: getTypeData(order.orderType.landSurvey),
-            action: order.orderType.landSurvey.isActive && user?.admin ? () => {
-                history.push({
-                    pathname,
-                    state: {
-                        updateOrder: true,
-                        modifyType: 'landSurvey'
-                    },
-                }) 
-            } : undefined
+            action:
+                order.orderType.landSurvey.isActive && user?.admin
+                    ? () => {
+                          history.push({
+                              pathname,
+                              state: {
+                                  updateOrder: true,
+                                  modifyType: "landSurvey",
+                              },
+                          });
+                      }
+                    : undefined,
         },
     ];
 
@@ -202,7 +222,7 @@ export const OrderInfo = () => {
             pathname,
             state: {
                 updateOrder: false,
-                modifyType: undefined
+                modifyType: undefined,
             },
         });
     };
