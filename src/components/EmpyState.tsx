@@ -26,7 +26,9 @@ export const EmptyState = ({
             direction="column"
             justify="center"
             alignItems="center"
+            wrap="nowrap"
             spacing={3}
+            className={classes.container}
         >
             <Grid item>
                 <img
@@ -46,7 +48,6 @@ export const EmptyState = ({
                     </Typography>
                 </Grid>
             )}
-
             {button && (
                 <Grid item>
                     <Button
@@ -69,5 +70,8 @@ const useStyles = makeStyles((theme) => ({
     image: {
         maxWidth: "350px",
         fill: theme.palette.primary.main,
+    },
+    container: {
+        height: "100%",
     },
 }));

@@ -1,9 +1,12 @@
 import { Box, Button, makeStyles, Paper, Typography } from "@material-ui/core";
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import { Order, Task, taskStatusTypes } from "../../Interfaces";
 import AddIcon from "@material-ui/icons/Add";
 import { TaskInput } from "./TaskInput";
+import firebase from "firebase/app";
+import { MessageSnackbar } from "../SnackMessage";
 
+export const INFO_ACTION_BOX_HEIGHT = 320;
 interface Props {
     order: Order;
 }
@@ -110,6 +113,11 @@ export function deleteAction(index: number) {
 }
 
 export const TaskList = ({ order }: Props) => {
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState<"error" | "success">(
+        "error"
+    );
+    const [loading, setLoading] = useState(false)
     const [tasks, dispatch] = useReducer(
         taskReducer,
         order.taskList ? order.taskList : []
@@ -118,66 +126,107 @@ export const TaskList = ({ order }: Props) => {
     const classes = useStyles();
 
     const handleAddTask = () => {
-        console.log(tasks.length);
         dispatch(addAction(tasks.length)); //Adds it to the end
     };
 
+    const onSaveChanges = async () => {
+        setLoading(true)
+        try {
+            const db = firebase.firestore();
+            await db
+                .collection("orders")
+                .doc(order.id)
+                .update({ ...order, taskList: tasks } as Order);
+            setMessageType("success");
+            setMessage("Tasks Updated");
+        } catch (err) {
+            setMessageType("error");
+            setMessage(err.message || err);
+        } finally {
+            setLoading(false)
+        }
+    };
+
     return (
-        <Paper className={classes.paper}>
-            <Box display="flex" flexDirection="column" p={3} height="100%">
-                <Box mt={1}>
-                    <Typography variant="h5">Task List</Typography>
-                </Box>
-                {tasks.length === 0 ? (
+        <>
+            <MessageSnackbar
+                {...{ message }}
+                {...{ setMessage }}
+                {...{ messageType }}
+            />
+            <Paper className={classes.paper}>
+                <Box display="flex" flexDirection="column" p={3} height="100%">
                     <Box
-                        flexGrow={1}
+                        mt={1}
                         display="flex"
-                        justifyContent="center"
+                        justifyContent="space-between"
+                        flexWrap="nowrap"
                         alignItems="center"
                     >
+                        <Typography variant="h5">Task List</Typography>
                         <Button
+                            variant="outlined"
                             size="small"
-                            variant="text"
-                            type="submit"
-                            onClick={handleAddTask}
-                            startIcon={<AddIcon />}
+                            disabled={order.taskList === tasks || loading}
+                            onClick={onSaveChanges}
                         >
-                            Add new Task
+                            Save Changes
                         </Button>
                     </Box>
-                ) : (
-                    <>
-                        <Box mt={1} flexGrow={1} className={classes.tasksInput}>
-                            {tasks.map((item, index) => (
-                                <TaskInput
-                                    key={`task-${index}`}
-                                    task={item}
-                                    {...{ index }}
-                                    {...{ dispatch }}
-                                />
-                            ))}
-                        </Box>
-                        <Box justifySelf="flex-end">
+                    {tasks.length === 0 ? (
+                        <Box
+                            flexGrow={1}
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                        >
                             <Button
                                 size="small"
                                 variant="text"
-                                type="submit"
                                 onClick={handleAddTask}
                                 startIcon={<AddIcon />}
                             >
                                 Add new Task
                             </Button>
                         </Box>
-                    </>
-                )}
-            </Box>
-        </Paper>
+                    ) : (
+                        <>
+                            <Box
+                                mt={1}
+                                flexGrow={1}
+                                className={classes.tasksInput}
+                            >
+                                {tasks.map((item, index) => (
+                                    <TaskInput
+                                        key={`task-${index}`}
+                                        task={item}
+                                        {...{ index }}
+                                        {...{ dispatch }}
+                                    />
+                                ))}
+                            </Box>
+                            <Box justifySelf="flex-end">
+                                <Button
+                                    size="small"
+                                    variant="text"
+                                    type="submit"
+                                    onClick={handleAddTask}
+                                    startIcon={<AddIcon />}
+                                >
+                                    Add new Task
+                                </Button>
+                            </Box>
+                        </>
+                    )}
+                </Box>
+            </Paper>
+        </>
     );
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     paper: {
-        height: "325px",
+        height: INFO_ACTION_BOX_HEIGHT,
     },
     tasksInput: {
         overflowY: "scroll",

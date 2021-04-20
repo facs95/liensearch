@@ -18,6 +18,7 @@ export const SearchInput = ({ value, setValue }: Props) => {
                     InputProps={{ disableUnderline: true }}
                     data-lpignore="true"
                     fullWidth
+                    autoComplete="off"
                     {...{ value }}
                     onChange={(e) => setValue(e.target.value)}
                     placeholder="Search by address, zip code, status, or folio..."

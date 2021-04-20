@@ -80,6 +80,9 @@ export const TaskInput = ({ task, index, dispatch }: Props) => {
                     ),
                     autoComplete: "new-password",
                 }}
+                inputProps={{
+                    className: classes.input,
+                }}
             />
             <IconButton onClick={handleDelete} size="small">
                 <DeleteIcon />
@@ -103,5 +106,8 @@ const useStyles = makeStyles(() => ({
         "&:focus": {
             borderBottom: "none",
         },
+    },
+    input: {
+        padding: 0,
     },
 }));

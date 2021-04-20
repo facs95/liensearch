@@ -141,13 +141,13 @@ export interface CreateOrder extends OrderData {
     created_on: number;
     status: orderStatusEnumKeys;
     address: Address;
+    taskList: Task[];
 }
 
 export interface Order extends CreateOrder {
     id: string;
     objectID: string; //for algolia
     orderCount: number;
-    taskList?: Task[];
 }
 
 export interface OrgData {

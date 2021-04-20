@@ -73,7 +73,10 @@ const useStyles = makeStyles((theme) => ({
     container: {
         display: "flex",
         flexDirection: "column",
-        width: "100%",
         padding: theme.spacing(2, 5),
+        width: "100%",
+        [theme.breakpoints.up("md")]: {
+            width: `calc(100% - ${DRAWER_WIDTH}px)`,
+        },
     },
 }));

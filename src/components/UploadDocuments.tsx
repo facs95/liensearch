@@ -7,6 +7,7 @@ import {
     Typography,
     IconButton,
     CircularProgress,
+    Box,
 } from "@material-ui/core";
 import { UserContext } from "../context/UserContext";
 import CloseIcon from "@material-ui/icons/Close";
@@ -16,6 +17,7 @@ import { map } from "lodash";
 import firebase from "firebase/app";
 import { EmptyState } from "./EmpyState";
 import { SnackContext } from "../context/SnackContext";
+import { INFO_ACTION_BOX_HEIGHT } from "./TaskList/TaskList";
 
 interface Props {
     orderId: string;
@@ -34,10 +36,13 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
 
     const db = firebase.storage();
 
-    const catchError = useCallback((err: any) => {
-        setMessageType("error");
-        setMessage(err && err.message);
-    }, [setMessage, setMessageType]);
+    const catchError = useCallback(
+        (err: any) => {
+            setMessageType("error");
+            setMessage(err && err.message);
+        },
+        [setMessage, setMessageType]
+    );
 
     const createSuccess = (message: string) => {
         setMessageType("success");
@@ -122,26 +127,19 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
 
     const classes = useStyles();
 
-    if (loading) return <CircularProgress />
+    if (loading) return <CircularProgress />;
 
     return (
-        <Paper className={classes.fullWidth}>
-            <Grid
-                container
-                direction="column"
-                spacing={3}
-                className={classes.cardContainer}
-            >
-                <Grid
-                    item
-                    container
-                    justify="space-between"
+        <Paper className={classes.paper}>
+            <Box display="flex" flexDirection="column" p={3} height="100%">
+                <Box
+                    mt={1}
+                    display="flex"
+                    justifyContent="space-between"
+                    flexWrap="nowrap"
                     alignItems="center"
-                    wrap="nowrap"
                 >
-                    <Grid item>
-                        <Typography variant="h5">Documents</Typography>
-                    </Grid>
+                    <Typography variant="h5">Documents</Typography>
                     {user && user.admin && (
                         <Grid
                             item
@@ -152,7 +150,7 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
                         >
                             {uploadLoading && (
                                 <Grid item>
-                                    <CircularProgress />
+                                    <CircularProgress size={30} />
                                 </Grid>
                             )}
                             <Grid item>
@@ -166,7 +164,7 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
                                 />
                                 <label htmlFor="raised-button-file">
                                     <Button
-                                        size="large"
+                                        size="small"
                                         component="span"
                                         variant="outlined"
                                         disabled={uploadLoading}
@@ -177,16 +175,10 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
                             </Grid>
                         </Grid>
                     )}
-                </Grid>
-                <Grid item container direction="column" spacing={2}>
-                    {listOfFiles.length === 0 ? (
-                        <EmptyState
-                            width={200}
-                            title="No documents yet"
-                            imageFile="documents.svg"
-                        />
-                    ) : (
-                        listOfFiles.map((file, index) => (
+                </Box>
+                {listOfFiles.length !== 0 ? (
+                    <Box mt={1} flexGrow={1} className={classes.filesContainer}>
+                        {listOfFiles.map((file, index) => (
                             <Grid
                                 key={`file-${index}`}
                                 item
@@ -227,22 +219,30 @@ export const UploadDocuments = ({ orderId, orgId }: Props) => {
                                     </Grid>
                                 )}
                             </Grid>
-                        ))
-                    )}
-                </Grid>
-            </Grid>
+                        ))}
+                    </Box>
+                ) : (
+                    <Box mt={2} flexGrow={1}>
+                        <EmptyState
+                            width={150}
+                            title="No Documents Found"
+                            imageFile="documents.svg"
+                        />
+                    </Box>
+                )}
+            </Box>
         </Paper>
     );
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     input: {
         display: "none",
     },
-    cardContainer: {
-        padding: theme.spacing(3),
+    paper: {
+        height: INFO_ACTION_BOX_HEIGHT,
     },
-    fullWidth: {
-        width: "100%",
+    filesContainer: {
+        overflowY: "scroll",
     },
 }));

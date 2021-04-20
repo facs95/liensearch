@@ -45,10 +45,11 @@ export const Step3 = ({
             address,
             orderType,
             requestedBy: userData?.uid || "",
-            requestedByEmail: userData?.email || '',
+            requestedByEmail: userData?.email || "",
             orgId: userData?.orgId || "",
             created_on: Date.now(),
-            status: 'inProgress',
+            status: "inProgress",
+            taskList: [],
         };
         if (orderType.landSurvey.isActive) {
             o.landSurvey = landSurvey;

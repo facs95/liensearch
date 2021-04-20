@@ -252,12 +252,14 @@ export const OrderInfo = () => {
                     <KPI {...{ kpis }} />
                 </Grid>
                 <Grid item container spacing={2}>
-                    <Grid item xs lg={6}>
+                    <Grid item xs lg={user?.admin ? 6 : 12}>
                         <UploadDocuments orderId={id} orgId={order.orgId} />
                     </Grid>
-                    <Grid item xs lg={6}>
-                        <TaskList {...{ order }} />
-                    </Grid>
+                    {user?.admin && (
+                        <Grid item xs lg={6}>
+                            <TaskList {...{ order }} />
+                        </Grid>
+                    )}
                 </Grid>
             </Grid>
         </>
