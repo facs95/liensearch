@@ -2,7 +2,6 @@ import React, {
     useCallback,
     useContext,
     useEffect,
-    useMemo,
     useState,
 } from "react";
 import { Theme } from "@material-ui/core/styles";
@@ -96,9 +95,11 @@ export const AppHeader = ({ setDrawerOpen, ...args }: AppBarProps & Props) => {
                         <Typography variant="h4">{title}</Typography>
                     </div>
                     <Box display="flex" alignItems="center" flexWrap="nowrap">
-                        <Box mr={2}>
-                            <OrganizationHeader {...{ orgName }} />
-                        </Box>
+                        {orgName && (
+                            <Box mr={2}>
+                                <OrganizationHeader {...{ orgName }} />
+                            </Box>
+                        )}
                         <IconButton
                             onClick={handleMenu}
                             color="inherit"

@@ -23,17 +23,7 @@ const theme = createMuiTheme({
         },
     },
     typography: {
-        fontFamily: "Roboto",
-        fontSize: 12,
-        subtitle1: {
-            fontWeight: "bold",
-        },
-        h5: {
-            fontWeight: 600,
-        },
-        body2: {
-            fontWeight: 600,
-        },
+        fontSize: 13
     },
     spacing: 6,
     overrides: {
@@ -42,18 +32,10 @@ const theme = createMuiTheme({
                 height: 40,
             },
         },
-        MuiDivider: {
-            root: {
-                // backgroundColor: 'black'
-            },
-        },
         MuiFormLabel: {
-            focused: {
-                borderColor: "black",
-            },
             root: {
                 "&$focused": {
-                    color: "black",
+                    borderColor: "black",
                 },
             },
         },

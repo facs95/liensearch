@@ -9,7 +9,6 @@ import {
     OrderTypeStatusEnum,
 } from "../Interfaces";
 import { CircularProgress, Grid, Typography } from "@material-ui/core";
-import { LoadingContext } from "../context/LoadingContext";
 import { DisplayOrder } from "../components/DisplayOrder";
 import { UploadDocuments } from "../components/UploadDocuments";
 import { TitleContext } from "../context/TitleContext";
@@ -24,6 +23,7 @@ import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import { StatusChip } from "../components/StatusChip";
 import LocalAirportIcon from "@material-ui/icons/LocalAirport";
 import { ActiveIcon } from "../components/ActiveIcon";
+import { TaskList } from "../components/TaskList/TaskList";
 
 export const OrderInfo = () => {
     const [order, setOrder] = useState<Order | null>(null);
@@ -251,8 +251,13 @@ export const OrderInfo = () => {
                 <Grid item>
                     <KPI {...{ kpis }} />
                 </Grid>
-                <Grid item>
-                    <UploadDocuments orderId={id} orgId={order.orgId} />
+                <Grid item container spacing={2}>
+                    <Grid item xs lg={6}>
+                        <UploadDocuments orderId={id} orgId={order.orgId} />
+                    </Grid>
+                    <Grid item xs lg={6}>
+                        <TaskList {...{ order }} />
+                    </Grid>
                 </Grid>
             </Grid>
         </>

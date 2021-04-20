@@ -37,7 +37,7 @@ const useStyles = (size: size) => makeStyles((theme) => ({
         borderRadius: theme.shape.borderRadius,
         color: "white",
         display: 'inline-block',
-        minWidth: 80,
+        minWidth: 100,
         textAlign: 'center'
     },
 }));

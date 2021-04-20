@@ -5,15 +5,7 @@ import React, {
     useContext,
     useMemo,
 } from "react";
-import {
-    Badge,
-    Box,
-    Button,
-    CircularProgress,
-    Grid,
-    IconButton,
-} from "@material-ui/core";
-
+import { Badge, Box, Button, CircularProgress, Grid } from "@material-ui/core";
 import algoliasearch from "algoliasearch/lite";
 import { OrderTable } from "./OrderTable";
 import { Order, orderTypeEnumKeys, orderStatusEnumKeys } from "../Interfaces";
@@ -28,7 +20,6 @@ import { FilterDrawer } from "./FilterDrawer";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { ALGOLIA_CONFIG } from "../config";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import firebase from "firebase/app";
 
 //This two have to be always in order
 //To add a new filter it has to be added in algolia
@@ -138,33 +129,6 @@ export const Orders = () => {
         return filtersOptions;
     }, [user, filterStatus, filterOrderType, filterOrg, filterEmployee]);
 
-    const setTotalCount = useCallback(async () => {
-        const db = firebase.firestore();
-        if (user && !user?.admin) {
-            const orgStats = await db
-                .collection("organizations")
-                .doc(user.orgId)
-                .get();
-            if (orgStats.exists) {
-                const statsData = orgStats.data();
-                setTotalOrders(statsData ? statsData.orderCount : 0);
-            } else {
-                setTotalOrders(0);
-            }
-        } else {
-            const ordersStats = await db
-                .collection("stats")
-                .doc("orders")
-                .get();
-            if (ordersStats.exists) {
-                const statsData = ordersStats.data();
-                setTotalOrders(statsData ? statsData.count : 0);
-            } else {
-                setTotalOrders(0);
-            }
-        }
-    }, [user]);
-
     const getOrders = useCallback(async () => {
         const searchClient = algoliasearch(
             ALGOLIA_CONFIG.appId,
@@ -185,12 +149,12 @@ export const Orders = () => {
                 hitsPerPage: rowsPerPage,
                 page,
             })
-            .then(({ hits }) => {
-                console.log(hits);
+            .then(({ hits, nbHits }) => {
+                setTotalOrders(nbHits);
                 setOrders(hits as Order[]);
                 setApiError(false);
             })
-            .catch((err) => setApiError(true))
+            .catch(() => setApiError(true))
             .finally(() => {
                 setLoading(false);
             });
@@ -198,13 +162,11 @@ export const Orders = () => {
 
     const onRefresh = () => {
         getOrders();
-        setTotalCount();
     };
 
     useEffect(() => {
         getOrders();
-        setTotalCount();
-    }, [getOrders, setTotalCount]);
+    }, [getOrders]);
 
     if (loading) return <CircularProgress />;
 
@@ -259,7 +221,7 @@ export const Orders = () => {
                 <Grid item container spacing={1} justify="flex-end">
                     <Grid item>
                         <Button
-                            variant="text"
+                            variant="outlined"
                             size="small"
                             startIcon={<RefreshIcon />}
                             onClick={onRefresh}
@@ -278,7 +240,7 @@ export const Orders = () => {
                             }
                         >
                             <Button
-                                variant="text"
+                                variant="outlined"
                                 size="small"
                                 startIcon={<FilterListIcon />}
                                 onClick={onFilterOpen}

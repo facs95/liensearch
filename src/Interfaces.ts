@@ -147,6 +147,7 @@ export interface Order extends CreateOrder {
     id: string;
     objectID: string; //for algolia
     orderCount: number;
+    taskList?: Task[];
 }
 
 export interface OrgData {
@@ -165,4 +166,11 @@ export interface Employee {
     id: string;
     email: string;
     name: string;
+}
+
+export type taskStatusTypes = "complete" | "incomplete";
+
+export interface Task {
+    description: string;
+    status: taskStatusTypes;
 }

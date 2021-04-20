@@ -102,6 +102,12 @@ export const DisplayOrder = ({ order, type }: Props) => {
 
     const displayInfo: () => AccordionContentInterface[] = () => {
         return orderDetails.map((detail) => {
+            if (detail === "closingDate" || detail === "neededDate") {
+                return {
+                    subHeader: orderInfoText.get(detail) ?? "",
+                    value: new Date(order[detail]).toDateString() || "--",
+                };
+            }
             return {
                 subHeader: orderInfoText.get(detail) ?? "",
                 value: order[detail] || "--",
@@ -129,7 +135,7 @@ export const DisplayOrder = ({ order, type }: Props) => {
             defaultExpanded: true,
             content: [
                 {
-                    subHeader: 'Property Address',
+                    subHeader: "Property Address",
                     value: getAddressStr(order.address),
                 },
                 {
@@ -142,7 +148,7 @@ export const DisplayOrder = ({ order, type }: Props) => {
                 },
                 ...displayInfo(),
             ],
-        }
+        },
     ];
 
     if (order.orderType.landSurvey.isActive) {

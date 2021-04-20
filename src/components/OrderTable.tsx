@@ -21,7 +21,7 @@ const headers = [
     "Folio",
     "Status",
     "Created",
-    "Closing Date"
+    "Closing Date",
 ];
 
 const StyledTableRow = withStyles((theme) => ({
@@ -57,7 +57,7 @@ export const OrderTable = ({
                     <TableHead>
                         <TableRow>
                             {headers.map((entry, index) => (
-                                <TableCell key={`header${index}`}>
+                                <TableCell size="medium" key={`header${index}`}>
                                     {entry}
                                 </TableCell>
                             ))}

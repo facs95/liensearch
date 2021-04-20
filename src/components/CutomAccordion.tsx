@@ -40,12 +40,12 @@ export const CustomAccordion = ({
                             container
                             wrap="nowrap"
                         >
-                            <Grid item xs={6} md={4} lg={2}>
+                            <Grid item xs={6} md={4} lg={3}>
                                 <Typography variant="body2">
                                     {item.subHeader}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={6} md={10} lg={10}>
+                            <Grid item xs={6} md={10} lg={9}>
                                 <Typography>{item.value}</Typography>
                             </Grid>
                         </Grid>
