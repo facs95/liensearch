@@ -14,6 +14,7 @@ import {
 import { Order } from "../Interfaces";
 import { useHistory } from "react-router-dom";
 import { StatusChip } from "./StatusChip";
+import { EmptyState } from "./EmpyState";
 
 const headers = [
     "Address",
@@ -50,6 +51,10 @@ export const OrderTable = ({
     setPage,
 }: Props) => {
     const classes = useStyles();
+    
+    if (orders.length === 0)
+        return <EmptyState title="No Orders Found" imageFile="orders.svg" />;
+
     return (
         <Paper>
             <TableContainer className={classes.container}>

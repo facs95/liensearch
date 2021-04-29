@@ -14,7 +14,17 @@ import { DRAWER_WIDTH } from "../AppWrapper";
 import { UserContext } from "../../context/UserContext";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import BusinessIcon from "@material-ui/icons/Business";
+import SearchIcon from "@material-ui/icons/Search";
+import EmailIcon from "@material-ui/icons/Email";
+import LandscapeIcon from "@material-ui/icons/Landscape";
+import GavelIcon from "@material-ui/icons/Gavel";
 import { useHistory, useLocation } from "react-router-dom";
+import {
+    ESTOPPEL_LETTER_PATH,
+    LIEN_SEARCH_PATH,
+    LAND_SURVEY_PATH,
+    PERMIT_RESOLUTION_PATH,
+} from "../../utils/constants";
 
 interface Props {
     drawerOpen: boolean;
@@ -30,11 +40,35 @@ export const LeftNav = ({ drawerOpen, setDrawerOpen }: Props) => {
 
     const options = [
         {
-            label: "My Orders",
+            label: "All Orders",
             icon: <LibraryBooksIcon />,
             action: () => history.push("/"),
-            divider: !!user?.admin,
             selected: ["/", "/order/:id"].includes(pathname),
+        },
+        {
+            label: "Lien Searches",
+            icon: <SearchIcon />,
+            action: () => history.push("/" + LIEN_SEARCH_PATH),
+            selected: ["/" + LIEN_SEARCH_PATH].includes(pathname),
+        },
+        {
+            label: "Estoppel Letter",
+            icon: <EmailIcon />,
+            action: () => history.push("/" + ESTOPPEL_LETTER_PATH),
+            selected: ["/" + ESTOPPEL_LETTER_PATH].includes(pathname),
+        },
+        {
+            label: "Land Survey",
+            icon: <LandscapeIcon />,
+            action: () => history.push("/" + LAND_SURVEY_PATH),
+            selected: ["/" + LAND_SURVEY_PATH].includes(pathname),
+        },
+        {
+            label: "Permit Resolutions",
+            icon: <GavelIcon />,
+            action: () => history.push("/" + PERMIT_RESOLUTION_PATH),
+            divider: !!user?.admin,
+            selected: ["/" + PERMIT_RESOLUTION_PATH].includes(pathname),
         },
     ];
 

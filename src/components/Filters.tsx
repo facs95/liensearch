@@ -10,19 +10,19 @@ export interface FilterOptions {
     status: {
         value: orderStatusEnumKeys | "";
         setter: React.Dispatch<React.SetStateAction<orderStatusEnumKeys | "">>;
-    }
+    };
     orderType: {
         value: orderTypeEnumKeys | "";
         setter: React.Dispatch<React.SetStateAction<orderTypeEnumKeys | "">>;
-    }
+    };
     organizations?: {
         value: string;
         setter: React.Dispatch<React.SetStateAction<string>>;
-    }
+    };
     employee?: {
-        value: string,
-        setter: React.Dispatch<React.SetStateAction<string>>
-    }
+        value: string;
+        setter: React.Dispatch<React.SetStateAction<string>>;
+    };
 }
 
 interface Props {
@@ -33,7 +33,7 @@ export const Filters = ({ filters }: Props) => {
     const { status, organizations, orderType } = filters;
 
     const clearFilters = () => {
-        forOwn(filters, value => value && value.setter(""));
+        forOwn(filters, (value) => value && value.setter(""));
     };
 
     return (

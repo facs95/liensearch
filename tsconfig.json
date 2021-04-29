@@ -19,7 +19,8 @@
     "sourceMap": true,
     "outDir": "out",
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "src"

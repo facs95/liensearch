@@ -19,6 +19,12 @@ export const SearchInput = ({ value, setValue }: Props) => {
                     data-lpignore="true"
                     fullWidth
                     autoComplete="off"
+                    inputProps={{
+                        autocomplete: "new-password",
+                        form: {
+                            autocomplete: "off",
+                        },
+                    }}
                     {...{ value }}
                     onChange={(e) => setValue(e.target.value)}
                     placeholder="Search by address, zip code, status, or folio..."

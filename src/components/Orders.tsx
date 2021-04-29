@@ -41,6 +41,11 @@ const getFilter: Map<
     ],
 ]);
 
+const searchClient = algoliasearch(
+    ALGOLIA_CONFIG.appId,
+    ALGOLIA_CONFIG.apiKey
+);
+
 const generateFilterQuery = (
     filters: FilterOptions,
     initialValue?: Array<string[]>
@@ -130,10 +135,7 @@ export const Orders = () => {
     }, [user, filterStatus, filterOrderType, filterOrg, filterEmployee]);
 
     const getOrders = useCallback(async () => {
-        const searchClient = algoliasearch(
-            ALGOLIA_CONFIG.appId,
-            ALGOLIA_CONFIG.apiKey
-        );
+  
         const index = searchClient.initIndex("orders");
 
         let filterArr: Array<string[]> = [];
@@ -150,7 +152,7 @@ export const Orders = () => {
                 page,
             })
             .then(({ hits, nbHits }) => {
-                setTotalOrders(nbHits);
+                setTotalOrders(nbHits); // This will set the total orders for the respective filter
                 setOrders(hits as Order[]);
                 setApiError(false);
             })

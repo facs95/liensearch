@@ -9,6 +9,7 @@ import { AppWrapperParams } from "./components/AppWrapper";
 import { ManageClients } from "./views/admin/ManageClients";
 import { ManageEmployees } from "./views/admin/ManageEmployees";
 import { UserProfile } from "./views/UserProfile";
+import { Orders } from "./views/orders/Orders";
 
 const authWrap = (component: JSX.Element): JSX.Element => (
     <AuthWrapper>{component}</AuthWrapper>
@@ -29,6 +30,11 @@ export const Routes: React.FC = () => {
         return (
             <Switch>
                 <Route exact path="/" render={() => appWrap(<Dashboard />)} />
+                <Route
+                    exact
+                    path="/:orderType"
+                    render={() => appWrap(<Orders />)}
+                />
                 <Route
                     exact
                     path="/new-order/:step"

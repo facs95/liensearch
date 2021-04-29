@@ -8,7 +8,7 @@ import {
 import React from "react";
 import CloseIcon from "@material-ui/icons/Close";
 
-interface Props {
+export interface CustomDrawerProps {
     open: boolean;
     onClose: () => void;
     header: string;
@@ -17,7 +17,12 @@ interface Props {
 
 const DRAWER_WIDTH = 400;
 
-export const CustomDrawer = ({ open, onClose, content }: Props) => {
+export const CustomDrawer = ({
+    open,
+    onClose,
+    content,
+    header,
+}: CustomDrawerProps) => {
     const classes = useStyles();
 
     const container = (
@@ -29,7 +34,9 @@ export const CustomDrawer = ({ open, onClose, content }: Props) => {
         >
             <Grid container item justify="space-between" alignItems="center">
                 <Grid item>
-                    <Typography variant="h5">Modify Order</Typography>
+                    <Typography variant="h5">
+                        {header ? header : "Modify Order"}
+                    </Typography>
                 </Grid>
                 <Grid item>
                     <IconButton onClick={onClose}>

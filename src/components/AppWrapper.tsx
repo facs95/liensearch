@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import {
-    Toolbar,
     makeStyles,
-    LinearProgress,
     CssBaseline,
 } from "@material-ui/core";
 
 import { AppHeader } from "./AppHeader";
-import { LoadingContext } from "../context/LoadingContext";
 import { LeftNav } from "./LeftNav/LeftNav";
 import { TitleContext } from "../context/TitleContext";
 import { NavigationBar } from "./NavigationBar";
