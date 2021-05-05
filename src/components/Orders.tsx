@@ -41,8 +41,6 @@ const getFilter: Map<
     ],
 ]);
 
-const searchClient = algoliasearch(ALGOLIA_CONFIG.appId, ALGOLIA_CONFIG.apiKey);
-
 const generateFilterQuery = (
     filters: FilterOptions,
     initialValue?: Array<string[]>
@@ -132,8 +130,11 @@ export const Orders = () => {
     }, [user, filterStatus, filterOrderType, filterOrg, filterEmployee]);
 
     const getOrders = useCallback(async () => {
+        const searchClient = algoliasearch(
+            ALGOLIA_CONFIG.appId,
+            ALGOLIA_CONFIG.apiKey
+        );
         const index = searchClient.initIndex("orders");
-
         let filterArr: Array<string[]> = [];
 
         if (user && !user?.admin) {

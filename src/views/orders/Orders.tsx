@@ -15,9 +15,6 @@ import { TopBar } from "./TopBar";
 import { TitleContext } from "../../context/TitleContext";
 import { ActionButtonContext } from "../../context/ActionButtonContext";
 
-const searchClient = algoliasearch(ALGOLIA_CONFIG.appId, ALGOLIA_CONFIG.apiKey);
-const index = searchClient.initIndex("orders");
-
 const FILTERS_KEY = "stateFilters";
 
 export const Orders = () => {
@@ -82,6 +79,11 @@ export const Orders = () => {
 
     const getOrders = useCallback(async () => {
         setLoading(true);
+        const searchClient = algoliasearch(
+            ALGOLIA_CONFIG.appId,
+            ALGOLIA_CONFIG.apiKey
+        );
+        const index = searchClient.initIndex("orders");
         let filterArr: Array<string[]> = [];
 
         if (!user.admin) {

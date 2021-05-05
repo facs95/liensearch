@@ -81,22 +81,27 @@ export default function MaterialAutoCompletePlaces({ setAddress }: Props) {
                 (results: any, status: any) => {
                     if (results) {
                         const address = results[0].address_components;
-                        const streeNumber = address.find(
-                            (ad: any) => ad.types[0] === "street_number"
-                        )?.long_name ?? '';
-                        const street = address.find(
-                            (ad: any) => ad.types[0] === "route"
-                        )?.long_name ?? '';
-                        const city = address.find(
-                            (ad: any) => ad.types[0] === "locality"
-                        )?.long_name ?? '';
-                        const state = address.find(
-                            (ad: any) =>
-                                ad.types[0] === "administrative_area_level_1"
-                        )?.short_name ?? '';
-                        const zipCode = address.find(
-                            (ad: any) => ad.types[0] === "postal_code"
-                        )?.long_name ?? '';
+                        const streeNumber =
+                            address.find(
+                                (ad: any) => ad.types[0] === "street_number"
+                            )?.long_name ?? "";
+                        const street =
+                            address.find((ad: any) => ad.types[0] === "route")
+                                ?.long_name ?? "";
+                        const city =
+                            address.find(
+                                (ad: any) => ad.types[0] === "locality"
+                            )?.long_name ?? "";
+                        const state =
+                            address.find(
+                                (ad: any) =>
+                                    ad.types[0] ===
+                                    "administrative_area_level_1"
+                            )?.short_name ?? "";
+                        const zipCode =
+                            address.find(
+                                (ad: any) => ad.types[0] === "postal_code"
+                            )?.long_name ?? "";
                         const add: Address = {
                             address1: `${streeNumber} ${street}`,
                             city,
@@ -134,7 +139,6 @@ export default function MaterialAutoCompletePlaces({ setAddress }: Props) {
         let active = true;
 
         if (!geocoderInstance.current && (window as any).google) {
-            console.log("here");
             geocoderInstance.current = new (window as any).google.maps.Geocoder();
         }
         if (!autocompleteService.current && (window as any).google) {
@@ -201,7 +205,7 @@ export default function MaterialAutoCompletePlaces({ setAddress }: Props) {
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    label="Add a location"
+                    label="Search location"
                     variant="outlined"
                     fullWidth
                 />
