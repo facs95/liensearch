@@ -23,7 +23,7 @@ const theme = createMuiTheme({
         },
     },
     typography: {
-        fontSize: 13
+        fontSize: 13,
     },
     spacing: 6,
     overrides: {
@@ -36,20 +36,49 @@ const theme = createMuiTheme({
             root: {
                 "&$focused": {
                     borderColor: "black",
+                    color: "black",
                 },
+                color: "black",
+            },
+        },
+        MuiFormHelperText: {
+            root: {
+                "&$focused": {
+                    borderColor: "black",
+                    color: "black",
+                },
+                color: "black",
             },
         },
         MuiTextField: {
             root: {
-                "&.Mui-focused fieldset": {
+                "&.Mui-focused": {
                     borderColor: "green",
+                },
+                "&$focused": {
+                    borderColor: "black",
+                    color: "black",
                 },
             },
         },
         MuiOutlinedInput: {
             root: {
-                "&$focused": {
+                "&:focus fieldset": {
                     borderColor: "black",
+                },
+                "&:hover fieldset": {
+                    borderColor: "black",
+                },
+                "&.Mui-focused fieldset": {
+                    borderColor: "black !important",
+                },
+            },
+        },
+        MuiInputBase: {
+            root: {
+                "&$focused": {
+                    borderColor: "black !important",
+                    color: "black",
                 },
             },
         },

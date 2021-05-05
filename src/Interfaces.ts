@@ -124,6 +124,7 @@ export interface OrderData {
     folio: number;
     legalDescription: string;
     requestedBy?: string;
+    orgName: string
     requestedByEmail?: string;
     closingDate: string;
     neededDate: string;

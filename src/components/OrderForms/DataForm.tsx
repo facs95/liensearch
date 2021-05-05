@@ -14,6 +14,62 @@ interface Props {
     setIsDataReady: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const inputList: InputList[] = [
+    {
+        label: OrderDataEnum["orderNumber"],
+        key: "orderNumber",
+        md: 4,
+        xs: 12,
+    },
+    {
+        label: OrderDataEnum["folio"],
+        key: "folio",
+        isNumber: true,
+        md: 4,
+        xs: 12,
+    },
+    {
+        label: OrderDataEnum["legalDescription"],
+        key: "legalDescription",
+        md: 4,
+        xs: 12,
+    },
+    {
+        label: OrderDataEnum["seller"],
+        key: "seller",
+        md: 3,
+        xs: 12,
+    },
+    {
+        label: OrderDataEnum["buyer"],
+        key: "buyer",
+        md: 3,
+        xs: 12,
+    },
+    {
+        label: OrderDataEnum["listingAgent"],
+        key: "listingAgent",
+        isNotRequired: true,
+        md: 3,
+        xs: 12,
+    },
+    {
+        label: OrderDataEnum["listingAgentPhone"],
+        key: "listingAgentPhone",
+        isNotRequired: true,
+        isNumber: true,
+        md: 3,
+        xs: 12,
+    },
+    {
+        label: OrderDataEnum["specialInstructions"],
+        key: "specialInstructions",
+        isNotRequired: true,
+        md: 12,
+        xs: 12,
+    },
+];
+
 interface InputList {
     label: string;
     key: keyof typeof OrderDataEnum;
@@ -28,66 +84,12 @@ export const DataForm = ({
     setOrderData,
     setIsDataReady,
 }: Props) => {
-    const inputList: InputList[] = [
-        {
-            label: OrderDataEnum["orderNumber"],
-            key: "orderNumber",
-            md: 4,
-            xs: 12,
-        },
-        {
-            label: OrderDataEnum["folio"],
-            key: "folio",
-            isNumber: true,
-            md: 4,
-            xs: 12,
-        },
-        {
-            label: OrderDataEnum["legalDescription"],
-            key: "legalDescription",
-            md: 4,
-            xs: 12,
-        },
-        {
-            label: OrderDataEnum["seller"],
-            key: "seller",
-            md: 3,
-            xs: 12,
-        },
-        {
-            label: OrderDataEnum["buyer"],
-            key: "buyer",
-            md: 3,
-            xs: 12,
-        },
-        {
-            label: OrderDataEnum["listingAgent"],
-            key: "listingAgent",
-            isNotRequired: true,
-            md: 3,
-            xs: 12,
-        },
-        {
-            label: OrderDataEnum["listingAgentPhone"],
-            key: "listingAgentPhone",
-            isNotRequired: true,
-            isNumber: true,
-            md: 3,
-            xs: 12,
-        },
-        {
-            label: OrderDataEnum["specialInstructions"],
-            key: "specialInstructions",
-            isNotRequired: true,
-            md: 12,
-            xs: 12,
-        },
-    ];
-
     useEffect(() => {
-        const isReady = inputList.some(item => !item.isNotRequired && !orderData[item.key]  )
+        const isReady = inputList.some(
+            (item) => !item.isNotRequired && !orderData[item.key]
+        );
         setIsDataReady(!isReady);
-    }, [inputList, orderData, setIsDataReady]);
+    }, [orderData, setIsDataReady]);
 
     return (
         <Grid item container spacing={2} xs={12} direction="column">
@@ -117,6 +119,7 @@ export const DataForm = ({
                             id="date-picker-inline"
                             inputVariant="outlined"
                             label={"Needed Date"}
+                            size="small"
                             value={orderData.neededDate}
                             onChange={(e) => {
                                 const newDate = e?.toLocaleDateString();
@@ -140,6 +143,7 @@ export const DataForm = ({
                             variant="inline"
                             format="MM/dd/yyyy"
                             margin="normal"
+                            size="small"
                             id="date-picker-inline"
                             inputVariant="outlined"
                             label={"Closing Date"}

@@ -12,7 +12,7 @@ interface Props<T extends object> {
     isNumber?: boolean;
     label: string;
     name: keyof T;
-    title?: string
+    title?: string;
     value: string | number | boolean;
     setter: React.Dispatch<React.SetStateAction<T>>;
     isBoolean?: boolean;
@@ -70,6 +70,7 @@ export function InputGenerator<T extends object>({
             onChange={handleChange}
             value={value}
             label={label}
+            size="small"
             variant="outlined"
         />
     );

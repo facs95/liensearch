@@ -35,18 +35,17 @@ export const generateOrderStateFilterQuery = (
         query = [...query, filter];
     }
     if (filters.orderState) {
-        const filter = transform(
+        const filter = transform<boolean, string[]>(
             filters.orderState,
             (acc, value, key) => {
                 if (value) {
                     //This will be a boolean
-                    return [...acc, [`orderType.lienSearch.status:${value}`]];
+                    acc.push(`orderType.${orderState}.status:${key}`);
                 }
-                return acc;
             },
             []
         );
-        query = [...query, ...filter];
+        query = [...query, filter];
     }
     return query;
 };

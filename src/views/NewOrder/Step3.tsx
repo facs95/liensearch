@@ -1,4 +1,10 @@
-import React, { useState, useContext, useMemo } from "react";
+import React, {
+    useState,
+    useContext,
+    useMemo,
+    useCallback,
+    useEffect,
+} from "react";
 import { CreateWrapper } from "../../components/CreateWrapper";
 import firebase from "firebase/app";
 import {
@@ -33,11 +39,39 @@ export const Step3 = ({
 }: Props) => {
     const [loading, setLoading] = useState(false);
     const [orderComplete, setOrderComplete] = useState(false);
+    const [orgName, setOrgName] = useState("");
 
     const userData = useContext(UserContext);
     const history = useHistory();
 
     const db = firebase.firestore();
+
+    const getOrgName = useCallback(async () => {
+        setLoading(true);
+        try {
+            const db = firebase.firestore();
+            if (userData) {
+                const orgDoc = await db
+                    .collection("organizations")
+                    .doc(userData.orgId)
+                    .get();
+                if (orgDoc.exists) {
+                    const data = orgDoc.data();
+                    if (data) {
+                        setOrgName(data.name as string);
+                    }
+                }
+            }
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoading(false);
+        }
+    }, [userData]);
+
+    useEffect(() => {
+        getOrgName();
+    }, [getOrgName]);
 
     const order = useMemo(() => {
         let o: CreateOrder = {
@@ -47,6 +81,7 @@ export const Step3 = ({
             requestedBy: userData?.uid || "",
             requestedByEmail: userData?.email || "",
             orgId: userData?.orgId || "",
+            orgName: orgName,
             created_on: Date.now(),
             status: "inProgress",
             taskList: [],
@@ -58,7 +93,7 @@ export const Step3 = ({
             o.associations = associations;
         }
         return o;
-    }, [data, landSurvey, associations, orderType, address, userData]);
+    }, [data, landSurvey, associations, orderType, address, userData, orgName]);
 
     const onSubmit = async () => {
         setLoading(true);

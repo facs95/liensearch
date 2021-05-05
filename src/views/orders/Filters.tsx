@@ -1,4 +1,4 @@
-import { Button, Checkbox, Grid, Typography } from "@material-ui/core";
+import { Box, Button, Checkbox, Grid, Typography } from "@material-ui/core";
 import produce from "immer";
 import { has, set } from "lodash";
 import React, { useEffect, useReducer } from "react";
@@ -6,6 +6,7 @@ import { CustomDrawer } from "../../components/CustomDrawer";
 import { orderTypeStatusEnumKeys } from "../../Interfaces";
 import { OrgSelector } from "./OrgSelector";
 import { SelectEmployee } from "./SelectEmployee";
+import { StateOptions } from "./StateOptions";
 
 export interface OrderStateFilterInterface {
     organizations: string;
@@ -141,27 +142,33 @@ export const Filters = ({ filters, setFilters, open, onClose }: Props) => {
 
     const content = (
         <Grid container direction="column" spacing={3}>
-            <Grid item container direction="column" spacing={1}>
-                <Grid item>
+            <Grid item>
+                <Box display="flex" flexDirection="column">
                     <Typography variant="h6">Organization</Typography>
-                </Grid>
-                <Grid item>
-                    <OrgSelector
-                        orgId={state["organizations"]}
-                        dispatch={updateForm}
-                    />
-                </Grid>
+                    <Box marginTop={1}>
+                        <OrgSelector
+                            orgId={state["organizations"]}
+                            dispatch={updateForm}
+                        />
+                    </Box>
+                </Box>
             </Grid>
-            <Grid item container direction="column" spacing={1}>
-                <Grid item>
+            <Grid item>
+                <Box display="flex" flexDirection="column">
                     <Typography variant="h6">Employee</Typography>
-                </Grid>
-                <Grid item>
-                    <SelectEmployee
-                        currentEmployee={state["employee"]}
-                        dispatch={updateForm}
-                    />
-                </Grid>
+                    <Box marginTop={1}>
+                        <SelectEmployee
+                            currentEmployee={state["employee"]}
+                            dispatch={updateForm}
+                        />
+                    </Box>
+                </Box>
+            </Grid>
+            <Grid item>
+                <Box display="flex" flexDirection="column">
+                    <Typography variant="h6">State</Typography>
+                    <StateOptions {...{ state }} dispatch={updateForm} />
+                </Box>
             </Grid>
             <Grid item>
                 <Button

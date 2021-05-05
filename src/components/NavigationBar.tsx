@@ -2,7 +2,7 @@ import { Breadcrumbs, Button, Grid, Link, makeStyles } from "@material-ui/core";
 import React, { useContext } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { RouterParams } from "../Routes";
-import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import { ActionButtonContext } from "../context/ActionButtonContext";
 
 export const NavigationBar = () => {
@@ -10,7 +10,7 @@ export const NavigationBar = () => {
 
     const classes = useStyles();
 
-    const {actionButton} = useContext(ActionButtonContext);
+    const { actionButton } = useContext(ActionButtonContext);
 
     const history = useHistory();
 
@@ -26,11 +26,8 @@ export const NavigationBar = () => {
                         All
                     </Link>
                     {id && (
-                        <Link
-                            color="inherit"
-                            className={classes.link}
-                        >
-                            <LibraryBooksIcon className={classes.icon} />       
+                        <Link color="inherit" className={classes.link}>
+                            <LibraryBooksIcon className={classes.icon} />
                             {actionButton?.breadcrumbText || id}
                         </Link>
                     )}
@@ -41,6 +38,7 @@ export const NavigationBar = () => {
                     <Button
                         variant="contained"
                         color="primary"
+                        size="small"
                         onClick={actionButton.action}
                     >
                         {actionButton.label}
@@ -51,14 +49,14 @@ export const NavigationBar = () => {
     );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     pointer: {
         cursor: "pointer",
     },
     link: {
-        display: 'flex'
+        display: "flex",
     },
     icon: {
-        marginRight: theme.spacing(1)
-    }
+        marginRight: theme.spacing(1),
+    },
 }));

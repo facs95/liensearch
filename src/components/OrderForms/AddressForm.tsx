@@ -10,6 +10,44 @@ interface Props {
     setIsAddressReady: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const inputList: InputList[] = [
+    {
+        label: AddressEnum["address1"],
+        key: "address1",
+        title: "street-address",
+        xs: 12,
+    },
+    {
+        label: AddressEnum["unit"],
+        key: "unit",
+        title: "unit",
+        isNotRequired: true,
+        md: 6,
+        xs: 12,
+    },
+    {
+        label: AddressEnum["city"],
+        key: "city",
+        title: "address-level2",
+        md: 6,
+        xs: 12,
+    },
+    {
+        label: AddressEnum["state"],
+        key: "state",
+        title: "address-level1",
+        md: 6,
+        xs: 12,
+    },
+    {
+        label: AddressEnum["zipCode"],
+        key: "zipCode",
+        title: "postal-code",
+        md: 6,
+        xs: 12,
+    },
+];
+
 interface InputList {
     label: string;
     key: keyof Address;
@@ -25,50 +63,12 @@ export const AddressForm = ({
     setAddress,
     setIsAddressReady,
 }: Props) => {
-    const inputList: InputList[] = [
-        {
-            label: AddressEnum["address1"],
-            key: "address1",
-            title: "street-address",
-            xs: 12,
-        },
-        {
-            label: AddressEnum["unit"],
-            key: "unit",
-            title: "unit",
-            isNotRequired: true,
-            md: 6,
-            xs: 12,
-        },
-        {
-            label: AddressEnum["city"],
-            key: "city",
-            title: "address-level2",
-            md: 6,
-            xs: 12,
-        },
-        {
-            label: AddressEnum["state"],
-            key: "state",
-            title: "address-level1",
-            md: 6,
-            xs: 12,
-        },
-        {
-            label: AddressEnum["zipCode"],
-            key: "zipCode",
-            title: "postal-code",
-            md: 6,
-            xs: 12,
-        },
-    ];
-
     useEffect(() => {
         const isReady = inputList.some(
             (item) => !item.isNotRequired && !address[item.key]
         );
         setIsAddressReady(!isReady);
-    }, [inputList, address, setIsAddressReady]);
+    }, [address, setIsAddressReady]);
 
     return (
         <Grid item container spacing={2} xs={12} md={12} direction="column">
@@ -77,7 +77,7 @@ export const AddressForm = ({
                 <Divider />
             </Grid>
             <Grid item>
-                <MaterialAutoCompletePlaces {...{setAddress}} />
+                <MaterialAutoCompletePlaces {...{ setAddress }} />
             </Grid>
             <Grid item container spacing={2}>
                 {inputList.map((item, index) => (

@@ -1,6 +1,16 @@
 import React from "react";
 import { CreateWrapper } from "../../components/CreateWrapper";
-import { Grid, Typography, Divider } from "@material-ui/core";
+import {
+    Grid,
+    Typography,
+    Divider,
+    FormControl,
+    FormLabel,
+    FormGroup,
+    FormControlLabel,
+    Checkbox,
+    FormHelperText,
+} from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { OrderTypesInterface } from "../../Interfaces";
 import { OrderCard } from "../../components/OrderCard";
@@ -60,18 +70,37 @@ export const Step1 = ({ basePath, orderTypes, setOrderTypes }: Props) => {
     };
 
     const content = (
-        <Grid container direction="column" spacing={2}>
+        <Grid container direction="column" spacing={2} alignItems="center">
             <Grid item>
                 <Typography variant="h6">Select Type of Order</Typography>
-                <Divider />
             </Grid>
             <Grid item>
-                <Typography variant="body1">
-                    You can select multiple order types for the same property
-                </Typography>
-            </Grid>
-            <Grid item container spacing={2}>
-                {typeCards.map((type, index) => (
+                <FormControl component="fieldset">
+                    <FormLabel component="legend">
+                        You can select multiple order types for the same
+                        property:
+                    </FormLabel>
+                    <FormGroup>
+                        {typeCards.map((type, index) => (
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={type.selected}
+                                        onChange={() =>
+                                            handleDataChange(type.name)
+                                        }
+                                        name={type.label}
+                                    />
+                                }
+                                label={type.label}
+                            />
+                        ))}
+                    </FormGroup>
+                    <FormHelperText>
+                        This can be updated after the order is created
+                    </FormHelperText>
+                </FormControl>
+                {/* {typeCards.map((type, index) => (
                     <Grid
                         key={`type-${index}`}
                         item
@@ -84,7 +113,7 @@ export const Step1 = ({ basePath, orderTypes, setOrderTypes }: Props) => {
                             selected={orderTypes[type.name].isActive}
                         />
                     </Grid>
-                ))}
+                ))} */}
             </Grid>
         </Grid>
     );

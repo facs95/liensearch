@@ -1,18 +1,19 @@
 import { Box, Button, CircularProgress, Grid } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import algoliasearch from "algoliasearch/lite";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Redirect, useHistory, useLocation } from "react-router";
-import { EmptyState } from "../../components/EmpyState";
 import { Filters, orderStateFilterInitialState } from "./Filters";
 import { OrderTable } from "../../components/OrderTable";
 import { ALGOLIA_CONFIG } from "../../config";
 import { useUser } from "../../context/UserContext";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useOrderTypeParam } from "../../hooks/useOrderTypeParam";
-import { Order } from "../../Interfaces";
+import { Order, OrderTypeEnum } from "../../Interfaces";
 import { generateOrderStateFilterQuery } from "../../utils/filters";
 import { TopBar } from "./TopBar";
+import { TitleContext } from "../../context/TitleContext";
+import { ActionButtonContext } from "../../context/ActionButtonContext";
 
 const searchClient = algoliasearch(ALGOLIA_CONFIG.appId, ALGOLIA_CONFIG.apiKey);
 const index = searchClient.initIndex("orders");
@@ -22,6 +23,9 @@ const FILTERS_KEY = "stateFilters";
 export const Orders = () => {
     const orderType = useOrderTypeParam();
     const user = useUser();
+    const { setTitle } = useContext(TitleContext);
+    const { setNavigationBar } = useContext(ActionButtonContext);
+    const history = useHistory();
 
     const [loading, setLoading] = useState(true);
     const [apiError, setApiError] = useState(false);
@@ -35,8 +39,22 @@ export const Orders = () => {
         orderStateFilterInitialState
     );
 
+    useEffect(() => {
+        if (orderType) {
+            setTitle(OrderTypeEnum[orderType]);
+        }
+    }, [setTitle, orderType]);
+
+    useEffect(() => {
+        if (!user.admin) {
+            setNavigationBar({
+                label: "New Order",
+                action: () => history.push("/new-order/1"),
+            });
+        }
+    }, [user, setNavigationBar, history]);
+
     //Manage filter drawer status
-    const history = useHistory();
     const {
         pathname,
         state: { openFilter } = { openFilter: false },

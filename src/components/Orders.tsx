@@ -41,10 +41,7 @@ const getFilter: Map<
     ],
 ]);
 
-const searchClient = algoliasearch(
-    ALGOLIA_CONFIG.appId,
-    ALGOLIA_CONFIG.apiKey
-);
+const searchClient = algoliasearch(ALGOLIA_CONFIG.appId, ALGOLIA_CONFIG.apiKey);
 
 const generateFilterQuery = (
     filters: FilterOptions,
@@ -135,7 +132,6 @@ export const Orders = () => {
     }, [user, filterStatus, filterOrderType, filterOrg, filterEmployee]);
 
     const getOrders = useCallback(async () => {
-  
         const index = searchClient.initIndex("orders");
 
         let filterArr: Array<string[]> = [];
@@ -200,7 +196,7 @@ export const Orders = () => {
         );
 
     return (
-        <Grid container direction="column" spacing={4}>
+        <Grid container direction="column" spacing={3}>
             <FilterDrawer
                 open={openFilter}
                 onClose={onFilterClose}

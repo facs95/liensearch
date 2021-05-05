@@ -66,14 +66,14 @@ export const CreateOrderForm = ({
     const content = (
         <Grid container direction="column" spacing={2}>
             <Grid item container spacing={2}>
-                <Grid item container xs={12} md={6} spacing={2}>
+                <Grid item container md={12} lg={6} spacing={2}>
                     <AddressForm
                         {...{ setIsAddressReady }}
                         {...{ address }}
                         {...{ setAddress }}
                     />
                 </Grid>
-                <Grid item container xs={12} md={6}>
+                <Grid item container md={12} lg={6}>
                     <DataForm
                         {...{ setIsDataReady }}
                         orderData={data}
@@ -87,9 +87,10 @@ export const CreateOrderForm = ({
                         item
                         container
                         spacing={2}
-                        xs={12}
-                        md={orderTypes.landSurvey.isActive ? 6 : 12}
+                        md={12}
+                        lg={orderTypes.landSurvey.isActive ? 6 : 12}
                         direction="column"
+                        wrap="nowrap"
                     >
                         <AssociationForm
                             {...{ setIsAssociationsReady }}
@@ -103,8 +104,9 @@ export const CreateOrderForm = ({
                         item
                         container
                         spacing={2}
-                        xs={12}
-                        md={orderTypes.estoppelLetter.isActive ? 6 : 12}
+                        md={12}
+                        lg={orderTypes.estoppelLetter.isActive ? 6 : 12}
+                        wrap="nowrap"
                         direction="column"
                     >
                         <LandSurveyForm

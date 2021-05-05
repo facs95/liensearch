@@ -9,7 +9,7 @@ import {
     Address,
     LandSurveyDetails,
     Order,
-    emptyOrdersType
+    emptyOrdersType,
 } from "../../Interfaces";
 import firebase from "firebase/app";
 import { CreateOrderForm } from "../../components/CreateOrderForm";
@@ -38,6 +38,7 @@ const blankData: OrderData = {
     orderNumber: "",
     specialInstructions: "",
     folio: 0,
+    orgName: "",
     legalDescription: "",
     closingDate: new Date().toLocaleDateString(),
     neededDate: new Date().toLocaleDateString(),
@@ -84,9 +85,9 @@ export const NewOrder = () => {
         preAssocations || [{ ...blankAssociation }]
     );
 
-    const [orderTypes, setOrderTypes] = useState<OrderTypesInterface>(
-        {...preOrderType || emptyOrdersType}
-    );
+    const [orderTypes, setOrderTypes] = useState<OrderTypesInterface>({
+        ...(preOrderType || emptyOrdersType),
+    });
 
     const { step, id } = useParams();
 

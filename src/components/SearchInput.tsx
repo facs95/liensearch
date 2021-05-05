@@ -20,7 +20,7 @@ export const SearchInput = ({ value, setValue }: Props) => {
                     fullWidth
                     autoComplete="off"
                     inputProps={{
-                        autocomplete: "new-password",
+                        autoComplete: "new-password",
                         form: {
                             autocomplete: "off",
                         },
